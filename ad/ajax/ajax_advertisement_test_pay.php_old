@@ -1,0 +1,1397 @@
+<?php
+
+use BearTemplate\BearTemplate;
+
+
+//error_reporting(E_ALL);
+//ini_set('display_errors', '1');
+
+session_start();
+
+$DOCUMENT_ROOT = $_SERVER['DOCUMENT_ROOT'];
+
+include("$DOCUMENT_ROOT/include/session.php");
+include("$DOCUMENT_ROOT/include/auth.php");
+include("$DOCUMENT_ROOT/include/define.php");
+include("$DOCUMENT_ROOT/include/func.php");
+include("$DOCUMENT_ROOT/admin/include/db.php");
+include("$DOCUMENT_ROOT/include/class.BearTemplate.php");
+
+$ac = $_REQUEST['ac'];
+
+
+/*
+ *  광고 신청 관련 DB 처리 Process
+ *  1) ad_company에
+ *     - 광고신청자 정보 저장 (있으면 update, 없으면 insert) , 자동차는 예외적으로 저장하지 않음
+ *  2) 각 광고 종류별로 테이블에 광고 정보 등록
+ *     - 구인구직 : community_recruit_listings, community_recruit_listings_sub
+ *     - 비지니스 : community_business
+ *     - 자동차 : community_car_dealers
+ *  3) ad_payments에 결제 정보등록
+ *     - 광고신청자 결제정보 저장
+ *
+ */
+if($ac == "write_advertisement") {
+
+    $result_data = [
+        "status" => "success",
+        "msg" => "sucess",
+        "num" => 22
+
+    ];
+
+    echo json_encode($result_data, JSON_UNESCAPED_UNICODE);
+    exit;
+    
+    $db->transactionBegin();
+
+    try {
+
+        $ad_method = $_POST['ad_method'];
+
+        if($ad_method == "") {
+            exit;
+        }
+
+        // 공통 입력
+        $company_name = $_POST['company_name'] ?? "";
+        $company_website = $_POST['company_website'] ?? "";
+        $company_address = $_POST['company_address'] ?? "";
+        $company_state_code = $_POST['company_state_code'] ?? "";
+        $has_15_plus_employees = $_POST['has_15_plus_employees'] ?? "";
+
+        $contact_name  = $_POST['contact_name'] ?? "";
+        $contact_email = $_POST['contact_email'] ?? "";
+        $contact_phone = $_POST['contact_phone'] ?? "";        
+        
+        $ad_company_id = $_POST['ad_company_id'] ?? "";        
+        $listing_id = $_POST['listing_id'] ?? "";        
+        
+        $validity_period = 1;
+
+        switch ($ad_method) {
+            case "recruit_platinum":                
+                $validity_period = $_POST['rp_validity_period'] ?? 1;
+                break;
+            case "recruit_gold":
+                $validity_period = $_POST['rg_validity_period'] ?? 1;
+                break;
+            case "business_platinum":
+                $validity_period = $_POST['bp_validity_period'] ?? 1;
+                break;
+            case "vehicle_dealer":
+                $validity_period = $_POST['vd_validity_period'] ?? 1;
+                break;
+            case "agent":                
+                break;
+        }
+        
+        $desired_start_date = CONVERT_DATE_FORMAT($_POST['desired_start_date'] ?? ""); 
+        $desired_end_date = ADD_MONTHS_TO_DATE($desired_start_date,$validity_period);
+        
+        $today = date("Ymd");
+    
+        if($desired_start_date <= $today && $today <= $desired_end_date) $has_active_advertisement = 1;
+        else $has_active_advertisement = 0;
+
+        if ($ad_method != "vehicle_dealer") {
+
+            if ($listing_id != "") {      // 기존광고 등록한것이 있어서 광고기업 정보만 업데이트
+
+            /*  업데이트 없이 Skip
+                $update_values = array(
+                    'company_name' => $company_name,
+                    'company_website' => $company_website,
+                    'company_address' => $company_address,
+                    'company_state_code' => $company_state_code,
+                    'has_15_plus_employees' => $has_15_plus_employees,
+                    'contact_name' => $contact_name,
+                    'contact_email' => $contact_email,
+                    'contact_phone' => $contact_phone,
+                    'updated_user' => $SS_NAME,
+                    'updated_at' => date('Y-m-d H:i:s'),
+                    'ip_address' => $_SERVER['REMOTE_ADDR']
+                );
+
+                $result = $db->update('ad_company', $update_values, 'ad_company_id = ' . $ad_company_id);
+                if ($result == false) throw new Exception("ad_company update fail");
+                unset($update_values);
+              */
+
+            } else {
+
+                $insert_values = array(
+                    'user_id' => $SS_ID,
+                    'company_name' => $company_name,
+                    'company_website' => $company_website,
+                    'company_address' => $company_address,
+                    'company_state_code' => $company_state_code,
+                    'has_15_plus_employees' => $has_15_plus_employees,
+                    'contact_name' => $contact_name,
+                    'contact_email' => $contact_email,
+                    'contact_phone' => $contact_phone,
+                    'is_active' => 1,
+                    'created_user' => $SS_NICKNAME,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'ip_address' => $_SERVER['REMOTE_ADDR'],
+                );
+
+                // 어느쪽에서 사용했는지 마킹한다.
+                if ($ad_method == "recruit_platinum" || $ad_method == "recruit_gold") $insert_values['used_type'] = "recruit";
+                else $insert_values['used_type'] = "business";
+                
+                $result = $db->insert('ad_company', $insert_values);
+                if ($result == false) throw new Exception("ad_company insert fail");
+                $ad_company_id = $db->getLastInsertId();
+
+                unset($insert_values);
+
+            }
+
+        }
+
+
+        // 구인구직 platinum
+        if ($ad_method == "recruit_platinum" || $ad_method == "recruit_gold") {
+
+            
+            if ($ad_method == "recruit_platinum") {
+                
+                $state_codes    = $_POST['rp_state_code'] ?? [];
+                $city_names     = $_POST['rp_city_name'] ?? [];                
+                
+                $advertising_level = "platinum";
+                $title = $_POST['rp_title'] ?? "";
+                $subtitle = $_POST['rp_subtitle'] ?? "";
+                //$state_code = $_POST['rp_state_code'] ?? "";
+                //$city_name = $_POST['rp_city_name'] ?? "";
+
+                //$has_15_plus_employees = $_POST['rp_has_15_plus_employees'] ?? "";
+                $job_opening_information = $_POST['rp_job_opening_information'] ?? "";
+
+                $job_type = $_POST['rp_job_type'] ?? [];
+            }
+            else {
+                
+                $state_codes    = $_POST['rg_state_code'] ?? [];
+                $city_names     = $_POST['rg_city_name'] ?? [];                
+                
+                $advertising_level = "gold";
+                $title = $_POST['rg_title'] ?? "";
+                $subtitle = $_POST['rg_subtitle'] ?? "";
+                //$state_code = $_POST['rg_state_code'] ?? "";
+                //$city_name = $_POST['rg_city_name'] ?? "";
+
+                //$has_15_plus_employees = $_POST['rg_has_15_plus_employees'] ?? "";
+                $job_opening_information = $_POST['rg_job_opening_information'] ?? "";
+
+                $job_type = $_POST['rg_job_type'] ?? [];
+            }
+
+            $recruit_logo_image_url = "";
+            $recruit_main_image_url = "";
+            $recruit_main_image_background_url = "";
+            $recruit_sub_image_01_url = "";
+            $recruit_sub_image_02_url = "";
+
+            if ($ad_method == "recruit_platinum") {
+
+                /* 공통함수로 변경, 사용하지 않음
+                if ($_FILES['rp_logo_image_url']['size'] > 0) $recruit_logo_image_url = $_FILES['rp_logo_image_url']['name'];
+                if ($_FILES['rp_main_image_background_url']['size'] > 0) $recruit_main_image_background_url = $_FILES['rp_main_image_background_url']['name'];
+                if ($_FILES['rp_sub_image_01_url']['size'] > 0) $recruit_sub_image_01_url = $_FILES['rp_sub_image_01_url']['name'];
+                if ($_FILES['rp_sub_image_02_url']['size'] > 0) $recruit_sub_image_02_url = $_FILES['rp_sub_image_02_url']['name'];
+                */
+                
+                // 불러오기 하지 않고 신규로 했을경우만 로고 업로드
+                if ($listing_id == "") $recruit_logo_image_url = make_file_name("rp_logo_image_url", $listing_id, "rp_logo_image_url_exist");
+                else $recruit_logo_image_url = "이미지복사";
+                
+                $recruit_sub_image_01_url = make_file_name("rp_sub_image_01_url", $listing_id, "rp_sub_image_01_url_exist");
+                $recruit_sub_image_02_url = make_file_name("rp_sub_image_02_url", $listing_id, "rp_sub_image_02_url_exist");
+                $recruit_sub_image_03_url = make_file_name("rp_sub_image_03_url", $listing_id, "rp_sub_image_03_url_exist");
+                $recruit_sub_image_04_url = make_file_name("rp_sub_image_04_url", $listing_id, "rp_sub_image_04_url_exist");
+                $recruit_sub_image_05_url = make_file_name("rp_sub_image_05_url", $listing_id, "rp_sub_image_05_url_exist");
+                $recruit_sub_image_06_url = make_file_name("rp_sub_image_06_url", $listing_id, "rp_sub_image_06_url_exist");
+                
+
+            }
+            else {
+                /*
+                if ($_FILES['rg_logo_image_url']['size'] > 0) $recruit_logo_image_url = $_FILES['rg_logo_image_url']['name'];
+                if ($_FILES['rg_sub_image_01_url']['size'] > 0) $recruit_sub_image_01_url = $_FILES['rg_sub_image_01_url']['name'];
+                if ($_FILES['rg_sub_image_02_url']['size'] > 0) $recruit_sub_image_02_url = $_FILES['rg_sub_image_02_url']['name'];
+                */
+                
+                // 불러오기 하지 않고 신규로 했을경우만 로고 업로드
+                if ($listing_id == "") $recruit_logo_image_url = make_file_name("rg_logo_image_url", $listing_id, "rg_logo_image_url_exist");
+                else $recruit_logo_image_url = "이미지복사";
+                
+                $recruit_sub_image_01_url = make_file_name("rg_sub_image_01_url", $listing_id, "rg_sub_image_01_url_exist");
+                $recruit_sub_image_02_url = make_file_name("rg_sub_image_02_url", $listing_id, "rg_sub_image_02_url_exist");
+                $recruit_sub_image_03_url = make_file_name("rg_sub_image_03_url", $listing_id, "rg_sub_image_03_url_exist");
+                $recruit_sub_image_04_url = make_file_name("rg_sub_image_04_url", $listing_id, "rg_sub_image_04_url_exist");
+                $recruit_sub_image_05_url = make_file_name("rg_sub_image_05_url", $listing_id, "rg_sub_image_05_url_exist");
+                $recruit_sub_image_06_url = "";
+                
+            }
+
+
+
+            $insert_values = array(
+                'ad_company_id' => $ad_company_id,
+                'user_id' => $SS_ID,                
+                'logo_image_url' => $recruit_logo_image_url,
+                'main_image_background_url' => $recruit_main_image_background_url,
+                'sub_image_01_url' => $recruit_sub_image_01_url,
+                'sub_image_02_url' => $recruit_sub_image_02_url,
+                'sub_image_03_url' => $recruit_sub_image_03_url,
+                'sub_image_04_url' => $recruit_sub_image_04_url,
+                'sub_image_05_url' => $recruit_sub_image_05_url,
+                'sub_image_06_url' => $recruit_sub_image_06_url,
+                'advertising_level' => $advertising_level,
+                'title' => $title,
+                'subtitle' => $subtitle,
+                'company_name' => $company_name,
+                'contact_name' => $contact_name,
+                'contact_email' => $contact_email,
+                'contact_phone' => $contact_phone,
+                'job_opening_information' => $job_opening_information,                
+                'view_count' => 0,
+                'advertiser_notes' => '',
+                'internal_notes' => '',
+                'has_15_plus_employees' => $has_15_plus_employees,
+                'is_active' => 0,
+                'has_active_advertisement' => $has_active_advertisement,
+                'created_user' => $SS_NICKNAME,
+                'created_at' => date('Y-m-d H:i:s'),
+                'ip_address' => $_SERVER['REMOTE_ADDR']
+            );
+        
+
+            $result = $db->insert('community_recruit_listings', $insert_values);
+            if ($result == false) throw new Exception("community_recruit_listings insert fail");
+            $community_recruit_listings_id = $db->getLastInsertId();
+
+            if ($ad_method == "recruit_platinum") {                                 
+                
+                    // 불러오기가 아닌경우만 업로드
+                    if ($listing_id == "") file_process($recruit_logo_image_url, "recruit_files","recruit", $community_recruit_listings_id, "rp_logo_image_url", "logo", $listing_id, "rp_logo_image_url_exist");
+                    else file_copy_process("recruit_files","recruit", $community_recruit_listings_id, "logo", $listing_id);
+            
+                
+                    /* // 공통으로 묶음으로 처리하고 사용하지 않음
+                    if ($recruit_logo_image_url != "") FILE_UPLOAD("user", "recruit_files", "recruit", $community_recruit_listings_id, "rp_logo_image_url", "logo");
+                    else {
+                        if($listing_id != "" && $_POST['rp_logo_image_url_exist'] != "") {                                     
+                            file_copy("recruit_files", "/recruit_".$listing_id."_logo", "/recruit_".$community_recruit_listings_id."_logo",);                    
+                        }
+                    }
+                    
+                    
+                    if ($recruit_main_image_background_url != "") FILE_UPLOAD("user", "recruit_files", "recruit", $community_recruit_listings_id, "rp_main_image_background_url", "background_image");
+                    else {
+                        if($listing_id != "" && $_POST['rp_main_image_background_url_exist'] != "") {                                     
+                            file_copy("recruit_files", "/recruit_".$listing_id."_logo", "/recruit_".$community_recruit_listings_id."_main",);                    
+                        }
+                    }
+                    
+                    
+                    
+                    
+                    if ($recruit_sub_image_01_url != "") FILE_UPLOAD("user", "recruit_files", "recruit", $community_recruit_listings_id, "rp_sub_image_01_url", "img1");
+                    else 
+                    {
+                        ($listing_id != "" && $_POST['rp_sub_image_01_url_exist'] != "") {                                     
+                            file_copy("recruit_files", "/recruit_".$listing_id."_img1", "/recruit_". $community_recruit_listings_id . "_img1",);                    
+                        }
+                    }
+                    if ($recruit_sub_image_02_url != "") FILE_UPLOAD("user", "recruit_files", "recruit", $community_recruit_listings_id, "rp_sub_image_02_url", "img2");
+                    
+                    */
+                    
+                    file_process($recruit_sub_image_01_url, "recruit_files","recruit", $community_recruit_listings_id, "rp_sub_image_01_url", "img1", $listing_id, "rp_sub_image_01_url_exist");
+                    file_process($recruit_sub_image_02_url, "recruit_files","recruit", $community_recruit_listings_id, "rp_sub_image_02_url", "img2", $listing_id, "rp_sub_image_02_url_exist");
+                    file_process($recruit_sub_image_03_url, "recruit_files","recruit", $community_recruit_listings_id, "rp_sub_image_03_url", "img3", $listing_id, "rp_sub_image_03_url_exist");
+                    file_process($recruit_sub_image_04_url, "recruit_files","recruit", $community_recruit_listings_id, "rp_sub_image_04_url", "img4", $listing_id, "rp_sub_image_04_url_exist");
+                    file_process($recruit_sub_image_05_url, "recruit_files","recruit", $community_recruit_listings_id, "rp_sub_image_05_url", "img5", $listing_id, "rp_sub_image_05_url_exist");
+                    file_process($recruit_sub_image_06_url, "recruit_files","recruit", $community_recruit_listings_id, "rp_sub_image_06_url", "img6", $listing_id, "rp_sub_image_06_url_exist");
+            }
+            else {
+                
+                if ($listing_id == "") file_process($recruit_logo_image_url, "recruit_files","recruit", $community_recruit_listings_id, "rg_logo_image_url", "logo", $listing_id, "rg_logo_image_url_exist");
+                else file_copy_process("recruit_files","recruit", $community_recruit_listings_id, "logo", $listing_id);
+                
+                file_process($recruit_sub_image_01_url, "recruit_files","recruit", $community_recruit_listings_id, "rg_sub_image_01_url", "img1", $listing_id, "rg_sub_image_01_url_exist");
+                file_process($recruit_sub_image_02_url, "recruit_files","recruit", $community_recruit_listings_id, "rg_sub_image_02_url", "img2", $listing_id, "rg_sub_image_02_url_exist");
+                file_process($recruit_sub_image_03_url, "recruit_files","recruit", $community_recruit_listings_id, "rg_sub_image_03_url", "img3", $listing_id, "rg_sub_image_03_url_exist");
+                file_process($recruit_sub_image_04_url, "recruit_files","recruit", $community_recruit_listings_id, "rg_sub_image_04_url", "img4", $listing_id, "rg_sub_image_04_url_exist");
+                file_process($recruit_sub_image_05_url, "recruit_files","recruit", $community_recruit_listings_id, "rg_sub_image_05_url", "img5", $listing_id, "rg_sub_image_05_url_exist");
+                
+                /*
+                if ($recruit_logo_image_url != "") FILE_UPLOAD("user", "recruit_files", "recruit", $community_recruit_listings_id, "rg_logo_image_url", "logo");
+                if ($recruit_sub_image_01_url != "") FILE_UPLOAD("user", "recruit_files", "recruit", $community_recruit_listings_id, "rg_sub_image_01_url", "img1");
+                if ($recruit_sub_image_02_url != "") FILE_UPLOAD("user", "recruit_files", "recruit", $community_recruit_listings_id, "rg_sub_image_02_url", "img2");
+                */
+                
+            }
+
+            unset($insert_values);
+
+            foreach ($job_type as $index => $value) {
+                
+                if (!empty(trim($value))) {
+                    
+                    $insert_values = array(
+                        'community_recruit_listings_sub_id' => null,
+                        'community_recruit_listings_id' => $community_recruit_listings_id,
+                        'user_id' => $SS_ID,                        
+                        'job_type' => $value,
+                        'is_active' => 1,
+                        'created_user' => $SS_ID ?? "",
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'ip_address' => $_SERVER['REMOTE_ADDR']
+                    );
+
+                    $result =$db->insert('community_recruit_listings_sub', $insert_values);
+                    if ($result == false) throw new Exception("community_recruit_listings_sub insert fail");
+                    unset($insert_values);
+
+                }
+                
+            }
+                
+                
+            foreach ($state_codes as $index => $state_code) {
+                                
+                if($state_code == "") continue;
+               
+                $city_name = $city_names[$index] ?? '';
+                                
+                $insert_values = array(
+                        'community_recruit_listings_loc_sub_id' => null,
+                        'community_recruit_listings_id' => $community_recruit_listings_id,
+                        'state_code' => htmlspecialchars($state_code),
+                        'city_name' => htmlspecialchars($city_name),                        
+                        'is_active' => 1,
+                        'created_user' => $SS_ID ?? "",
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'ip_address' => $_SERVER['REMOTE_ADDR']
+                );
+               
+                $result =$db->insert('community_recruit_listings_loc_sub', $insert_values);
+                if ($result == false) throw new Exception("community_recruit_listings_loc_sub insert fail");
+                unset($insert_values);
+                
+                
+                
+            }
+            
+        }
+
+        // 비지니스 platinum
+        if ($ad_method == "business_platinum") {
+
+            $advertising_level = "platinum";
+            $business_type = $_POST['bp_business_type'];
+            $title = $_POST['bp_title'];
+            $state_code = $_POST['bp_state_code'] ?? "";
+            $city_name = $_POST['bp_city_name'] ?? "";
+            $content = $_POST['bp_content'] ?? "";
+            $advertiser_notes = "";
+
+
+            $business_main_image_url = "";
+            $business_sub_image_01_url = "";
+
+
+            //if ($_FILES['bp_main_image_url']['size'] > 0) $business_main_image_url = $_FILES['bp_main_image_url']['name'];
+            //if ($_FILES['bp_sub_image_01_url']['size'] > 0) $business_sub_image_01_url = $_FILES['bp_sub_image_01_url']['name'];
+            
+            $business_main_image_url = make_file_name("bp_main_image_url", $listing_id, "bp_main_image_url_exist");
+            $business_sub_image_01_url = make_file_name("bp_sub_image_01_url", $listing_id, "bp_sub_image_01_url_exist");
+            $business_sub_image_02_url = make_file_name("bp_sub_image_02_url", $listing_id, "bp_sub_image_02_url_exist");
+            $business_sub_image_03_url = make_file_name("bp_sub_image_03_url", $listing_id, "bp_sub_image_03_url_exist");
+            $business_sub_image_04_url = make_file_name("bp_sub_image_04_url", $listing_id, "bp_sub_image_04_url_exist");
+            $business_sub_image_05_url = make_file_name("bp_sub_image_05_url", $listing_id, "bp_sub_image_05_url_exist");
+
+            $insert_values = array(
+                'ad_company_id' => $ad_company_id,
+                'user_id' => $SS_ID,
+                'advertising_level' => $advertising_level,
+                'business_type' => $business_type,            
+                'main_image_url' => $business_main_image_url,
+                'sub_image_01_url' => $business_sub_image_01_url,
+                'sub_image_02_url' => $business_sub_image_02_url,
+                'sub_image_03_url' => $business_sub_image_03_url,
+                'sub_image_04_url' => $business_sub_image_04_url,
+                'sub_image_05_url' => $business_sub_image_05_url,
+                'title' => $title,
+                'state_code' => $state_code,
+                'city_name' => $city_name,
+                'company_name' => $company_name,
+                'contact_name' => $contact_name,
+                'contact_email' => $contact_email,
+                'contact_phone' => $contact_phone,
+                'content' => $content,
+                'view_count' => 0,
+                'advertiser_notes' => $advertiser_notes,
+                'is_active' => 0,
+                'has_active_advertisement' => $has_active_advertisement,
+                'created_user' => $SS_NICKNAME,
+                'created_at' => date('Y-m-d H:i:s'),
+                'ip_address' => $_SERVER['REMOTE_ADDR'],
+            );
+            
+            $result = $db->insert('community_business', $insert_values);
+            if ($result == false) throw new Exception("community_business insert fail");
+            $community_business_id = $db->getLastInsertId();
+
+            //if ($business_main_image_url != "") FILE_UPLOAD("user", "business_files", "business", $community_business_id,  "bp_main_image_url","main");
+            //if ($business_sub_image_01_url != "") FILE_UPLOAD("user", "business_files", "business", $community_business_id, "bp_sub_image_01_url", "img1");
+            
+            file_process($business_main_image_url, "business_files","business", $community_business_id, "bp_main_image_url", "main", $listing_id, "bp_main_image_url_exist");
+            file_process($business_sub_image_01_url, "business_files","business", $community_business_id, "bp_sub_image_01_url", "img1", $listing_id, "bp_sub_image_01_url_exist");
+            file_process($business_sub_image_02_url, "business_files","business", $community_business_id, "bp_sub_image_02_url", "img2", $listing_id, "bp_sub_image_02_url_exist");
+            file_process($business_sub_image_03_url, "business_files","business", $community_business_id, "bp_sub_image_03_url", "img3", $listing_id, "bp_sub_image_03_url_exist");
+            file_process($business_sub_image_04_url, "business_files","business", $community_business_id, "bp_sub_image_04_url", "img4", $listing_id, "bp_sub_image_04_url_exist");
+            file_process($business_sub_image_05_url, "business_files","business", $community_business_id, "bp_sub_image_05_url", "img5", $listing_id, "bp_sub_image_05_url_exist");
+            
+            unset($insert_values);
+
+        }
+
+        // 자동차 딜러 광고
+        if ($ad_method == "vehicle_dealer") {
+
+
+            $dealer_website = $_POST['vd_dealer_website'];
+            $listing_address1 = $_POST['vd_listing_address1'];
+            $dealer_introduction = $_POST['vd_dealer_introduction'];
+            
+            $state_code = $_POST['vd_state_code'] ?? "";
+            $city_name = $_POST['vd_city_name'] ?? "";
+
+
+            $vd_logo_url = "";
+            $vd_main_image_url = "";
+
+            //if ($_FILES['vd_logo_url']['size'] > 0) $vd_logo_url = $_FILES['vd_logo_url']['name'];            
+            //if ($_FILES['vd_main_image_url']['size'] > 0) $vd_main_image_url = $_FILES['vd_main_image_url']['name'];
+            
+            $vd_logo_url = make_file_name("vd_logo_url", $listing_id, "vd_logo_url_exist");
+            $vd_main_image_url = make_file_name("vd_main_image_url", $listing_id, "vd_main_image_url_exist");
+            
+            // 불러오기 했으면 업데이트만 한다.
+            if ($listing_id != "") {  
+                
+                $update_values = array(
+                    'user_id' => $SS_ID,
+                    'company_name' => $company_name,
+                    'company_website' => $company_website,
+                    'dealer_website' => $dealer_website,
+                    'contact_name' => $contact_name,
+                    'contact_email' => $contact_email,
+                    'contact_phone' => $contact_phone,
+                    'listing_address1' => $listing_address1,
+                    'listing_address2' => "",
+                    'state_code' => $state_code,
+                    'city_name' => $city_name,
+                    'listing_zip' => "",
+                    'listing_zip_ext' => "",
+                    'listing_country' => "",
+                    'logo_url' => $vd_logo_url,
+                    'main_image_url' => $vd_main_image_url,
+                    'dealer_introduction' => $dealer_introduction,
+                    'is_active' => 0,
+                    'has_active_advertisement' => $has_active_advertisement,                    
+                    'updated_user' => $SS_NICKNAME,
+                    'updated_at' => date('Y-m-d H:i:s'),
+                    'ip_address' => $_SERVER['REMOTE_ADDR'],
+                );
+
+                $result = $db->update('community_car_dealers', $update_values, 'community_car_dealers_id = ' . $listing_id);
+                if ($result == false) throw new Exception("community_car_dealers update fail");
+                unset($update_values);
+                
+                if ($_FILES['vd_logo_url']['size'] > 0) FILE_UPLOAD("user", "vehicle_dealer_files", "vehicle_dealer", $listing_id,  "vd_logo_url", "logo");
+                if ($_FILES['vd_main_image_url']['size'] > 0)  FILE_UPLOAD("user", "vehicle_dealer_files", "vehicle_dealer", $listing_id,  "vd_main_image_url", "main");
+                
+                $community_car_dealers_id = $listing_id;
+                
+            }
+            else {
+                
+                $insert_values = array(
+                    'user_id' => $SS_ID,
+                    'company_name' => $company_name,
+                    'company_website' => $company_website,
+                    'dealer_website' => $dealer_website,
+                    'contact_name' => $contact_name,
+                    'contact_email' => $contact_email,
+                    'contact_phone' => $contact_phone,
+                    'listing_address1' => $listing_address1,
+                    'listing_address2' => "",
+                    'state_code' => $state_code,
+                    'city_name' => $city_name,
+                    'listing_zip' => "",
+                    'listing_zip_ext' => "",
+                    'listing_country' => "",
+                    'logo_url' => $vd_logo_url,
+                    'main_image_url' => $vd_main_image_url,
+                    'dealer_introduction' => $dealer_introduction,
+                    'is_active' => 0,
+                    'has_active_advertisement' => $has_active_advertisement,
+                    'created_user' => $SS_NICKNAME,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'ip_address' => $_SERVER['REMOTE_ADDR'],
+                );
+
+                $result = $db->insert('community_car_dealers', $insert_values);
+                if ($result == false) throw new Exception("community_car_dealers insert fail");
+                $community_car_dealers_id = $db->getLastInsertId();
+                
+                //if ($vd_logo_url != "") FILE_UPLOAD("user", "vehicle_dealer_files", "vehicle_dealer", $community_car_dealers_id,  "vd_logo_url", "logo");
+                //if ($vd_main_image_url != "") FILE_UPLOAD("user", "vehicle_dealer_files", "vehicle_dealer", $community_car_dealers_id,  "vd_main_image_url", "main");
+                
+                file_process($vd_logo_url, "vehicle_dealer_files","vehicle_dealer", $community_car_dealers_id, "vd_logo_url", "logo", $listing_id, "vd_logo_url_exist");
+                file_process($vd_main_image_url, "vehicle_dealer_files","vehicle_dealer", $community_car_dealers_id, "vd_main_image_url", "main", $listing_id, "vd_main_image_url_exist");
+
+
+                unset($insert_values);
+            }
+
+
+
+        }
+
+
+        $section_type = 0;
+        
+        switch ($ad_method) {
+            case "recruit_platinum":
+                $section_type = 1;
+                $listing_id = $community_recruit_listings_id;
+                break;
+            case "recruit_gold":
+                $section_type = 2;
+                $listing_id = $community_recruit_listings_id;
+                break;
+            case "business_platinum":
+                $section_type = 3;
+                $listing_id = $community_business_id;
+                break;
+            case "vehicle_dealer":
+                $section_type = 4;
+                $listing_id = $community_car_dealers_id;
+                break;
+            case "agent":
+                $section_type = 5;
+                break;
+        }
+
+        // 카드 결제 붙인다.
+        /*
+
+           https://www.authorize.net 활용
+
+         */
+
+        // 이벤트 기간
+        $payment_amount = 0;
+        $payment_method = "오픈기념 무료 서비스";    
+        
+
+        // 결제정보 등록
+        $insert_values = array(
+            'user_id' => $SS_ID,
+            'section_type' => $section_type,
+            'listing_id' => $listing_id,
+            'desired_start_date' => $desired_start_date,
+            'desired_end_date' => $desired_end_date,
+            'start_date' =>  $desired_start_date,
+            'end_date' =>  $desired_end_date,
+            'validity_period' => $validity_period,
+            'is_paid' => 'N',
+            'payment_date' => date('Y-m-d H:i:s'),
+            'payment_amount' => $payment_amount,
+            'payment_method' => $payment_method,
+            'is_active' => 0,
+            'created_user' => $SS_NICKNAME,
+            'created_at' => date('Y-m-d H:i:s'),
+            'ip_address' => $_SERVER['REMOTE_ADDR'],
+        );
+
+        $result = $db->insert('ad_payments', $insert_values);
+        if ($result == false) throw new Exception("ad_payments insert fail");
+        $ad_payments_id = $db->getLastInsertId();
+        unset($insert_values);
+
+    }
+    catch (Exception $e) {
+
+        $db->transactionRollback();
+
+        $result_data = [
+            "status" => "fail",
+            "msg" => $e->getMessage()
+
+        ];
+
+        echo json_encode($result_data, JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
+//    $db->transactionRollback();
+   $db->transactionCommit();
+
+    $result_data = [
+        "status" => "success",
+        "msg" => "sucess",
+        "num" => $ad_payments_id
+
+    ];
+
+    echo json_encode($result_data, JSON_UNESCAPED_UNICODE);
+    exit;
+
+}
+
+if ($ac == "previous_advertising_list") {
+
+    $ad_method = $_GET['ad_method'] ?? "";
+    $company_name = $_GET['company_name'] ?? "";
+
+    $html = "";
+
+    $company_name = str_replace(' ', '', $company_name);
+     
+    $company_name = "%".$company_name."%";
+    
+    if ($ad_method == "recruit_platinum") {
+
+        $row_sql = "SELECT A.*, C.validity_period, C.payment_amount, D.company_name, D.company_address FROM community_recruit_listings A 
+                    left join community_recruit_listings_sub B on A.community_recruit_listings_id = B.community_recruit_listings_id    
+                    left join ad_payments C on A.community_recruit_listings_id = C.listing_id
+                    left join ad_company D on A.ad_company_id = D.ad_company_id
+           where  REPLACE(D.company_name, ' ', '') like '{$company_name}' 
+           and A.advertising_level = 'platinum' and ( C.section_type = 1 or C.section_type = 2)
+           group by A.community_recruit_listings_id
+           order by A.created_at desc";
+           
+        $advertiser_txt = "구인광고(Platinum)";
+    }
+
+    if ($ad_method == "recruit_gold") {
+
+        $row_sql = "SELECT A.*, C.validity_period, C.payment_amount, D.company_name, D.company_address FROM community_recruit_listings A 
+                    left join community_recruit_listings_sub B on A.community_recruit_listings_id = B.community_recruit_listings_id    
+                    left join ad_payments C on A.community_recruit_listings_id = C.listing_id    
+                    left join ad_company D on A.ad_company_id = D.ad_company_id
+           where   REPLACE(D.company_name, ' ', '') like '{$company_name}' 
+           and  A.advertising_level = 'gold' and  ( C.section_type = 1 or C.section_type = 2)
+           group by A.community_recruit_listings_id                       
+           order by A.created_at desc";
+           
+        $advertiser_txt = "구인광고(Gold)";   
+    }
+
+    if($ad_method == "business_platinum") {
+
+        $row_sql = "SELECT A.*, C.validity_period, C.payment_amount, D.company_name, D.company_address FROM community_business A            
+                    left join ad_payments C on A.community_business_id = C.listing_id    
+                    left join ad_company D on A.ad_company_id = D.ad_company_id
+           where   REPLACE(D.company_name, ' ', '') like '{$company_name}'
+           and A.advertising_level = 'platinum' and   C.section_type = 3
+           group by A.community_business_id      
+           order by A.created_at desc";
+        
+        $advertiser_txt = "비지니스(Platinum)";   
+
+    }
+
+
+    if($ad_method == "vehicle_dealer") {
+        
+         $row_sql = "SELECT A.*, C.validity_period, C.payment_amount FROM community_car_dealers A            
+                    left join ad_payments C on A.community_car_dealers_id = C.listing_id    
+           where A.user_id = '{$SS_ID}'
+                 and  C.section_type = 4
+           order by A.created_at desc";
+        
+        $advertiser_txt = "자동차 딜러";   
+    }
+    
+ //   $placeholders = ['company_name' => '%'.$company_name.'%'];
+ 
+    $placeholders = [];
+    $result = $db->query($row_sql, $placeholders);
+    while ($row = $db->fetch()) {
+
+        $address = "";
+        switch($ad_method) {
+            
+            case "recruit_platinum"     : $title = $row->title; $num = $row->community_recruit_listings_id; $address = $row->company_address; break;
+            case "recruit_gold"         : $title = $row->title; $num = $row->community_recruit_listings_id; $address = $row->company_address;break;
+            case "business_platinum"    : $title = $row->title; $num = $row->community_business_id; $address = $row->company_address; break;
+            case "vehicle_dealer"       : $title = $row->contact_name; $num = $row->community_car_dealers_id; $address = $row->listing_address1; break;
+            
+        }
+        
+        $created_at = substr($row->created_at,0,10);
+        
+        $html .= "<tr>
+                                                <td>
+                                                    {$row->company_name}
+                                                </td>
+                                                <td>
+                                                    {$address}
+                                                </td>
+                                                <td>
+                                                    {$row->contact_name}
+                                                </td>
+                                                <td>
+                                                    {$row->contact_email}
+                                                </td>
+                                                <td>
+                                                    {$row->contact_phone}
+                                                </td>
+                                                <td>
+                                                    {$title}
+                                                </td>                                                
+                                                <td>
+                                                   {$row->validity_period}개월
+                                                </td>
+                                                <!--td>
+                                                    {$row->payment_amount}원
+                                                </td-->
+                                                <td>
+                                                    {$created_at}
+                                                </td>
+                                                <td>
+                                                    <input class=\"form-check-input rounded-0\" type=\"checkbox\" onclick=\"GET_INFO('{$ad_method}','{$num}');\">
+                                                </td>
+                                            </tr>";
+    }
+
+    $result_data = [
+        "status" => "success",
+        "msg" => "sucess",
+        "items" => array("item" => $html)
+    ];
+    
+    echo json_encode($result_data, JSON_UNESCAPED_UNICODE);
+        exit;
+
+}
+
+if($ac == "previous_advertising_info") {
+    
+    $ad_method = $_GET['ad_method'] ?? "";
+    $num = $_GET['num'] ?? 0;
+    
+    if ($ad_method == "recruit_platinum") {
+
+        $row_sql = "SELECT A.*, C.validity_period, C.payment_amount, C.desired_start_date, D.company_name as a_company_name, D.company_website, D.company_address, D.company_state_code, D.has_15_plus_employees FROM community_recruit_listings A 
+                    left join community_recruit_listings_sub B on A.community_recruit_listings_id = B.community_recruit_listings_id    
+                    left join ad_payments C on A.community_recruit_listings_id = C.listing_id
+                    left join ad_company D on A.ad_company_id = D.ad_company_id
+           where A.community_recruit_listings_id = $num
+           and A.advertising_level = 'platinum' and ( C.section_type = 1 or C.section_type = 2)
+           order by A.created_at desc limit 0,1";
+           
+        $advertiser_txt = "구인광고(Platinum)";
+    }
+
+    if ($ad_method == "recruit_gold") {
+
+        $row_sql = "SELECT A.*, C.validity_period, C.payment_amount, C.desired_start_date, D.company_name as a_company_name, D.company_website, D.company_address,  D.company_state_code, D.has_15_plus_employees  FROM community_recruit_listings A 
+                    left join community_recruit_listings_sub B on A.community_recruit_listings_id = B.community_recruit_listings_id    
+                    left join ad_payments C on A.community_recruit_listings_id = C.listing_id    
+                    left join ad_company D on A.ad_company_id = D.ad_company_id
+           where  A.community_recruit_listings_id = $num  
+           and  A.advertising_level = 'gold' and  ( C.section_type = 1 or C.section_type = 2)
+           order by A.created_at desc limit 0,1";
+           
+        $advertiser_txt = "구인광고(Gold)";   
+    }
+
+    if($ad_method == "business_platinum") {
+
+        $row_sql = "SELECT A.*, C.validity_period, C.payment_amount, C.desired_start_date, D.company_name as a_company_name,  D.company_website, D.company_address, D.company_state_code, D.has_15_plus_employees  FROM community_business A            
+                    left join ad_payments C on A.community_business_id = C.listing_id    
+                    left join ad_company D on A.ad_company_id = D.ad_company_id
+           where  A.community_business_id = $num 
+           and A.advertising_level = 'platinum'  and   C.section_type = 3
+           order by A.created_at desc limit 0,1";
+        
+        $advertiser_txt = "비지니스(Platinum)";   
+
+    }
+    
+     if($ad_method == "vehicle_dealer") {
+        
+         $row_sql = "SELECT A.*, C.validity_period, C.desired_start_date, C.payment_amount FROM community_car_dealers A            
+                    left join ad_payments C on A.community_car_dealers_id = C.listing_id    
+           where A.community_car_dealers_id = $num
+                 and  C.section_type = 4
+           order by A.created_at desc";
+        
+        $advertiser_txt = "자동차 딜러";   
+    }
+    
+    $placeholders = [];
+    $result = $db->query($row_sql, $placeholders);
+    $row = $db->fetch();
+    
+    if(empty($row)) {
+        $result_data = [
+            "status" => "fail",
+            "msg" => "과거 데이터가 없습니다."        
+        ];
+        
+        echo json_encode($result_data, JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+    
+    if ($ad_method == "recruit_platinum" || $ad_method == "recruit_gold") {
+        
+        $main_image_url = ""; 
+        $logo_image_url = "";
+        $sub_image_01_url = "";
+        $sub_image_02_url = "";
+        $sub_image_03_url = "";
+        $sub_image_04_url = "";
+        $sub_image_05_url = "";
+        $sub_image_06_url = "";
+        
+        $community_recruit_listings_id = $row->community_recruit_listings_id;
+        
+        if($row->logo_image_url != "") $logo_image_url = $define_val->IMG_PROTECT ."?c=community&cc=recruit&d=logo&s=".$community_recruit_listings_id;        
+            
+        if($row->main_image_url != "") $main_image_url = $define_val->IMG_PROTECT ."?c=community&cc=recruit&d=main&s=".$community_recruit_listings_id;
+                
+        if($row->sub_image_01_url != "") $sub_image_01_url = $define_val->IMG_PROTECT ."?c=community&cc=recruit&d=img1&s=".$community_recruit_listings_id;
+        if($row->sub_image_02_url != "") $sub_image_02_url = $define_val->IMG_PROTECT ."?c=community&cc=recruit&d=img2&s=".$community_recruit_listings_id;
+        if($row->sub_image_03_url != "") $sub_image_03_url = $define_val->IMG_PROTECT ."?c=community&cc=recruit&d=img3&s=".$community_recruit_listings_id;
+        if($row->sub_image_04_url != "") $sub_image_04_url = $define_val->IMG_PROTECT ."?c=community&cc=recruit&d=img4&s=".$community_recruit_listings_id;
+        if($row->sub_image_05_url != "") $sub_image_05_url = $define_val->IMG_PROTECT ."?c=community&cc=recruit&d=img5&s=".$community_recruit_listings_id;
+        if($row->sub_image_06_url != "") $sub_image_06_url = $define_val->IMG_PROTECT ."?c=community&cc=recruit&d=img6&s=".$community_recruit_listings_id;
+        
+        if ($ad_method == "recruit_platinum") $prefix = "rp";
+        else $prefix = "rg";
+        
+        [$first_state_code, $first_city_name, $state_city_html] = make_state_city($db2, $prefix, $community_recruit_listings_id);
+        
+        $item = array(
+        'ad_company_id'         => $row->ad_company_id,
+        "listing_id"            => $row->community_recruit_listings_id,
+        "validity_period"       => $row->validity_period,
+        "payment_amount"        => $row->payment_amount > 0 ? $row->payment_amount : "무료",
+        "company_name"          => $row->a_company_name,
+        "company_website"       => $row->company_website,
+        "company_address"       => $row->company_address,
+        "company_state_code"    => $row->company_state_code,
+        "state_code"            => $first_state_code,
+        "city_name"             => $first_city_name,  
+        "state_city_html"       => $state_city_html,
+        "has_15_plus_employees" => $row->has_15_plus_employees,
+        "desired_start_date"    => CONVERT_DATE_FORMAT3($row->desired_start_date),
+        "contact_name"          => $row->contact_name,
+        "contact_email"         => $row->contact_email,
+        "contact_phone"         => $row->contact_phone,
+        "job_opening_information" => $row->job_opening_information,
+        "title"                 => $row->title,
+        "logo_image_url"        => $logo_image_url,
+        "main_image_url"        => $main_image_url,
+        "sub_image_01_url"      => $sub_image_01_url,
+        "sub_image_02_url"      => $sub_image_02_url,
+        "sub_image_03_url"      => $sub_image_03_url,
+        "sub_image_04_url"      => $sub_image_04_url,
+        "sub_image_05_url"      => $sub_image_05_url,
+        "sub_image_06_url"      => $sub_image_06_url        
+        );
+        
+        [$first_job_type, $job_type_html] = make_recurit_job_html($db, $define_val, $community_recruit_listings_id);
+    
+        $item['html_job_type'] = $job_type_html;
+        $item['first_job_type'] = $first_job_type;
+    }
+    
+    if ($ad_method == "business_platinum") {
+        
+        $main_image_url = ""; 
+        
+        $sub_image_01_url = "";
+        $sub_image_02_url = "";
+        $sub_image_03_url = "";
+        $sub_image_04_url = "";
+        $sub_image_05_url = "";
+        $sub_image_06_url = "";
+        
+        $community_business_id = $row->community_business_id;
+        
+        if($row->main_image_url != "") $main_image_url = $define_val->IMG_PROTECT ."?c=community&cc=business&d=main&s=".$community_business_id;
+                
+        if($row->sub_image_01_url != "") $sub_image_01_url = $define_val->IMG_PROTECT ."?c=community&cc=business&d=img1&s=".$community_business_id;
+        if($row->sub_image_02_url != "") $sub_image_02_url = $define_val->IMG_PROTECT ."?c=community&cc=business&d=img2&s=".$community_business_id;
+        if($row->sub_image_03_url != "") $sub_image_03_url = $define_val->IMG_PROTECT ."?c=community&cc=business&d=img3&s=".$community_business_id;
+        if($row->sub_image_04_url != "") $sub_image_04_url = $define_val->IMG_PROTECT ."?c=community&cc=business&d=img4&s=".$community_business_id;
+        if($row->sub_image_05_url != "") $sub_image_05_url = $define_val->IMG_PROTECT ."?c=community&cc=business&d=img5&s=".$community_business_id;
+        if($row->sub_image_06_url != "") $sub_image_06_url = $define_val->IMG_PROTECT ."?c=community&cc=business&d=img6&s=".$community_business_id;
+        
+        $item = array(
+        'ad_company_id'         => $row->ad_company_id,
+        "listing_id"            => $row->community_business_id,
+        "validity_period"       => $row->validity_period,
+        "payment_amount"        => $row->payment_amount > 0 ? $row->payment_amoun : "무료",
+        "state_code"            => $row->state_code,
+        "city_name"             => $row->city_name,
+        "desired_start_date"    => CONVERT_DATE_FORMAT3($row->desired_start_date),
+        "company_name"          => $row->company_name,        
+        "contact_name"          => $row->contact_name,
+        "contact_email"         => $row->contact_email,
+        "contact_phone"         => $row->contact_phone,        
+        "first_business_type" => $row->business_type,
+        "title"                 => $row->title,
+        "content"               => $row->content,
+        "main_image_url"        => $main_image_url,
+        "sub_image_01_url"      => $sub_image_01_url,
+        "sub_image_02_url"      => $sub_image_02_url,
+        "sub_image_03_url"      => $sub_image_03_url,
+        "sub_image_04_url"      => $sub_image_04_url,
+        "sub_image_05_url"      => $sub_image_05_url,
+        "sub_image_06_url"      => $sub_image_06_url        
+        );
+    }  
+    
+    if ($ad_method == "vehicle_dealer") {
+        
+        $logo_url = ""; 
+        
+        $main_image_url = "";
+        
+        $community_car_dealers_id = $row->community_car_dealers_id;
+        
+        if($row->logo_url != "") $logo_url = $define_val->IMG_PROTECT ."?c=community&cc=vehicle_dealer&d=logo&s=".$community_car_dealers_id;
+                
+        if($row->main_image_url != "") $main_image_url = $define_val->IMG_PROTECT ."?c=community&cc=vehicle_dealer&d=main&s=".$community_car_dealers_id;
+        
+        $item = array(
+        'ad_company_id'         => "",
+        "listing_id"            => $row->community_car_dealers_id,
+        "validity_period"       => $row->validity_period,
+        "payment_amount"        => $row->payment_amount > 0 ? $row->payment_amoun : "무료",
+        "desired_start_date"    => CONVERT_DATE_FORMAT3($row->desired_start_date),
+        "company_name"          => $row->company_name,        
+        "company_website"       => $row->company_website,      
+        "contact_name"          => $row->contact_name,
+        "dealer_website"        => $row->dealer_website,      
+        "listing_address1"      => $row->listing_address1,
+        "listing_address2"      => $row->listing_address2,
+        "contact_email"         => $row->contact_email,
+        "contact_phone"         => $row->contact_phone,        
+        "state_code"            => $row->state_code,
+        "city_name"             => $row->city_name,        
+        "dealer_introduction"   => $row->dealer_introduction,
+        "logo_url"              => $logo_url,
+        "main_image_url"        => $main_image_url
+        );
+    }      
+    
+    $result_data = [
+        "status" => "success",
+        "msg" => "sucess",
+        "items" => array("item" => $item)
+    ];
+    
+    echo json_encode($result_data, JSON_UNESCAPED_UNICODE);
+    exit;
+    
+}
+
+if($ac == "update_advertisement") {
+
+    $db->transactionBegin();
+
+    try {
+
+        $ad_method = $_POST['ad_method'];
+
+        if($ad_method == "") {
+            exit;
+        }
+
+        // 공통 입력
+        $company_name = $_POST['company_name'] ?? "";
+        $company_website = $_POST['company_website'] ?? "";
+        $company_address = $_POST['company_address'] ?? "";
+        $company_state_code = $_POST['company_state_code'] ?? "";
+        $has_15_plus_employees = $_POST['has_15_plus_employees'] ?? "";
+
+        $contact_name  = $_POST['contact_name'] ?? "";
+        $contact_email = $_POST['contact_email'] ?? "";
+        $contact_phone = $_POST['contact_phone'] ?? "";        
+        
+        $ad_company_id = $_POST['ad_company_id'] ?? "";        
+        $listing_id = $_POST['listing_id'] ?? "";        
+        
+        $validity_period = $_POST['validity_period'] ?? 1;
+
+        $desired_start_date = CONVERT_DATE_FORMAT($_POST['desired_start_date'] ?? ""); 
+        $desired_end_date = ADD_MONTHS_TO_DATE($desired_start_date,$validity_period);
+        
+        $today = date("Ymd");
+    
+        if($desired_start_date <= $today && $today <= $desired_end_date) $has_active_advertisement = 1;
+        else $has_active_advertisement = 0;
+
+        // 회사정보 수정없음
+        if ($ad_method != "vehicle_dealer") {         
+
+            /*
+            // 업데이트 없이 Skip
+            $update_values = array(
+                'company_name' => $company_name,
+                'company_website' => $company_website,
+                'company_address' => $company_address,
+                'company_state_code' => $company_state_code,
+                'has_15_plus_employees' => $has_15_plus_employees,
+                'contact_name' => $contact_name,
+                'contact_email' => $contact_email,
+                'contact_phone' => $contact_phone,
+                'updated_user' => $SS_NAME,
+                'updated_at' => date('Y-m-d H:i:s'),
+                'ip_address' => $_SERVER['REMOTE_ADDR']
+            );
+
+            $result = $db->update('ad_company', $update_values, 'ad_company_id = ' . $ad_company_id);
+            if ($result == false) throw new Exception("ad_company update fail");
+            unset($update_values);
+            */
+
+            
+
+        }
+
+
+        // 구인구직 platinum
+        if ($ad_method == "recruit_platinum" || $ad_method == "recruit_gold") {
+
+            
+            if ($ad_method == "recruit_platinum") {
+                
+                $section_type = 1;
+                $state_codes    = $_POST['rp_state_code'] ?? [];
+                $city_names     = $_POST['rp_city_name'] ?? [];                
+                
+                $advertising_level = "platinum";
+                $title = $_POST['rp_title'] ?? "";
+                $subtitle = $_POST['rp_subtitle'] ?? "";                
+                $job_opening_information = $_POST['rp_job_opening_information'] ?? "";
+
+                $job_type = $_POST['rp_job_type'] ?? [];
+            }
+            else {
+                
+                $section_type = 2;
+                $state_codes    = $_POST['rg_state_code'] ?? [];
+                $city_names     = $_POST['rg_city_name'] ?? [];                
+                
+                $advertising_level = "gold";
+                $title = $_POST['rg_title'] ?? "";
+                $subtitle = $_POST['rg_subtitle'] ?? "";
+                
+                $job_opening_information = $_POST['rg_job_opening_information'] ?? "";
+
+                $job_type = $_POST['rg_job_type'] ?? [];
+            }
+
+            $recruit_logo_image_url = "";
+            $recruit_main_image_url = "";
+            $recruit_main_image_background_url = "";
+            $recruit_sub_image_01_url = "";
+            $recruit_sub_image_02_url = "";
+
+            if ($ad_method == "recruit_platinum") {              
+                
+               // $recruit_logo_image_url = make_file_name("rp_logo_image_url", $listing_id, "rp_logo_image_url_exist");
+                $recruit_sub_image_01_url = make_file_name("rp_sub_image_01_url", $listing_id, "rp_sub_image_01_url_exist");
+                $recruit_sub_image_02_url = make_file_name("rp_sub_image_02_url", $listing_id, "rp_sub_image_02_url_exist");
+                $recruit_sub_image_03_url = make_file_name("rp_sub_image_03_url", $listing_id, "rp_sub_image_03_url_exist");
+                $recruit_sub_image_04_url = make_file_name("rp_sub_image_04_url", $listing_id, "rp_sub_image_04_url_exist");
+                $recruit_sub_image_05_url = make_file_name("rp_sub_image_05_url", $listing_id, "rp_sub_image_05_url_exist");
+                $recruit_sub_image_06_url = make_file_name("rp_sub_image_06_url", $listing_id, "rp_sub_image_06_url_exist");
+                
+
+            }
+            else {
+                
+               // $recruit_logo_image_url = make_file_name("rg_logo_image_url", $listing_id, "rg_logo_image_url_exist");
+                $recruit_sub_image_01_url = make_file_name("rg_sub_image_01_url", $listing_id, "rg_sub_image_01_url_exist");
+                $recruit_sub_image_02_url = make_file_name("rg_sub_image_02_url", $listing_id, "rg_sub_image_02_url_exist");
+                $recruit_sub_image_03_url = make_file_name("rg_sub_image_03_url", $listing_id, "rg_sub_image_03_url_exist");
+                $recruit_sub_image_04_url = make_file_name("rg_sub_image_04_url", $listing_id, "rg_sub_image_04_url_exist");
+                $recruit_sub_image_05_url = make_file_name("rg_sub_image_05_url", $listing_id, "rg_sub_image_05_url_exist");
+                $recruit_sub_image_06_url = "";
+                
+            }
+
+            $update_values = array(                
+                'company_name' => $company_name,
+               // 'logo_image_url' => $recruit_logo_image_url, 수정못하게 처리
+                'main_image_background_url' => $recruit_main_image_background_url,
+                'sub_image_01_url' => $recruit_sub_image_01_url,
+                'sub_image_02_url' => $recruit_sub_image_02_url,
+                'sub_image_03_url' => $recruit_sub_image_03_url,
+                'sub_image_04_url' => $recruit_sub_image_04_url,
+                'sub_image_05_url' => $recruit_sub_image_05_url,
+                'sub_image_06_url' => $recruit_sub_image_06_url,                
+                'title' => $title,
+                'subtitle' => $subtitle,
+                'contact_name' => $contact_name,
+                'contact_email' => $contact_email,
+                'contact_phone' => $contact_phone,
+                'job_opening_information' => $job_opening_information,                                
+                'is_modify_yn' => 0,
+                'is_approved' => 0,
+                'updated_user' => $SS_NICKNAME,
+                'updated_at' => date('Y-m-d H:i:s'),
+                'ip_address' => $_SERVER['REMOTE_ADDR']
+                
+            );
+
+            $result = $db->update('community_recruit_listings', $update_values, 'community_recruit_listings_id = ' . $listing_id);
+            if ($result == false) throw new Exception("community_recruit_listings update fail");
+            unset($update);
+
+            if ($ad_method == "recruit_platinum") {                                 
+                                    
+                //    if ($recruit_logo_image_url != "") FILE_UPLOAD("user", "recruit_files", "recruit", $listing_id, "rp_logo_image_url", "logo");
+                    if ($recruit_sub_image_01_url != "") FILE_UPLOAD("user", "recruit_files", "recruit", $listing_id, "rp_sub_image_01_url", "img1");
+                    if ($recruit_sub_image_02_url != "") FILE_UPLOAD("user", "recruit_files", "recruit", $listing_id, "rp_sub_image_02_url", "img2");
+                    if ($recruit_sub_image_03_url != "") FILE_UPLOAD("user", "recruit_files", "recruit", $listing_id, "rp_sub_image_03_url", "img3");
+                    if ($recruit_sub_image_04_url != "") FILE_UPLOAD("user", "recruit_files", "recruit", $listing_id, "rp_sub_image_04_url", "img4");
+                    if ($recruit_sub_image_05_url != "") FILE_UPLOAD("user", "recruit_files", "recruit", $listing_id, "rp_sub_image_05_url", "img5");       
+            }
+            else {                
+                
+               // if ($recruit_logo_image_url != "") FILE_UPLOAD("user", "recruit_files", "recruit", $listing_id, "rg_logo_image_url", "logo");
+                if ($recruit_sub_image_01_url != "") FILE_UPLOAD("user", "recruit_files", "recruit", $listing_id, "rg_sub_image_01_url", "img1");
+                if ($recruit_sub_image_02_url != "") FILE_UPLOAD("user", "recruit_files", "recruit", $listing_id, "rg_sub_image_02_url", "img2");
+                if ($recruit_sub_image_03_url != "") FILE_UPLOAD("user", "recruit_files", "recruit", $listing_id, "rg_sub_image_03_url", "img3");
+                if ($recruit_sub_image_04_url != "") FILE_UPLOAD("user", "recruit_files", "recruit", $listing_id, "rg_sub_image_04_url", "img4");
+                if ($recruit_sub_image_05_url != "") FILE_UPLOAD("user", "recruit_files", "recruit", $listing_id, "rg_sub_image_05_url", "img5");                
+                
+            }
+
+            $db->delete('community_recruit_listings_sub', 'community_recruit_listings_id = ' . $listing_id);
+            
+            foreach ($job_type as $index => $value) {
+                
+                if (!empty(trim($value))) {
+                    
+                    $insert_values = array(
+                        'community_recruit_listings_sub_id' => null,
+                        'community_recruit_listings_id' => $listing_id,
+                        'user_id' => $SS_ID,                        
+                        'job_type' => $value,
+                        'is_active' => 1,
+                        'created_user' => $SS_ID ?? "",
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'ip_address' => $_SERVER['REMOTE_ADDR']
+                    );
+
+                    $result =$db->insert('community_recruit_listings_sub', $insert_values);
+                    if ($result == false) throw new Exception("community_recruit_listings_sub insert fail");
+                    unset($insert_values);
+
+                }
+                
+            }
+                
+            $db->delete('community_recruit_listings_loc_sub', 'community_recruit_listings_id = ' . $listing_id);
+                                
+            foreach ($state_codes as $index => $state_code) {
+                                
+                if($state_code == "") continue;
+               
+                $city_name = $city_names[$index] ?? '';
+                                
+                $insert_values = array(
+                        'community_recruit_listings_loc_sub_id' => null,
+                        'community_recruit_listings_id' => $listing_id,
+                        'state_code' => htmlspecialchars($state_code),
+                        'city_name' => htmlspecialchars($city_name),                        
+                        'is_active' => 1,
+                        'created_user' => $SS_ID ?? "",
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'ip_address' => $_SERVER['REMOTE_ADDR']
+                );
+               
+                $result =$db->insert('community_recruit_listings_loc_sub', $insert_values);
+                if ($result == false) throw new Exception("community_recruit_listings_loc_sub insert fail");
+                unset($insert_values);
+                
+                
+                
+            }
+            
+        }
+
+        // 비지니스 platinum
+        if ($ad_method == "business_platinum") {
+
+            $section_type = 3;
+            $advertising_level = "platinum";
+            $business_type = $_POST['bp_business_type'];
+            $title = $_POST['bp_title'];
+            $state_code = $_POST['bp_state_code'] ?? "";
+            $city_name = $_POST['bp_city_name'] ?? "";
+            $content = $_POST['bp_content'] ?? "";
+            $advertiser_notes = "";
+
+
+            $business_main_image_url = "";
+            $business_sub_image_01_url = "";
+
+            
+            $business_main_image_url = make_file_name("bp_main_image_url", $listing_id, "bp_main_image_url_exist");
+            $business_sub_image_01_url = make_file_name("bp_sub_image_01_url", $listing_id, "bp_sub_image_01_url_exist");
+            $business_sub_image_02_url = make_file_name("bp_sub_image_02_url", $listing_id, "bp_sub_image_02_url_exist");
+            $business_sub_image_03_url = make_file_name("bp_sub_image_03_url", $listing_id, "bp_sub_image_03_url_exist");
+            $business_sub_image_04_url = make_file_name("bp_sub_image_04_url", $listing_id, "bp_sub_image_04_url_exist");
+            $business_sub_image_05_url = make_file_name("bp_sub_image_05_url", $listing_id, "bp_sub_image_05_url_exist");
+
+            $update_values = array(
+                'advertising_level' => $advertising_level,
+                'business_type' => $business_type,
+                'company_name' => $company_name,
+                'main_image_url' => $business_main_image_url,
+                'sub_image_01_url' => $business_sub_image_01_url,
+                'sub_image_02_url' => $business_sub_image_02_url,
+                'sub_image_03_url' => $business_sub_image_03_url,
+                'sub_image_04_url' => $business_sub_image_04_url,
+                'sub_image_05_url' => $business_sub_image_05_url,
+                'title' => $title,
+                'state_code' => $state_code,
+                'city_name' => $city_name,
+                'contact_name' => $contact_name,
+                'contact_email' => $contact_email,
+                'contact_phone' => $contact_phone,
+                'content' => $content,                
+                'advertiser_notes' => $advertiser_notes,    
+                'is_modify_yn' => 0,       
+                'is_approved' => 0,                     
+                'updated_user' => $SS_NICKNAME,
+                'updated_at' => date('Y-m-d H:i:s'),
+                'ip_address' => $_SERVER['REMOTE_ADDR']
+            );
+
+            $result = $db->update('community_business', $update_values, 'community_business_id = ' . $listing_id);
+            if ($result == false) throw new Exception("community_business update fail");
+
+            if ($business_main_image_url != "") FILE_UPLOAD("user", "business_files", "business", $listing_id,  "bp_main_image_url","main");
+            if ($business_sub_image_01_url != "") FILE_UPLOAD("user", "business_files", "business", $listing_id, "bp_sub_image_01_url", "img1");
+            if ($business_sub_image_02_url != "") FILE_UPLOAD("user", "business_files", "business", $listing_id, "bp_sub_image_02_url", "img2");
+            if ($business_sub_image_03_url != "") FILE_UPLOAD("user", "business_files", "business", $listing_id, "bp_sub_image_03_url", "img3");
+            if ($business_sub_image_04_url != "") FILE_UPLOAD("user", "business_files", "business", $listing_id, "bp_sub_image_04_url", "img4");
+            if ($business_sub_image_05_url != "") FILE_UPLOAD("user", "business_files", "business", $listing_id, "bp_sub_image_055url", "img5");
+                        
+            unset($insert_values);
+
+        }
+
+        // 자동차 딜러 광고
+        if ($ad_method == "vehicle_dealer") {
+
+            $section_type = 4;
+            $dealer_website = $_POST['vd_dealer_website'];
+            $listing_address1 = $_POST['vd_listing_address1'];
+            $dealer_introduction = $_POST['vd_dealer_introduction'];
+            
+            $state_code = $_POST['vd_state_code'] ?? "";
+            $city_name = $_POST['vd_city_name'] ?? "";
+
+            $vd_logo_url = "";
+            $vd_main_image_url = "";
+            
+            $vd_logo_url = make_file_name("vd_logo_url", $listing_id, "vd_logo_url_exist");
+            $vd_main_image_url = make_file_name("vd_main_image_url", $listing_id, "vd_main_image_url_exist");
+            
+                
+            $update_values = array(                    
+                'company_name' => $company_name,
+                'company_website' => $company_website,
+                'dealer_website' => $dealer_website,
+                'contact_name' => $contact_name,
+                'contact_email' => $contact_email,
+                'contact_phone' => $contact_phone,
+                'listing_address1' => $listing_address1,
+                'listing_address2' => "",
+                'state_code' => $state_code,
+                'city_name' => $city_name,
+                'listing_zip' => "",
+                'listing_zip_ext' => "",
+                'listing_country' => "",
+                'is_modify_yn' => 0,    
+                'is_approved' => 0,
+                'logo_url' => $vd_logo_url,
+                'main_image_url' => $vd_main_image_url,
+                'dealer_introduction' => $dealer_introduction,                    
+                'updated_user' => $SS_NICKNAME,
+                'updated_at' => date('Y-m-d H:i:s'),
+                'ip_address' => $_SERVER['REMOTE_ADDR']
+            );
+
+            $result = $db->update('community_car_dealers', $update_values, 'community_car_dealers_id = ' . $listing_id);
+            if ($result == false) throw new Exception("community_car_dealers update fail");
+            unset($update_values);                
+                           
+            if ($vd_logo_url != "") FILE_UPLOAD("user", "vehicle_dealer_files", "vehicle_dealer", $listing_id,  "vd_logo_url", "logo");
+            if ($vd_main_image_url != "") FILE_UPLOAD("user", "vehicle_dealer_files", "vehicle_dealer", $listing_id,  "vd_main_image_url", "main");
+        
+
+        }
+        
+        $update_values = array(        
+            'desired_start_date' => $desired_start_date,
+            'desired_end_date' => $desired_end_date,         
+            'updated_user' => $SS_NICKNAME,
+            'updated_at' => date('Y-m-d H:i:s'),
+            'ip_address' => $_SERVER['REMOTE_ADDR']
+        );
+
+        $result = $db->update('ad_payments', $update_values, ['listing_id' => $listing_id, 'section_type' => $section_type]);
+        if ($result == false) throw new Exception("ad_payments update fail");
+        unset($update_values);
+
+    }
+    catch (Exception $e) {
+
+        $db->transactionRollback();
+
+        $result_data = [
+            "status" => "fail",
+            "msg" => $e->getMessage()
+
+        ];
+
+        echo json_encode($result_data, JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
+//   $db->transactionRollback();
+   $db->transactionCommit();
+
+    $result_data = [
+        "status" => "success",
+        "msg" => "sucess",
+
+    ];
+
+    echo json_encode($result_data, JSON_UNESCAPED_UNICODE);
+    exit;
+
+}

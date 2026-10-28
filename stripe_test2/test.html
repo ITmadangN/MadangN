@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>결제</title>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<style>
+.payment-wrap {
+display: flex;
+gap: 30px;
+}
+
+.product-info {
+    width: 40%;
+}
+
+.payment-area {
+    width: 60%;
+}
+
+#checkout {
+    width: 100%;
+}
+    </style>
+</head>
+
+<body>
+
+<h2>상품 결제</h2>
+
+<div>
+    상품명 : Premium 상품<br>
+    결제금액 : 30,000원
+</div>
+
+<br>
+
+<button type="button" id="btnPayment">
+    결제하기
+</button>
+
+<br><br>
+
+<script>
+
+const stripe = Stripe('pk_test_51Tem4pJrnxNGZT5aMzgAM8fxIx0cITYLMVHsY3eTThFNF8j8J7J2D2gLllH6ZjBIvqXb2KC8wXTGNz4qXV2lK6Jt00EOAsEYEc');
+
+let checkout = null;
+
+$('#btnPayment').click(function () {
+
+    $.ajax({
+        url: 'create_checkout_session.php',
+        type: 'POST',
+        dataType: 'json',
+
+        data: {
+            product_id: 1001
+        },
+
+        success: async function (response) {
+
+            console.log(response);
+
+            if (!response.client_secret) {
+                alert('결제 세션 생성 실패');
+                return;
+            }
+
+            checkout = await stripe.initEmbeddedCheckout({
+                clientSecret: response.client_secret
+            });
+
+            checkout.mount('#checkout');
+
+            $('#btnPayment').hide();
+        },
+
+        error: function (xhr) {
+            console.log(xhr.responseText);
+            alert('결제 처리 중 오류가 발생했습니다.');
+        }
+    });
+
+});
+
+</script>
+
+</body>
+sdfds
+<div id="checkout"></div>
+sdlkfjsdlkfjsdlkfjdslk
+</html>

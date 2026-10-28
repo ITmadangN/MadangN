@@ -1,0 +1,18 @@
+/* Add here all your CSS customizations */
+table tr td a{color:#000 !important;}
+table thead th {
+	border-top: 2px solid #e4e4e4;
+}
+input::placeholder { font-size: 13px;color:#555 !important;}
+.text-dark{color:#555 !important;}
+.text-gray{color:#777 !important;}
+.text-blue{color:#214ee2 !important;}
+.mt-n1{margin-top:-10px !important;}
+.nimg img{height:20px !important;}
+.bimg img{height:100px !important;}
+.timg img {height:60px !important;}
+
+
+table tr td {
+vertical-align: middle;
+}

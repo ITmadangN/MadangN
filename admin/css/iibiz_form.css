@@ -1,0 +1,338 @@
+/* ── 상세조회 카드 커스텀 스타일 ── */
+.detail-card {
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid #e4e7ef;
+    overflow: hidden;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+}
+
+.detail-company-banner {
+    background: linear-gradient(135deg, #334155 0%, #475569 100%);
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.detail-company-avatar {
+    width: 46px;
+    height: 46px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+    border: 1.5px solid rgba(255, 255, 255, 0.35);
+}
+
+.detail-company-name {
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.3;
+}
+
+.detail-company-meta {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 2px;
+}
+
+.detail-loop-row {
+    padding: 10px 24px;
+    border-bottom: 1px solid #f0f2f8;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+.detail-loop-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-right: 4px;
+}
+
+.detail-level-badge {
+    display: inline-flex;
+    align-items: center;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.detail-section-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #2563eb;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 14px 24px 6px;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.detail-field {
+    padding: 12px 24px;
+    border-bottom: 1px solid #f0f2f8;
+}
+
+.detail-field:nth-child(odd) {
+    border-right: 1px solid #f0f2f8;
+}
+
+.detail-field.full {
+    grid-column: 1 / -1;
+    border-right: none;
+}
+
+.detail-field-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #64748b;;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 4px;
+}
+
+.detail-field-value {
+    font-size: 14px;
+    color: #1e2330;
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+.detail-field-value img {
+    max-width: 100%;
+    max-height: 120px;
+    border-radius: 6px;
+    border: 1px solid #e4e7ef;
+    margin-top: 4px;
+}
+
+.detail-img-placeholder {
+    margin-top: 6px;
+    background: #f8fafc;
+    border: 1.5px dashed #d1d5db;
+    border-radius: 8px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #c0c7d6;
+    font-size: 12px;
+    gap: 5px;
+}
+
+.detail-status-badge {
+    display: inline-block;
+    background: #dcfce7;
+    color: #16a34a;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 12px;
+    border-radius: 20px;
+}
+
+@media (max-width: 640px) {
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-field:nth-child(odd) {
+        border-right: none;
+    }
+
+    .detail-field.full {
+        grid-column: 1;
+    }
+}
+
+/* ── 수정 폼 스타일 ── */
+.detail-form-control {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #1e2330;
+    background: #ffffff;
+    border: 1px solid #e4e7ef;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.detail-form-control:focus {
+    border-color: #0d9488;
+    background: #fff;
+}
+
+.detail-form-control[readonly] {
+    background: #f1f5f9;
+    color: #94a3b8;
+    cursor: not-allowed;
+}
+
+textarea.detail-form-control {
+    resize: vertical;
+    line-height: 1.6;
+}
+
+select.detail-form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%239ca3af' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 28px;
+}
+
+.detail-field-select-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.detail-field-select-row select {
+    flex: 1;
+    min-width: 120px;
+}
+
+.detail-readonly-value {
+    font-size: 14px;
+    color: #64748b;
+    padding: 8px 0;
+}
+
+.detail-checkbox-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    font-size: 14px;
+    color: #1e2330;
+    cursor: pointer;
+}
+
+.detail-checkbox-wrap input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #0f766e;
+    cursor: pointer;
+}
+
+/* ── 광고레벨 행 ── */
+.adlevel-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.adlevel-row .detail-form-control {
+    flex: 1;
+    min-width: 0;
+}
+.adlevel-delete-btn {
+    flex-shrink: 0;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #dc2626;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+}
+.adlevel-delete-btn:hover {
+    background: #fee2e2;
+}
+.adlevel-add-btn {
+    flex-shrink: 0;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #0f766e;
+    background: #f0fdfa;
+    border: 1.5px solid #0d9488;
+    border-radius: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+}
+.adlevel-add-btn:hover {
+    background: #ccfbf1;
+}
+
+.image-modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .image-modal.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .image-modal-content {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        position: relative;
+        max-width: 90%;
+        max-height: 90vh;
+        overflow: auto;
+    }
+
+    .image-modal-close {
+        position: absolute;
+        right: 15px;
+        top: 10px;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        color: #aaa;
+    }
+
+    .image-modal-close:hover {
+        color: #000;
+    }
+
+    .image-modal-image {
+        max-width: 100%;
+        max-height: 85vh;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .image-modal-title {
+        text-align: center;
+        margin-bottom: 15px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+    }

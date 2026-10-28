@@ -1,0 +1,378 @@
+/* ============================================
+   차량 상세 페이지 리디자인 (vd-)
+   ============================================ */
+
+/* ---- 1) 판매자 정보 상단 바 (이미지 위) ---- */
+.seller-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    background: #2b2540;
+    border-radius: 8px;
+    padding: 18px 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.seller-top-left {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.seller-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.seller-logo {
+    width: auto;
+    height: 40px;
+    object-fit: contain;
+    background: #fff;
+    border-radius: 6px;
+    padding: 4px;
+}
+
+.seller-company {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.seller-price-tag {
+    font-size: 28px;
+    font-weight: 800;
+    color: #ff6b6b;
+    letter-spacing: -0.5px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.seller-top-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.seller-contact-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.1);
+    padding: 7px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.2s ease;
+}
+
+.seller-contact-item:hover {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.seller-contact-item i {
+    color: #a78bfa;
+    font-size: 12px;
+    width: 14px;
+    text-align: center;
+}
+
+.seller-contact-item a {
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+}
+
+.seller-contact-item a:hover {
+    color: #fff;
+}
+
+
+/* ---- 2) 섹션 타이틀 ---- */
+.vd-section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #333;
+    padding: 12px 20px;
+    background: #f8f8fa;
+    border-bottom: 1px solid #eee;
+}
+
+.vd-section-title i {
+    color: #6351ab;
+    margin-right: 6px;
+}
+
+
+/* ---- 3) 기본정보 그리드 ---- */
+.vd-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+}
+
+.vd-info-item {
+    display: flex;
+    align-items: center;
+    padding: 11px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    border-right: 1px solid #f0f0f0;
+    font-size: 13.5px;
+}
+
+.vd-info-item:nth-child(3n) {
+    border-right: none;
+}
+
+.vd-info-label {
+    color: #888;
+    font-weight: 600;
+    min-width: 95px;
+    white-space: nowrap;
+}
+
+.vd-info-label i {
+    margin-right: 6px;
+    width: 15px;
+    text-align: center;
+    color: #aaa;
+}
+
+.vd-info-value {
+    color: #333;
+    font-weight: 500;
+}
+
+
+/* ---- 4) 하단: 옵션/설명(왼쪽) + 문의폼(오른쪽) ---- */
+.vd-bottom-wrap {
+    display: flex;
+    gap: 0;
+    align-items: stretch;
+    margin-top: 20px;
+}
+
+.vd-bottom-left {
+    flex: 1;
+    min-width: 0;
+    border-right: 1px solid #eee;
+}
+
+.vd-bottom-right {
+    flex: 0 0 300px;
+    max-width: 300px;
+}
+
+
+/* ---- 5) 옵션정보 그리드 ---- */
+.vd-option-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+}
+
+.vd-option-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    border-right: 1px solid #f0f0f0;
+    font-size: 13.5px;
+}
+
+.vd-option-item:nth-child(2n) {
+    border-right: none;
+}
+
+.vd-option-label {
+    color: #888;
+    font-weight: 600;
+    min-width: 87px;
+    white-space: nowrap;
+}
+
+.vd-option-label::after {
+    content: " :";
+}
+
+.vd-option-value {
+    color: #333;
+    font-weight: 500;
+    margin-left: 8px;
+}
+
+/* 기타 옵션 - 전체 너비 & 여러 줄 지원 */
+.vd-option-item.vd-option-full {
+    grid-column: 1 / -1;
+    border-right: none;
+    align-items: flex-start;
+    padding: 12px 20px;
+}
+
+.vd-option-item.vd-option-full .vd-option-value {
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.7;
+}
+
+
+/* ---- 6) 차량설명 ---- */
+.vd-description {
+    padding: 16px 20px;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #444;
+    min-height: 60px;
+}
+
+
+/* ---- 7) 문의 폼 박스 ---- */
+.vd-inquiry-box {
+    padding: 16px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.vd-inquiry-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #6351ab;
+}
+
+.vd-inquiry-title i {
+    color: #6351ab;
+    margin-right: 5px;
+}
+
+.vd-inquiry-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.vd-inquiry-fields input,
+.vd-inquiry-fields textarea {
+    width: 100%;
+    border: 1px solid #ddd !important;
+    transition: border-color 0.2s;
+}
+
+.vd-inquiry-fields input:focus,
+.vd-inquiry-fields textarea:focus {
+    border-color: #6351ab !important;
+}
+
+.vd-inquiry-captcha {
+    margin-top: 8px;
+}
+
+.vd-inquiry-captcha .recaptcha-container {
+    margin-bottom: -30px;
+}
+
+.vd-inquiry-captcha .g-recaptcha {
+    transform: scale(0.82);
+    transform-origin: 0 0;
+}
+
+.h-36px {
+    height: 36px !important;
+    min-height: 36px !important;
+}
+
+.w-full {
+    width: 100% !important;
+}
+
+
+/* ---- 8) 반응형 ---- */
+@media (max-width: 992px) {
+    .vd-info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .vd-info-item:nth-child(3n) {
+        border-right: 1px solid #f0f0f0;
+    }
+
+    .vd-info-item:nth-child(2n) {
+        border-right: none;
+    }
+
+    .vd-bottom-wrap {
+        flex-direction: column;
+    }
+
+    .vd-bottom-left {
+        border-right: none;
+        border-bottom: 1px solid #eee;
+    }
+
+    .vd-bottom-right {
+        flex: 1;
+        max-width: 100%;
+    }
+
+    .vd-inquiry-box {
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .seller-top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px;
+    }
+
+    .seller-top-right {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        width: 100%;
+    }
+
+    .seller-contact-item {
+        border-radius: 6px;
+        width: 100%;
+    }
+
+    .seller-price-tag {
+        font-size: 24px;
+    }
+
+    .vd-bottom-wrap {
+        margin-top: 16px;
+    }
+
+    .vd-option-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .vd-option-item {
+        border-right: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .vd-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .vd-info-item {
+        border-right: none;
+    }
+
+    .seller-top-bar {
+        padding: 12px;
+    }
+}

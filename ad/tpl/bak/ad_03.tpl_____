@@ -1,0 +1,499 @@
+<!-- INCLUDE FILE '../include/header.php' -->
+<form name="formp" id="formp" action="ajax/ajax_ad_03.php" method="post" enctype="multipart/form-data">
+<input type="hidden" name="ac" id="ac" value="write_advertisement">
+     <div class="content-wrapper">
+        <div id="content-recruit_platinum" class="desc-content">
+
+            <!-- Section start -->
+            <div class="section panel overflow-hidden">
+                <div class="section-outer panel">
+                    <div class="max-w-lg">
+                        <div class="section-inner">
+                            <div class="block-layout grid-layout vstack gap-2 panel overflow-hidden">
+
+                                <div class="block-header panel">
+                                    <div class="head_title">
+                                        <h3 class="h5 m-0 fw-bolder"><img src="/community/images/dot.png" alt="dot" class="pr-10"/>에이전트</h3>
+                                    </div>
+                                </div>
+
+
+                                <div class="border2 rounded p-2 sm:p-3 mt-n1">
+                                    <div class="p-1">
+                                        <div class="row g-1 pb-0 sm:pb-3">
+                                            <div class="col-12 md:col-5 p-0 sm:p-3">
+                                                <div class="post-meta panel hstack justify-start gap-1 fs-6 fw-bold text-gray-900 text-opacity-60  md:d-flex z-1">
+                                                                    <div class="dots"></div>
+                                                                    <div class="text-gray-900 text-opacity-80 fs-6">
+                                                                        에이전트 & 부동산 매출광고
+
+                                                                    </div>
+                                                                </div>
+                                                    
+
+                                                 <div class="post-meta panel hstack justify-start gap-1 fs-6 fw-bold text-gray-900 text-opacity-60 mt-1 md:d-flex z-1">
+                                                                    <div class="dots"></div>
+                                                                    <div class="w-72px">기간 </div>
+                                                                    <div class="text-gray-900 text-opacity-80 fs-6">
+                                                                        <select class="form-select rounded text-gray-900 w-100px h-32px p-narrow text-opacity-60"
+                                                                                id="validity_period"
+                                                                                name="validity_period">
+                                                                            {{SELECT_VALIDITY_PERIOD}}
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                     
+
+                                                <div class="post-meta panel hstack justify-start gap-1 fs-6 fw-bold text-gray-900 mt-1 text-opacity-60  md:d-flex z-1">
+                                                                    <div class="dots"></div>
+                                                                    <div class="w-72px">가격</div>
+                                                                    <div class="text-gray-900 text-opacity-80 fs-6">$0
+                                                                        (신규런칭이벤트)
+                                                                    </div>
+                                                                </div>
+                                                    
+
+
+                                            </div>
+
+                                            <div class="col-12 md:col-7 pt-1">
+                                                <img src="/ad/agent1.jpg" data-src="/ad/agent1.jpg" alt="image" data-uc-img="loading: lazy">
+                                            </div>
+                                        </div>
+                                    </div><!-- 상단 이미지 -->
+
+
+                                    <div class="dotline2"></div>
+
+
+                                    <div class="comborder">
+                                        <div class="w-100 sm:w-800px mx-auto">
+                                            <div class="pt-0">
+                                                <div class="fw-bold fs-4">에이전트 기본정보</div>
+                                            </div>
+                                            <div class="row g-1 pb-0 sm:pb-3 p-0 sm:p-2 mts10">
+
+					     <div class="col-12 md:col-5">
+                                                    <div class="post-meta panel hstack justify-start gap-1 fs-62 fw-bold text-gray-900 text-opacity-60  md:d-flex z-1">
+                                                          <div class="w-128px">CRMLS member </div>
+                                                          <div class="w-full"><input type="radio" name="is_crmls_member" id="is_crmls_member_y" value="Y" checked  onclick="YN_SEARCH();"> YES &nbsp; <input type="radio" name="is_crmls_member" id="is_crmls_member_n" value="N" onclick="YN_SEARCH();" > NO</div>
+                                                     </div>
+                                                          
+                                                </div>
+                                                <div class="col-12 md:col-5 hidden768">
+                                                    <div></div>
+                                                </div>
+
+
+
+					       <div class="col-12 md:col-5">
+                                                    <div class="post-meta panel hstack justify-start gap-1 fs-62 fw-bold text-gray-900 text-opacity-60  md:d-flex z-1">
+                                                          <div class="w-128px">DRE Lic# </div>
+                                                          <div class="w-full"><input class="form-control h-32px w-full fs-6 bg-white" type="text" name="agent_dre_license" id="agent_dre_license"></div>
+                                                     </div>
+                                                          
+                                                </div>
+                                                <div class="col-12 md:col-5 mright" id="agent_search_button">
+                                                    <div><button class="btn btn-primary2 btn-xs fs-62" type="button" style="width:180px !important;" onclikc="GET_DRE();"> DRE License 찾기</button></div>
+                                                </div>
+
+						<div class="bdbr"></div>
+
+
+                                                <div class="col-12">
+						<div class="fw-bolder text-warning fs-62 mt-1"> <i class="fa fa-arrow-circle-right" aria-hidden="true"></i> 오피스</div>
+						</div>
+
+
+                                                 <div class="col-12 md:col-5">
+                                                    <div class="post-meta panel hstack justify-start gap-1 fs-62 fw-bold text-gray-900 text-opacity-60  md:d-flex z-1">
+                                                          <div class="w-128px">오피스 MLS ID </div>
+                                                          <div class="w-full"><input class="form-control h-32px w-full fs-6 bg-white" type="text" name="office_mls_id" id="office_mls_id"></div>
+                                                     </div>
+                                                          
+                                                </div>
+                                                <div class="col-12 md:col-5 hidden768">
+                                                    <div></div>
+                                                </div>
+
+						<div class="col-12 md:col-5">
+                                                    <div class="post-meta panel hstack justify-start gap-1 fs-62 fw-bold text-gray-900 text-opacity-60  md:d-flex z-1">
+                                                          <div class="w-128px">오피스명 </div>
+                                                          <div class="w-full"><input class="form-control h-32px w-full fs-6 bg-white" type="text" name="office_name" id="office_name"></div>
+                                                     </div>
+                                                          
+                                                </div>
+                                                <div class="col-12 md:col-5 hidden768">
+                                                    <div></div>
+                                                </div>
+
+						<div class="col-12 md:col-5">
+                                                    <div class="post-meta panel hstack justify-start gap-1 fs-62 fw-bold text-gray-900 text-opacity-60  md:d-flex z-1">
+                                                          <div class="w-128px">전화번호 </div>
+                                                          <div class="w-full"><input class="form-control h-32px w-full fs-6 bg-white" type="text" name="office_phone" id="office_phone"></div>
+                                                     </div>
+                                                          
+                                                </div>
+                                                <div class="col-12 md:col-5 hidden768">
+                                                    <div></div>
+                                                </div>
+
+						<div class="col-12 md:col-5">
+                                                    <div class="post-meta panel hstack justify-start gap-1 fs-62 fw-bold text-gray-900 text-opacity-60  md:d-flex z-1">
+                                                          <div class="w-128px">이메일 </div>
+                                                          <div class="w-full"><input class="form-control h-32px w-full fs-6 bg-white" type="text" name="office_email" id="office_email"></div>
+                                                     </div>
+                                                          
+                                                </div>
+                                                <div class="col-12 md:col-5 hidden768">
+                                                    <div></div>
+                                                </div>
+
+						 <div class="col-12 md:col-5">
+                                                    <div class="post-meta panel hstack justify-start gap-1 fs-6 fw-bold text-gray-900 text-opacity-60  md:d-flex z-1">
+                                                          <div class="w-128px">주소</div>
+                                                          <div class="w-full"><input class="form-control h-35px w-full fs-62 bg-white p-narrow" type="text" name="office_address1" id="office_address1" placeholder="주소1"></div>
+                                                    </div>
+                                                </div>
+                                                 <div class="col-12 md:col-4">
+                                                    <div class="post-meta panel hstack justify-start gap-1 fs-6 fw-bold text-gray-900 text-opacity-60  md:d-flex z-1">
+                                                          <div class="w-128px pchidden"> </div>
+                                                          <div class="w-full"><input class="form-control h-35px w-full fs-62 bg-white p-narrow" type="text" name="office_address2" id="office_address2" placeholder="주소2"></div>
+                                                    </div>
+                                                </div>
+
+						 <div class="col-12 md:col-5">
+                                                    <div class="post-meta panel hstack justify-start gap-1 fs-6 fw-bold text-gray-900 text-opacity-60  md:d-flex z-1">
+                                                          <div class="w-128px">주</div>
+                                                          <div class="w-full">
+                                                               <select class="form-select rounded text-gray-900 h-35px p-narrow text-opacity-60 fs-62" id="office_state" name="office_state" onchange="GET_SELECT_CITY_NAME();">
+                                                                {{SELECT_STATE_CODE}}                                                                           
+                                                               </select>
+                                                           </div>
+                                                    </div>
+                                                </div>
+                                                 <div class="col-12 md:col-4">
+                                                    <div class="post-meta panel hstack justify-start gap-1 fs-6 fw-bold text-gray-900 text-opacity-60  md:d-flex z-1">
+                                                          <div class="w-128px pchidden"> </div>
+                                                          <div class="w-full">
+                                                               <select class="form-select rounded text-gray-900 h-35px p-narrow fs-62 text-opacity-60" id="office_city" name="office_city">
+                                                                           <option value="">도시선택</option>
+                                                               </select>
+                                                           </div>
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div class="col-12 md:col-5">
+                                                    <div class="post-meta panel hstack justify-start gap-1 fs-6 fw-bold text-gray-900 text-opacity-60  md:d-flex z-1">
+                                                          <div class="w-128px">우편번호 </div>
+                                                          <div class="w-full"><input class="form-control h-32px w-full fs-6 bg-white" type="text" name="office_zip" id="office_zip"></div>
+                                                     </div>
+                                                          
+                                                </div>
+                                                <div class="col-12 md:col-5 hidden768">
+                                                    <div></div>
+                                                </div>
+
+                                                <div class="bdbr"></div>
+                                                <div class="col-12">
+						<div class="fw-bolder text-warning fs-62 mt-1"> <i class="fa fa-arrow-circle-right" aria-hidden="true"></i> 에이전트</div>
+						</div>
+
+
+						<div class="col-12 md:col-5">
+                                                    <div class="post-meta panel hstack justify-start gap-1 fs-62 fw-bold text-gray-900 text-opacity-60  md:d-flex z-1">
+                                                          <div class="w-128px">에이전트 MLS ID </div>
+                                                          <div class="w-full"><input class="form-control h-32px w-full fs-6 bg-white" type="text" name="agent_key" id="agent_key"></div>
+                                                     </div>
+                                                          
+                                                </div>
+                                                <div class="col-12 md:col-5 hidden768">
+                                                    <div></div>
+                                                </div>
+
+						 <div class="col-12 md:col-5">
+                                                    <div class="post-meta panel hstack justify-start gap-1 fs-62 fw-bold text-gray-900 text-opacity-60  md:d-flex z-1">
+                                                          <div class="w-128px">Full Name </div>
+                                                          <div class="w-full"><input class="form-control h-32px w-full fs-6 bg-white" type="text" name="agent_full_name" id="agent_full_name"></div>
+                                                     </div>
+                                                          
+                                                </div>
+                                                <div class="col-12 md:col-6 hidden768">
+                                                    <div></div>
+                                                </div>
+
+						 <div class="col-12 md:col-5">
+                                                    <div class="post-meta panel hstack justify-start gap-1 fs-62 fw-bold text-gray-900 text-opacity-60  md:d-flex z-1">
+                                                          <div class="w-128px">전화번호 </div>
+                                                          <div class="w-full"><input class="form-control h-32px w-full fs-6 bg-white" type="text" name="agent_phone" id="agent_phone"></div>
+                                                     </div>
+                                                          
+                                                </div>
+                                                <div class="col-12 md:col-6 hidden768">
+                                                    <div></div>
+                                                </div>
+
+
+                                                <div class="col-12 md:col-5">
+                                                    <div class="post-meta panel hstack justify-start gap-1 fs-62 fw-bold text-gray-900 text-opacity-60  md:d-flex z-1">
+                                                          <div class="w-128px">이메일 </div>
+                                                          <div class="w-full"><input class="form-control h-32px w-full fs-6 bg-white" type="text" name="agent_email" id="agent_email"></div>
+                                                     </div>
+                                                          
+                                                </div>
+                                                <div class="col-12 md:col-6 hidden768">
+                                                    <div></div>
+                                                </div>
+
+						   <div class="col-10">
+                                                   <div class="post-meta panel hstack justify-start gap-1 fs-62 fw-bold text-gray-900 text-opacity-60  md:d-flex z-1">
+                                                                        <div class="w-128px">에이전트 사진 </div>
+                                                                        <div class="w-full">
+
+                                         <div id="file-wrapper">
+                                           <div id="file-inputs">
+                                              <div class="file-group mb-1">
+                                                 <div class="form-control form-control-sm h-35px d-flex align-items-center justify-content-between px-3 custom-file-view">
+                                                     <label class="flex-grow-1 pt-1 cursor-pointer text-nowrap overflow-hidden " onclick="triggerInput(this)">
+                                                     <span class="file-name-text fs-62 text-gray-900 text-opacity-60">이미지 선택! &nbsp;&nbsp; <span class="hidden-768">이미지는 jpg, png, gif만 가능하며 2MB이하 사이즈만 가능합니다.</span></span>
+                                                    </label>
+                                                   <button type="button" class="btn-close-custom mt-1" style="display: none;" onclick="removeInputGroup(this)"></button>
+                                                   <input type="file" name="main_image_url" class="d-none22" onchange="updateIndividualFile(this)">
+                                                </div>
+                                            </div>
+                                          </div>
+                                      
+                                         </div>
+
+
+
+
+                                                                        </div>
+                                                                    </div>
+                                                          
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div><!-- 에이전트 기본정보 -->
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Section end -->
+
+        </div><!-- 라디오버튼 1 내용 -->
+
+
+      
+
+       
+    </div>    </div>
+
+
+    <!-- Section start -->
+    <div class="section panel overflow-hidden mb-2 mt-2">
+        <div class="section-outer panel">
+            <div class="max-w-lg">
+                <div class="section-inner">
+                    <div class="block-layout grid-layout vstack gap-3 panel overflow-hidden">
+                        <div class="block-content border p-2 mt-n1" style="border-top:2px solid #000 !important;">
+
+
+                            <div class="panel row child-cols-12 border-bottom pb-2 pt-0">
+                                <article class="post type-post panel uc-transition-toggle vstack gap-0">
+                                    <div class="post-header panel vstack gap-1 mt-1">
+                                        <h3 class="post-title h62 m-0">
+                                            <span class="text-dark fw-bold hover:text-primary"> <img
+                                                        src="/community/images/dot.png" alt="dot"> &nbsp; 결제정보</span>
+                                        </h3>
+                                    </div>
+                                </article>
+
+                            </div><!-- Title -->
+
+
+                            <div class="panel row child-cols-12 md:child-cols pt-3 border-bottom pb-3">
+
+                                <div class="col-12">
+                                    <div>
+                                        <article class="post type-post panel uc-transition-toggle">
+                                            <div class="text-gray-900 text-opacity-70 fs-6 fw-medium">안전한 결제를 위해 카드 정보를
+                                                입력해 주세요
+                                            </div>
+                                            <div class="post-meta panel hstack justify-start gap-1 fs-6 fw-bold text-gray-900 text-opacity-60  md:d-flex z-1">
+                                                <div class="text-gray-900  text-opacity-80 fs-6">입력하신 정보는 [마당엔닷컴]에 저장되지
+                                                    않으며, 미국 최대 결제대행사인 Authorize.net를 사용합니다.
+                                                </div>
+                                            </div>
+                                        </article>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="mt-2 pt-1 pb-1">
+                                <div class="mb-2"><img src="/ad/card.png" data-src="/ad/card.png" alt="image"
+                                                       data-uc-img="loading: lazy"></div>
+
+                                <div class="comborder border p-2 sm:p-3 bg-gray-10 rounded">
+                                    <div class="w-100 sm:w-800px mx-auto">
+
+                                        <div class="row g-1 margin22 pb-0 sm:pb-3">
+
+                                            <div class="col-12 md:col-6">
+                                                <div class="position-relative d-flex align-items-center">
+                                                    <div class="absoinput"><i class="fa fa-credit-card fs-5"></i></div>
+                                                    <input class="form-control form-control-sm h-40px w-full fs-6 bg-white"
+                                                           type="text" name="" placeholder="카드번호"
+                                                           style="padding-left: 50px !important;">
+                                                </div>
+
+                                            </div>
+                                            <div class="col-12 md:col-6">
+                                                <div class="position-relative d-flex align-items-center">
+                                                    <div class="absoinput"><i class="fa fa-user-circle-o fs-5"></i>
+                                                    </div>
+                                                    <input class="form-control form-control-sm h-40px w-full fs-6 bg-white"
+                                                           type="text" name="" placeholder="소유자이름"
+                                                           style="padding-left: 50px !important;">
+                                                </div>
+                                            </div>
+                                            <div class="col-12 md:col-4">
+
+                                                <div class="d-flex gap-2 items-center">
+                                                    <div class="position-relative d-flex items-center">
+                                                        <select class="form-select rounded p-12 text-gray-900 text-opacity-60"
+                                                                id="" name="" style="width:100px;">
+                                                            <option value="" selected="">월</option>
+                                                            <option value="1">1</option>
+                                                            <option value="2">2</option>
+                                                        </select>
+
+                                                    </div>
+                                                    /
+
+                                                    <div class="position-relative d-flex align-items-center">
+                                                        <select class="form-select rounded p-12 text-gray-900 text-opacity-60"
+                                                                id="" name="" style="width:100px;">
+                                                            <option value="" selected="">년</option>
+                                                            <option value="1">2026</option>
+                                                            <option value="2">2027</option>
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 md:col-4">
+                                                <div class="position-relative d-flex align-items-center">
+                                                    <div class="absoinput"><i class="fa fa-question-circle-o"></i></div>
+                                                    <input class="form-control form-control-sm h-40px w-full fs-6 bg-white"
+                                                           type="text" name="" placeholder="CVV2 코드"
+                                                           style="padding-left: 50px !important;">
+                                                </div>
+                                            </div>
+                                            <div class="col-12 md:col-4">
+                                                <div class="d-flex items-center justify-start pt-1">
+                                                    <a href="#uc-cvv2-modal" class="text-none" data-uc-toggle> CVV2 코드란
+                                                        ?</a>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div><!--Content 1-->
+
+                            <div class="panel row child-cols-12 border-bottom pb-2 pt-2">
+                                <article class="post type-post panel uc-transition-toggle vstack gap-0">
+                                    <div class="post-header panel vstack gap-1 mt-1">
+                                        <h3 class="post-title h62 m-0">
+                                            <span class="text-dark fw-bold hover:text-primary"> <img
+                                                        src="/community/images/dot.png"
+                                                        alt="dot"> &nbsp; 광고 신청 동의서</span>
+                                        </h3>
+                                    </div>
+                                </article>
+
+                            </div><!-- Title -->
+
+
+                            <div class="panel row child-cols-12 md:child-cols pt-3 border-bottom pb-3">
+
+                                <div class="col-12">
+                                    <div>
+                                        <article class="post type-post panel uc-transition-toggle">
+                                            <div class="text-gray-900 text-opacity-70 fs-6 fw-medium">아래 동의서에 동의를 하셔야
+                                                광고신청을 하실수 있습니다.
+                                            </div>
+                                            <div class="post-meta panel hstack justify-start gap-1 fs-6 fw-bold text-gray-900 text-opacity-60  md:d-flex z-1">
+                                                <div class="text-gray-900  text-opacity-80 fs-6">본 동의서는 귀하(이하 ‘광고주’)가 본
+                                                    웹사이트(이하 ‘플랫폼’)에 광고를 게재함에 있어 상호 간의 권리와 의무를 규정함을 목적으로 합니다.
+                                                </div>
+                                            </div>
+                                        </article>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="mt-2 pt-1 pb-1 fs-6 p-0 sm:p-3 lh-lg2">
+                                <span class="fw-bold fs-6">   1) 광고 기간 및 노출</span><br/>
+                                - 최소 광고 기간: 모든 광고의 기본 게재 기간은 승인일로부터 최소 30일입니다.<br/><br/>
+                                - 노출 환경 안내: 사용자의 브라우저 설정, 광고 차단 확장 프로그램(Ad-block 등) 설치 여부에 따라 일부 환경에서 광고가 노출되지 않을 수 있으며,
+                                이는 플랫폼의 귀책 사유가 되지 않습니다.<br/><br/>
+                                <span class="fw-bold fs-6"> 2) 수정 및 환불 규정</span><br/>
+                                - 수정 권한: 광고 내용의 수정 요청은 게재 기간 내 총 1회로 제한됩니다. (오타 수정 및 이미지 교체 포함)<br/>
+                                - 환불 불가: 광고주의 단순 변심 또는 광고 효과 미비 등을 이유로 한 중도 해지 및 환불은 불가합니다.<br/><br/>
+                                <span class="fw-bold fs-6"> 3) 면책 및 관할 법원</span><br/>
+                                - 법적 책임: 광고 내용으로 인해 발생하는 모든 법적 분쟁(저작권, 허위사실 유포 등)의 책임은 광고주에게 있습니다.<br/>
+                                - 관할 법원: 본 서비스 이용과 관련하여 분쟁이 발생할 경우, 소송의 관할 지역은 미국 캘리포니아주 소재 법원으로 합니다.<br/>
+
+
+                                <div class="panel text-center mt-3">
+                                    
+                                    <div class="mt-2 text-start">
+                                        <input class="form-check-input rounded-0" type="checkbox"
+                                               id="inputCheckRemember" name="yak"> 본인은 광고신청 동의서에 내용을 읽고 이해하였으며 광고신청 동의서의
+                                        내용에 동의합니다.
+                                    </div>
+                                </div>
+                            </div><!--Content 2-->
+                        </div> <!--Content end-->
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Section end -->
+
+    <div id="pay_button">
+    <button class="btn btn-primary2 btn-md mt-1 fs-5" type="submit" style="width:100% !important;" ><i
+                class="fa fa-check"></i> 광고신청 완료하기
+    </button>
+    </div>
+
+
+</form>
+<!-- Section end -->
+            
+<script defer src="/js/libs/jquery.min.js"></script>
+<script defer src="/js/libs/jquery.mask.js"></script>
+<script defer src="/js/libs/jquery.form.min.js"></script>
+<script defer src="/js/ad/ad_03.js"></script>
+<script defer src="/js/iibiz_common.js"></script>
+<script defer src="/js/file.js"></script>
+
+<!-- INCLUDE FILE '../include/footer.php' -->
+
