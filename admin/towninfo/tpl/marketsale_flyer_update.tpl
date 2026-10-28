@@ -112,7 +112,7 @@
                                     <span class="btn btn-default btn-file">
                                         <span class="fileupload-exists">Change</span>
                                         <span class="fileupload-new">Upload</span>
-                                        <input type="file" name="main_image_url">
+                                        <input type="file" name="main_image_url" accept=".jpg, .jpeg, .png, .gif, .webp, avif">
                                     </span>가로최소 1800아상, 이미지는 jpg, png, gif, avif, webp만 가능
                                     <a href="#" class="btn btn-default fileupload-exists" data-dismiss="fileupload">Remove</a>
                                 </div>
