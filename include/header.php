@@ -439,7 +439,7 @@
                                 </div>
                             </li>
                             <li>
-                                <a href="/community/" {{MAIN3}}>커뮤니티<span data-uc-navbar-parent-icon></span></a>
+                                <a href="/community/recruit.php" {{MAIN3}}>커뮤니티<span data-uc-navbar-parent-icon></span></a>
 
                                 <div class="uc-navbar-dropdown ft-primary text-unset fs-6 fw-medium p-3 rounded-0 hide-scrollbar w-auto" data-uc-drop=" offset: 0; boundary: !.uc-navbar; animation: uc-animation-slide-top-small; duration: 150;">
                                     <ul class="uc-nav uc-navbar-dropdown-nav" style="margin-top:-15px;">
@@ -454,7 +454,7 @@
                                   </div>
                               </li>
                               <li>
-                                  <a href="/towninfo/" {{MAIN4}}>타운정보<span data-uc-navbar-parent-icon></span></a>
+                                  <a href="/towninfo/marketsale.php" {{MAIN4}}>타운정보<span data-uc-navbar-parent-icon></span></a>
 
                                   <div class="uc-navbar-dropdown ft-primary text-unset fs-6 fw-medium p-3 rounded-0 hide-scrollbar w-auto" data-uc-drop=" offset: 0; boundary: !.uc-navbar; animation: uc-animation-slide-top-small; duration: 150;">
                                       <ul class="uc-nav uc-navbar-dropdown-nav" style="margin-top:-15px;">

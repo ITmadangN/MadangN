@@ -56,7 +56,7 @@ class define_val {
                                                     'madangntv' => array('','전체','miburi','미부리','nowusa','지금미국','cafe','미국지식카페','people','보통이 아닌 사람들','heart','마음이 왜이래','mshorts','마당앤쇼츠'),
                                                     'insure' => array('','전체','unity','유니티','bridgeone','브리지원','money','재정의달인','medicare','메디케어','obama','오바마케어','moneywise','머니와이즈','ishorts','재정/보험 쇼츠'),
                                                     'realstate' => array('','전체','cbr','Coldwell Banker Best Realty'),
-                                                    'rogg' => array('','전체','styb','Save This Yellow Bus','donation','ROGG 아이티 선교기')
+                                                    'rogg' => array('','전체','styb','Save This Yellow Bus','rogg','ROGG 아이티 선교기')
                                                  );
 
 
