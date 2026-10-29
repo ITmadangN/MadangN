@@ -36,6 +36,7 @@
 
 					          <colgroup>
                                   <col width="12%"/>
+                                  <col width="12%"/>
                                   <col width="/"/>
                                   <col width="13%"/>
                                   <col width="8%"/>
@@ -46,6 +47,7 @@
                               </colgroup>
                                     <thead class="bg-gray-25 text-dark sticky-top z-1 text-center border-bottom">
                                         <tr>
+                                            <th>사진</th>
                                             <th>카테고리</th>
                                             <th>제목</th>
                                             <th>등록자</th>
