@@ -109,7 +109,27 @@ class service_notification_list
 
         while ($row = $this->db->fetch()) {
 
-           $link = "notification_view.php?id=" . $row->towninfo_event_notification_id;
+            $link = "notification_view.php?id=" . $row->towninfo_event_notification_id;
+            $p_towninfo_event_notification_id = $row->towninfo_event_notification_id;
+            $p_image_01_url = $row->image_01_url;
+            $p_image_02_url = $row->image_02_url;
+            $p_image_03_url = $row->image_03_url;
+
+            $blank_img = "";
+//            $blank_img = "/images/blank.png";
+
+            if ($p_image_01_url != "") {
+                $main_img = ($this->define_val->IMG_PROTECT) . "?c=towninfo&cc=notification&d=img1&s=" . $p_towninfo_event_notification_id;}
+            else if ($p_image_02_url != "") {
+                    $main_img = ($this->define_val->IMG_PROTECT) . "?c=towninfo&cc=notification&d=img2&s=" . $p_towninfo_event_notification_id;}
+            else if ($p_image_03_url != "") {
+                    $main_img = ($this->define_val->IMG_PROTECT) . "?c=towninfo&cc=notification&d=img3&s=" . $p_towninfo_event_notification_id;}
+            else {
+                $main_img = $blank_img;
+            }
+
+//            saveLog("$p_image_01_url : ",$p_image_01_url);
+//            saveLog("$main_img : ",$main_img);
 
             $category = ARRAY_RETURN($this->define_val->DEFINE_notification_category,$row->category);
             $home_css = "mt-3";
@@ -117,8 +137,9 @@ class service_notification_list
             if($i == 0) {
                 $home_css = "uc-first-column";
             }
-            
-            $this->loop[$i] = array('T_HOME_CSS' => $home_css,'T_NO' => $no,'T_LINK' => $link, 'T_CATEGORY' => $category, 'T_TITLE' => $row->title ,
+
+
+            $this->loop[$i] = array('T_HOME_CSS' => $home_css,'T_NO' => $no,'T_LINK' => $link, 'T_IMG' => $main_img,'T_CATEGORY' => $category, 'T_TITLE' => $row->title ,
                 'T_VIEW_COUNT' => $row->view_count, 'T_CREATE_AT' => DATETOSTRING_USA2($row->created_at,"/"),  'T_CREATED_USER' => $row->created_user);
 
 
