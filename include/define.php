@@ -243,8 +243,8 @@ public array $DEFINE_vehicle_car_maker_eng = array(
 
     public array $DEFINE_vehicle_transmission = array('','전체','automatic','자동','manual','수동');
 
-    public array $DEFINE_find_people_category = array('','전체','family','가족','buddy','동기', 'alumni','동문','acquaintance','지인','friend','친구','etc','기타');
-
+//    public array $DEFINE_find_people_category = array('','전체','family','가족/친척','buddy','동기', 'alumni','동창/동문','acquaintance','지인','friend','친구','etc','기타');
+    public array $DEFINE_find_people_category = array('','전체','family','가족/친척', 'alumni','동창/동문','spouse','이성친구/배우자','acquaintance','지인','friend','친구','etc','기타');
     public array $DEFINE_find_people_s_kind = array('','전체','title','제목','description','내용');
 
     public array $DEFINE_event_s_kind = array('','전체','title','제목','description','내용');

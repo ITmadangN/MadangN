@@ -4,7 +4,7 @@
     <form name="formp" id="formp" action="ajax/ajax_find_people.php" method="post">
         <div class="vstack sm:hstack items-start justify-between gap-4">
             <div class="d-flex items-start gap-1" style="flex-wrap: wrap;">
-                <select class="form-select rounded p-12 w-128px fs-6" id="s_category" name="s_category">
+                <select class="form-select rounded p-12 w-128px fs-6" id="s_category" name="s_category" onchange="GET_PAGE();">
                     {{S_SELECT_CATEGORY}}
                 </select>
 
