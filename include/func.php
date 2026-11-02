@@ -1721,7 +1721,9 @@ function saveLog($php_name, $content, $mode = 'a') {
     
     $today = date("Y-m-d H:i:s");
     
-    $log_path = $root_dir . "/../user_logs/".$log_file_name;        
+    $log_path = $root_dir . "/../user_logs/".$log_file_name;
+
+//    echo $log_path;
         
     $fp = fopen($log_path, $mode);
     
@@ -1740,11 +1742,11 @@ function saveLog($php_name, $content, $mode = 'a') {
     
     $result = fwrite($fp, "\n");
     
-    $result = fwrite($fp, "* REQUEST_URI : {$request_url} \n");
-    $result = fwrite($fp, "* REQUEST_METHOD : {$http_method} \n");
-    $result = fwrite($fp, "* REMOTE_ADDR : {$client_ip} \n");
-    $result = fwrite($fp, "\n");
-    $result = fwrite($fp, "\n");
+//    $result = fwrite($fp, "* REQUEST_URI : {$request_url} \n");
+//    $result = fwrite($fp, "* REQUEST_METHOD : {$http_method} \n");
+//    $result = fwrite($fp, "* REMOTE_ADDR : {$client_ip} \n");
+//    $result = fwrite($fp, "\n");
+//    $result = fwrite($fp, "\n");
     
     
     $result = fwrite($fp, $conv_content);
