@@ -66,7 +66,7 @@
                                                                     <h3 class="post-title h4 lg:h4 m-0 m-0 ">
                                                                         <a class="text-none" href="{{TOP_1_LINK}}">{{TOP_1_TITLE}}</a>
                                                                     </h3>
-                                                                    <p style="color:#666;margin-top:5px;" class="fs-5 lg:fs-5"><a class="text-none" href="{{TOP_1_LINK}}">{{TOP_1_CONTENT}}</a></p>
+                                                                    <p style="color:#666;margin-top:5px;" class="fs-5 lg:fs-5"><a class="text-none text-truncate-2" href="{{TOP_1_LINK}}">{{TOP_1_CONTENT}}</a></p>
                                                                 </div>
                                                             </article>
                                                         </div>
@@ -87,7 +87,7 @@
                                                                 <div class="post-header panel vstack justify-between gap-1 sm:gap-2 p-1 mt-narrow sm:mt-0 w-100">
                                                                     <div class="post-top panel vstack items-start gap-2">
                                                                        
-                                                                        <h3 class="post-title h5 sm:h5 m-0 text-truncate-2">
+                                                                        <h3 class="post-title h5 sm:h5 m-0 text-truncate-1">
                                                                             <a class="text-none" href="{{TOP_2_LINK}}">{{TOP_2_TITLE}}</a>
                                                                         </h3>
                                                                     </div>
