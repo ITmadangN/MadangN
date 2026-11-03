@@ -192,7 +192,7 @@
                                                                             <label class="flex-grow-1 pt-1 cursor-pointer text-nowrap overflow-hidden" id="logo_image_view"
                                                                                    onclick="triggerInput(this)">                                                                                   
                                                                                 <span class="file-name-text fs-62 text-gray-900 text-opacity-60">이미지 선택! &nbsp;&nbsp; <span
-                                                                                            class="hidden-768">이미지는 jpg, png, gif만 가능하며 2MB이하 사이즈만 가능합니다.</span></span>
+                                                                                            class="hidden-768">이미지는 jpg, png, gif만 가능하며 2 MB 이하 사이즈만 가능합니다.</span></span>
                                                                             </label>
                                                                             <button type="button"
                                                                                     class="btn-close-custom mt-1" id="logo_image_x"
@@ -315,7 +315,7 @@
                                                                                     <label class="flex-grow-1 pt-1 cursor-pointer text-nowrap overflow-hidden"  id="main_image_view"
                                                                                            onclick="triggerInput(this)">
                                                                                         <span class="file-name-text fs-62 text-gray-900 text-opacity-60">이미지 선택! &nbsp;&nbsp; <span
-                                                                                                    class="hidden-768">이미지는 jpg, png, gif만 가능하며 2MB이하 사이즈만 가능합니다.</span></span>
+                                                                                                    class="hidden-768">이미지는 jpg, png, gif만 가능하며 2 MB 이하 사이즈만 가능합니다.</span></span>
                                                                                     </label>
                                                                                     <button type="button" id="main_image_x"
                                                                                             class="btn-close-custom mt-1"

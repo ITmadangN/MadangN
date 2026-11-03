@@ -312,7 +312,7 @@
                                             <div><i class="fa fa-cloud-upload fs-1 text-gray-500"></i></div>
                                             <div class="fs-6 fw-bold">이미지를 여기로 드래그하거나 클릭하여 선택하세요</div>
                                             <div class="text-gray-500 fs-7">
-                                                jpg, png, gif만 가능 / 2MB 이하 / 최대 <span id="max-count">20</span>개
+                                                jpg, png, gif만 가능 / 2 MB 이하 / 최대 <span id="max-count">20</span>개
                                             </div>
                                             <div class="text-gray-700 fs-7">
                                                 현재 <span id="current-count">0</span> / 20 개
@@ -345,7 +345,7 @@
  <script>
 (function () {
     const MAX_FILES   = 20;
-    const MAX_SIZE    = 2 * 1024 * 1024; // 2MB
+    const MAX_SIZE    = 2 * 1024 * 1024; // 2 MB
     const ALLOW_TYPES = ['image/jpeg', 'image/png', 'image/gif'];
 
     const dropZone   = document.getElementById('drop-zone');
@@ -399,7 +399,7 @@
                 continue;
             }
             if (file.size > MAX_SIZE) {
-                alert('"' + file.name + '" : 2MB 이하만 가능합니다.');
+                alert('"' + file.name + '" : 2 MB 이하만 가능합니다.');
                 continue;
             }
             // 중복 방지(이름+크기 기준)

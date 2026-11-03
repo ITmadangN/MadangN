@@ -324,7 +324,7 @@ preview-item { position: relative; overflow: hidden; border-radius: 8px; }
                                             <div><i class="fa fa-cloud-upload fs-1 text-gray-500"></i></div>
                                             <div class="fs-6 fw-bold">새 이미지를 여기로 드래그하거나 클릭하여 선택하세요</div>
                                             <div class="text-gray-500 fs-7">
-                                                가로 928X 세로 696픽셀, jpg, png, gif만 가능 / 2MB 이하 / 최대 <span id="max-count">20</span>개
+                                                가로 928X 세로 696픽셀, jpg, png, gif만 가능 / 2 MB 이하 / 최대 <span id="max-count">20</span>개
                                             </div>
                                             <div class="text-gray-700 fs-7">
                                                 현재 <span id="current-count">0</span> / 20 개 (기존 포함 <span id="total-count">0</span>개)
@@ -442,7 +442,7 @@ preview-item { position: relative; overflow: hidden; border-radius: 8px; }
                 break;
             }
             if (!ALLOW_TYPES.includes(file.type)) { alert('"' + file.name + '" : jpg, png, gif만 가능합니다.'); continue; }
-            if (file.size > MAX_SIZE) { alert('"' + file.name + '" : 2MB 이하만 가능합니다.'); continue; }
+            if (file.size > MAX_SIZE) { alert('"' + file.name + '" : 2 MB 이하만 가능합니다.'); continue; }
             const dup = fileStore.some(f => f.name === file.name && f.size === file.size);
             if (dup) continue;
             fileStore.push(file);
