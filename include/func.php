@@ -378,7 +378,7 @@ function MAKE_UPLOAD_HTML($exist_file,$upload_name, $file_name, $img_src, $size 
                <div class="file-group mb-2">
                     <div class="form-control form-control-sm h-40px d-flex align-items-center justify-content-between px-3 custom-file-view pt-1">
                         <label class="flex-grow-1 m-0 d-flex align-items-center cursor-pointer text-nowrap overflow-hidden" onclick="triggerInput(this)">
-                            <span class="file-name-text">이미지를 선택해주세요 <span class="hidden-768">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 가로 '.$size.'픽셀, 이미지는 jpg, png, gif만 가능하며 2MB이하 사이즈만 가능합니다.</span></span>
+                            <span class="file-name-text">이미지를 선택해주세요 <span class="hidden-768">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 가로 '.$size.'픽셀, 이미지는 jpg, png, gif만 가능하며 2 MB 이하 사이즈만 가능합니다.</span></span>
                         </label>
                         <button type="button" class="btn-close-custom" style="display: none;" onclick="removeInputGroup(this)"></button>
                         <input type="file" name="'.$upload_name.'" accept=".jpg, .jpeg, .png, .gif"  class="d-none" accept="image/*" onchange="updateIndividualFile(this)">            

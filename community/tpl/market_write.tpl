@@ -111,7 +111,7 @@
                                                 <div class="file-group mb-1">
                                                     <div class="form-control form-control-sm h-40px d-flex align-items-center justify-content-between px-3 custom-file-view">
                                                         <label class="flex-grow-1 pt-1 cursor-pointer text-nowrap overflow-hidden" onclick="triggerInput(this)">
-                                                            <span class="file-name-text">이미지를 선택해주세요 <span class="hidden-768">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 가로 400X400픽셀, 이미지는 jpg, png, gif만 가능하며 2MB이하 사이즈만 가능합니다.</span></span>
+                                                            <span class="file-name-text">이미지를 선택해주세요 <span class="hidden-768">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 가로 400X400픽셀, 이미지는 jpg, png, gif만 가능하며 2 MB이하 사이즈만 가능합니다.</span></span>
                                                         </label>
                                                         <button type="button" class="btn-close-custom mt-1" style="display: none;" onclick="removeInputGroup(this)"></button>
                                                         <input type="file" name="user_files[]" accept=".jpg, .jpeg, .png, .gif" class="d-none22" onchange="updateIndividualFile(this)">

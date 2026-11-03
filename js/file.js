@@ -17,7 +17,7 @@ function updateIndividualFile(input) {
 
     if (input.files && input.files[0]) {
         const file = input.files[0];
-        const maxSize = 1 * 1024 * 1024; // 1MB
+        const maxSize = 2 * 1024 * 1024; // 1MB
 
         // 이미지 파일 확장자 체크 (선택 사항)
         if (!file.type.match('image.*')) {
@@ -26,9 +26,9 @@ function updateIndividualFile(input) {
             return;
         }
 
-        // 파일 사이즈 체크 (1MB 초과 시)
+        // 파일 사이즈 체크 (2 MB 초과 시)
         if (file.size > maxSize) {
-            alert(`파일 크기가 너무 큽니다.\n현재 크기: ${(file.size / 1024 / 1024).toFixed(2)}MB\n최대 허용 크기: 1MB`);
+            alert(`파일 크기가 너무 큽니다.\n현재 크기: ${(file.size / 1024 / 1024).toFixed(2)}MB\n최대 허용 크기: 2 MB`);
             input.value = '';
             return;
         }
@@ -150,7 +150,7 @@ function addNewInput(max) {
     newGroup.innerHTML = `
         <div class="form-control form-control-sm h-40px d-flex align-items-center justify-content-between px-3 custom-file-view pt-1">
             <label class="flex-grow-1 m-0 d-flex align-items-center cursor-pointer text-nowrap overflow-hidden" onclick="triggerInput(this)">
-                <span class="file-name-text">이미지를 선택해주세요 <span class="hidden-768">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 이미지는 jpg, png, gif만 가능하며 2MB이하 사이즈만 가능합니다.</span></span>
+                <span class="file-name-text">이미지를 선택해주세요 <span class="hidden-768">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 이미지는 jpg, png, gif만 가능하며 2 MB이하 사이즈만 가능합니다.</span></span>
             </label>
             <button type="button" class="btn-close-custom" style="display: none;" onclick="removeInputGroup(this)"></button>
             <input type="file" name="user_files[]" class="d-none"  accept=".jpg, .jpeg, .png, .gif"  onchange="updateIndividualFile(this)">            
