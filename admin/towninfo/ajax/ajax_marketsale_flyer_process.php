@@ -135,10 +135,12 @@ if ($ac == "update_marketsale_flyer") {
 //    $u_logo_url = GET_UPLOAD_IMAGE($_FILES['logo_url']['name'], $h_logo_url, $del_logo_url);
     $u_main_image_url = GET_UPLOAD_IMAGE($_FILES['main_image_url']['name'], $h_main_image_url, $del_main_image_url);
 
-    $ext = strtolower(pathinfo($h_main_image_url, PATHINFO_EXTENSION));
-    if (in_array($ext, ['gif', 'jpeg', 'png'])) {
-        echo "에러: GIF, JPEG, PNG 파일은 사용할 수 없습니다.";
-        exit;
+    if(!empty($_POST['main_image_url']['name'])) {
+        $ext = strtolower(pathinfo($_POST['main_image_url']['name'], PATHINFO_EXTENSION));
+        if (in_array($ext, ['gif', 'jpeg', 'png'])) {
+            echo "에러: GIF, JPEG, PNG 파일은 사용할 수 없습니다.";
+            exit;
+        }
     }
     
     $update_values = array(
