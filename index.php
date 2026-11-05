@@ -72,8 +72,11 @@ function makeBannerHome($db,$define_val) {
         
         $banner_dic["중앙배너"]['img'] = $img;
         $banner_dic["중앙_작은_배너-1"]['img'] = $img;
+        $banner_dic["중앙_작은_배너-1-1"]['img'] = $img;
+        $banner_dic["중앙_작은_배너-1-2"]['img'] = $img;
         $banner_dic["중앙_작은_배너-2"]['img'] = $img;
-        
+        $banner_dic["중앙_작은_배너-2-1"]['img'] = $img;
+        $banner_dic["중앙_작은_배너-2-2"]['img'] = $img;
         $banner_dic["오른쪽_세로배너-1"]['img'] = $img;
         $banner_dic["오른쪽_세로배너-2"]['img'] = $img;
         $banner_dic["오른쪽_세로배너-3"]['img'] = $img;
@@ -110,7 +113,11 @@ function makeBannerHome($db,$define_val) {
         
         $banner_dic["중앙배너"]['link'] = '';
         $banner_dic["중앙_작은_배너-1"]['link'] = '';
+        $banner_dic["중앙_작은_배너-1-1"]['link'] = '';
+        $banner_dic["중앙_작은_배너-1-2"]['link'] = '';
         $banner_dic["중앙_작은_배너-2"]['link'] = '';
+        $banner_dic["중앙_작은_배너-2-1"]['link'] = '';
+        $banner_dic["중앙_작은_배너-2-2"]['link'] = '';
         
         $banner_dic["오른쪽_세로배너-1"]['link'] = '';
         $banner_dic["오른쪽_세로배너-2"]['link'] = '';

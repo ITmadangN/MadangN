@@ -2278,12 +2278,12 @@ document.addEventListener('DOMContentLoaded', function() {
 <script defer src="/js/iibiz_common.js"></script>
 <script defer src="/js/common.js"></script>
 
-        <!-- 오른쪽 1 ,2 배너 rotation-->
+        <!-- 오른쪽 1 ,2 , 중앙_작은_배너-1, 중앙_작은_배너-2 배너 rotation-->
 
            <script>
                document.addEventListener('DOMContentLoaded', function () {
 
-                   // 첫 번째 배너
+                   // 오른쪽 1 배너
                    const banners1 = [
                        {
                            img: '{{오른쪽-1_img}}',
@@ -2314,7 +2314,7 @@ document.addEventListener('DOMContentLoaded', function() {
                    }, 4000);
 
 
-                   // 두 번째 배너
+                   // 오른쪽 2 배너
                    const banners2 = [
                        {
                            img: '{{오른쪽-2_img}}',
@@ -2344,7 +2344,45 @@ document.addEventListener('DOMContentLoaded', function() {
 
                    }, 4500);
 
+
+                   // 중앙_작은_배너-1
+                   const centerSmallBanners1 = [
+                       {
+                           img: '{{중앙_작은_배너-1_img}}',
+                           link: '{{중앙_작은_배너-1_link}}'
+                       },
+                       {
+                           img: '{{중앙_작은_배너-1-1_img}}',
+                           link: '{{중앙_작은_배너-1-1_link}}'
+                       },
+                       {
+                           img: '{{중앙_작은_배너-1-2_img}}',
+                           link: '{{중앙_작은_배너-1-2_link}}'
+                       }
+                   ];
+
+                   const centerSmallBanner1 = document.getElementById('rightBannerLink2');
+                   const centerSmallBannerImg1 = document.getElementById('rightBannerImg2');
+
+                   let centerSmallBannerindex1 = 0;
+
+                   setInterval(function () {
+                       centerSmallBannerindex1 = (centerSmallBannerindex1 + 1) % centerSmallBanners1.length;
+
+                       centerSmallBannerImg1.src = centerSmallBanners1[centerSmallBannerindex1].img;
+                       centerSmallBannerImg1.setAttribute('data-src', centerSmallBanners1[centerSmallBannerindex1].img);
+                       centerSmallBanner1.href = centerSmallBanners1[centerSmallBannerindex1].link || '#';
+
+                   }, 4500);
+
+
+
+
+
                });
+
+
+
            </script>
 
 
