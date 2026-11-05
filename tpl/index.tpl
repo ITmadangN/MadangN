@@ -727,9 +727,37 @@ document.addEventListener('DOMContentLoaded', function() {
                                             </div>
 
                                             <div class="banner-row mb-2 ">
+                                                <!--
                                                 <div class="banner-item"><a href="{{중앙_작은_배너-1_link}}" target="_blank"><img src="{{중앙_작은_배너-1_img}}" alt="배너1"></a></div>
                                                 <div class="banner-item"><a href="{{중앙_작은_배너-2_link}}" target="_blank"><img src="{{중앙_작은_배너-2_img}}" alt="배너2"></a></div>
-                                            </div><!-- 배너 -->
+                                                -->
+                                                <!-- 중앙 작은 배너 1 -->
+                                                <div class="banner-item">
+                                                    <a id="centerSmallBannerLink1"
+                                                       href="{{중앙_작은_배너-1_link}}"
+                                                       target="_blank">
+                                                        <img id="centerSmallBannerImg1"
+                                                             src="{{중앙_작은_배너-1_img}}"
+                                                             alt="배너1">
+                                                    </a>
+                                                </div>
+
+                                                <!-- 중앙 작은 배너 2 -->
+                                                <div class="banner-item">
+                                                    <a id="centerSmallBannerLink2"
+                                                       href="{{중앙_작은_배너-2_link}}"
+                                                       target="_blank">
+                                                        <img id="centerSmallBannerImg2"
+                                                             src="{{중앙_작은_배너-2_img}}"
+                                                             alt="배너2">
+                                                    </a>
+                                                </div>
+
+
+
+
+                                            </div><!--  중앙 작은 배너 -->
+
 
                                           </div><!-- lg:col-7 End -->
                                         
@@ -2361,8 +2389,8 @@ document.addEventListener('DOMContentLoaded', function() {
                        }
                    ];
 
-                   const centerSmallBanner1 = document.getElementById('rightBannerLink2');
-                   const centerSmallBannerImg1 = document.getElementById('rightBannerImg2');
+                   const centerSmallBannerLink1 = document.getElementById('centerSmallBannerLink1');
+                   const centerSmallBannerImg1 = document.getElementById('centerSmallBannerImg1');
 
                    let centerSmallBannerindex1 = 0;
 
@@ -2371,11 +2399,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
                        centerSmallBannerImg1.src = centerSmallBanners1[centerSmallBannerindex1].img;
                        centerSmallBannerImg1.setAttribute('data-src', centerSmallBanners1[centerSmallBannerindex1].img);
-                       centerSmallBanner1.href = centerSmallBanners1[centerSmallBannerindex1].link || '#';
+                       centerSmallBannerLink1.href = centerSmallBanners1[centerSmallBannerindex1].link || '#';
 
                    }, 4500);
 
+                   // 중앙_작은_배너-2
+                   const centerSmallBanners2 = [
+                       {
+                           img: '{{중앙_작은_배너-2_img}}',
+                           link: '{{중앙_작은_배너-2_link}}'
+                       },
+                       {
+                           img: '{{중앙_작은_배너-2-1_img}}',
+                           link: '{{중앙_작은_배너-2-1_link}}'
+                       },
+                       {
+                           img: '{{중앙_작은_배너-2-2_img}}',
+                           link: '{{중앙_작은_배너-2-2_link}}'
+                       }
+                   ];
 
+                   const centerSmallBannerLink2= document.getElementById('centerSmallBannerLink2');
+                   const centerSmallBannerImg2 = document.getElementById('centerSmallBannerImg2');
+
+                   let centerSmallBannerindex2 = 0;
+
+                   setInterval(function () {
+                       centerSmallBannerindex2 = (centerSmallBannerindex2 + 1) % centerSmallBanners2.length;
+
+                       centerSmallBannerImg2.src = centerSmallBanners2[centerSmallBannerindex2].img;
+                       centerSmallBannerImg2.setAttribute('data-src', centerSmallBanners2[centerSmallBannerindex2].img);
+                       centerSmallBannerLink2.href = centerSmallBanners2[centerSmallBannerindex2].link || '#';
+
+                   }, 4500);
 
 
 
