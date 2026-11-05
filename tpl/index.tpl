@@ -748,8 +748,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                                        href="{{중앙_작은_배너-2_link}}"
                                                        target="_blank">
                                                         <img id="centerSmallBannerImg2"
-                                                             src="{{중앙_작은_배너-2_img}}"
-                                                             alt="배너2">
+                                                             src="{{중앙_작은_배너-2_img}}" data-src="{{중앙_작은_배너-2_img}}"
+                                                             alt="배너2"  data-uc-img="loading: lazy">
                                                     </a>
                                                 </div>
 
@@ -2397,9 +2397,10 @@ document.addEventListener('DOMContentLoaded', function() {
                    setInterval(function () {
                        centerSmallBannerindex1 = (centerSmallBannerindex1 + 1) % centerSmallBanners1.length;
 
-                       centerSmallBannerImg1.src = centerSmallBanners1[centerSmallBannerindex1].img;
-                       centerSmallBannerImg1.setAttribute('data-src', centerSmallBanners1[centerSmallBannerindex1].img);
-                       centerSmallBannerLink1.href = centerSmallBanners1[centerSmallBannerindex1].link || '#';
+                       const banner = centerSmallBanners1[centerSmallBannerindex1];
+
+                       centerSmallBannerImg1.src = banner.img;
+                       centerSmallBannerLink1.href = banner.link || '#';
 
                    }, 4500);
 
