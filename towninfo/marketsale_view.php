@@ -88,10 +88,12 @@ ORDER BY A.county_name asc
 */
 // $row_sql = "SELECT * FROM towninfo_marketsale_flyer where towninfo_marketsale_flyer_id = (select towninfo_marketsale_flyer_id from towninfo_marketsale_branch where towninfo_marketsale_branch_id = '{$id}' and is_active = 1)";
 
-$row_sql = "SELECT A.*, B.title, B.main_image_url, B.description, B.sale_start_date, B.sale_end_date, B.view_count, B.user_id, B.created_at as rdate, C.market_name, C.market_logo_url FROM towninfo_marketsale_branch A
-                    LEFT JOIN towninfo_marketsale_flyer B on A.towninfo_marketsale_flyer_id = B.towninfo_marketsale_flyer_id
-                    left join towninfo_marketsale_market C on A.towninfo_marketsale_market_id = C.towninfo_marketsale_market_id
-                    where A.towninfo_marketsale_branch_id  = {$id}
+$row_sql = "SELECT A.*, B.title, B.main_image_url, B.description, B.sale_start_date, B.sale_end_date, B.view_count, B.user_id, B.updated_at as rdate, 
+                   C.market_name, C.market_logo_url, C.market_website_url 
+            FROM towninfo_marketsale_branch A
+            LEFT JOIN towninfo_marketsale_flyer B on A.towninfo_marketsale_flyer_id = B.towninfo_marketsale_flyer_id
+            left join towninfo_marketsale_market C on A.towninfo_marketsale_market_id = C.towninfo_marketsale_market_id
+            where A.towninfo_marketsale_branch_id  = {$id}
 ";
 
 $db->query($row_sql);
@@ -109,6 +111,7 @@ $p_sale_end_date = $row->sale_end_date;
 $p_state_code = $row->state_code;
 $p_description = $row->description;
 $p_user_id = $row->user_id;
+$p_market_website_url = $row->market_website_url;
 
 $p_view_count = $row->view_count + 1;
 $p_rdate = DATETOSTRING_USA2($row->rdate,"/");
@@ -320,8 +323,8 @@ $tpl->setVar("T_LOGO_URL", $logo_img);
 $tpl->setVar("T_MAIN_URL", $main_img);
 $tpl->setVar("T_MAIN_URL_BASE", base64_encode($main_img));
 $tpl->setVar("T_DESCRIPTION", str_replace("\n", "<br>", $p_description));
-$tpl->setVar("T_LINK", $p_weekly_ads_flyer_site);
-
+//$tpl->setVar("T_LINK", $p_weekly_ads_flyer_site);
+$tpl->setVar("T_LINK", $p_market_website_url);
 
 $tpl->setVar("T_BRANCH", $html);
 
