@@ -2389,19 +2389,32 @@ document.addEventListener('DOMContentLoaded', function() {
                        }
                    ];
 
-                   const centerSmallBannerLink1 = document.getElementById('centerSmallBannerLink1');
+                   // const centerSmallBannerLink1 = document.getElementById('centerSmallBannerLink1');
+                   // const centerSmallBannerImg1 = document.getElementById('centerSmallBannerImg1');
+                   //
+                   // let centerSmallBannerindex1 = 0;
+                   //
+                   // setInterval(function () {
+                   //     centerSmallBannerindex1 =
+                   //         (centerSmallBannerindex1 + 1) % centerSmallBanners1.length;
+                   //
+                   //     const banner = centerSmallBanners1[centerSmallBannerindex1];
+                   //
+                   //     centerSmallBannerImg1.src = banner.img;
+                   //     centerSmallBannerLink1.href = banner.link || '#';
+                   //
+                   // }, 4500);
+                   const centerSmallBannerLink1= document.getElementById('centerSmallBannerLink1');
                    const centerSmallBannerImg1 = document.getElementById('centerSmallBannerImg1');
 
                    let centerSmallBannerindex1 = 0;
 
                    setInterval(function () {
-                       centerSmallBannerindex1 =
-                           (centerSmallBannerindex1 + 1) % centerSmallBanners1.length;
+                       centerSmallBannerindex1 = (centerSmallBannerindex1 + 1) % centerSmallBanners2.length;
 
-                       const banner = centerSmallBanners1[centerSmallBannerindex1];
-
-                       centerSmallBannerImg1.src = banner.img;
-                       centerSmallBannerLink1.href = banner.link || '#';
+                       centerSmallBannerImg1.src = centerSmallBanners2[centerSmallBannerindex1].img;
+                       centerSmallBannerImg1.setAttribute('data-src', centerSmallBanners2[centerSmallBannerindex1].img);
+                       centerSmallBannerLink1.href = centerSmallBanners2[centerSmallBannerindex1].link || '#';
 
                    }, 4500);
 
