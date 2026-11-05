@@ -2410,7 +2410,7 @@ document.addEventListener('DOMContentLoaded', function() {
                    let centerSmallBannerindex1 = 0;
 
                    setInterval(function () {
-                       centerSmallBannerindex1 = (centerSmallBannerindex1 + 1) % centerSmallBanners2.length;
+                       centerSmallBannerindex1 = (centerSmallBannerindex1 + 1) % centerSmallBanners1.length;
 
                        centerSmallBannerImg1.src = centerSmallBanners2[centerSmallBannerindex1].img;
                        centerSmallBannerImg1.setAttribute('data-src', centerSmallBanners2[centerSmallBannerindex1].img);
