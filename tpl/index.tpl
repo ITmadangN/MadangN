@@ -2399,8 +2399,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
                        const banner = centerSmallBanners1[centerSmallBannerindex1];
 
-                       centerSmallBannerImg1.src = banner.img;
-                       centerSmallBannerLink1.href = banner.link || '#';
+                       // centerSmallBannerImg1.src = banner.img;
+                       // centerSmallBannerLink1.href = banner.link || '#';
+                       centerSmallBannerImg1.src = centerSmallBanners1[centerSmallBannerindex1].img;
+                       centerSmallBannerLink1.href = centerSmallBanners1[centerSmallBannerindex1].link || '#';
 
                    }, 4500);
 
