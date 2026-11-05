@@ -2412,9 +2412,9 @@ document.addEventListener('DOMContentLoaded', function() {
                    setInterval(function () {
                        centerSmallBannerindex1 = (centerSmallBannerindex1 + 1) % centerSmallBanners1.length;
 
-                       centerSmallBannerImg1.src = centerSmallBanners2[centerSmallBannerindex1].img;
-                       centerSmallBannerImg1.setAttribute('data-src', centerSmallBanners2[centerSmallBannerindex1].img);
-                       centerSmallBannerLink1.href = centerSmallBanners2[centerSmallBannerindex1].link || '#';
+                       centerSmallBannerImg1.src = centerSmallBanners1[centerSmallBannerindex1].img;
+                       centerSmallBannerImg1.setAttribute('data-src', centerSmallBanners1[centerSmallBannerindex1].img);
+                       centerSmallBannerLink1.href = centerSmallBanners1[centerSmallBannerindex1].link || '#';
 
                    }, 4000);
 
