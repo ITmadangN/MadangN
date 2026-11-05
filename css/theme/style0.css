@@ -8643,12 +8643,12 @@ img:hover,
     aspect-ratio: 262 / 72;
 }
 
-.banner-item img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
+/*.banner-item img {*/
+/*    display: block;*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*    object-fit: contain;*/
+/*}*/
 
 @media (max-width: 767px) {
     .banner-row {
@@ -8656,11 +8656,11 @@ img:hover,
         gap: 10px;
     }
 }
-/*.banner-item img {*/
-/*    width: 100%;*/
-/*    height: auto;*/
-/*    display: block;*/
-/*}*/
+.banner-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
 
 @media (max-width: 767px) {
     .banner-row {

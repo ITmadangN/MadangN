@@ -2416,7 +2416,7 @@ document.addEventListener('DOMContentLoaded', function() {
                        centerSmallBannerImg1.setAttribute('data-src', centerSmallBanners2[centerSmallBannerindex1].img);
                        centerSmallBannerLink1.href = centerSmallBanners2[centerSmallBannerindex1].link || '#';
 
-                   }, 4500);
+                   }, 4000);
 
                    // 중앙_작은_배너-2
                    const centerSmallBanners2 = [
