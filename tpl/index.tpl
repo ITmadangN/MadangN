@@ -737,7 +737,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                                        href="{{중앙_작은_배너-1_link}}"
                                                        target="_blank">
                                                         <img id="centerSmallBannerImg1"
-                                                             src="{{중앙_작은_배너-1_img}}" data-src="{{중앙_작은_배너-1_img}}"
+                                                             src="{{중앙_작은_배너-1_img}}"
                                                              alt="배너1" >
                                                     </a>
                                                 </div>
@@ -748,7 +748,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                                        href="{{중앙_작은_배너-2_link}}"
                                                        target="_blank">
                                                         <img id="centerSmallBannerImg2"
-                                                             src="{{중앙_작은_배너-2_img}}" data-src="{{중앙_작은_배너-2_img}}"
+                                                             src="{{중앙_작은_배너-2_img}}"
                                                              alt="배너2" >
                                                     </a>
                                                 </div>
@@ -2395,14 +2395,13 @@ document.addEventListener('DOMContentLoaded', function() {
                    let centerSmallBannerindex1 = 0;
 
                    setInterval(function () {
-                       centerSmallBannerindex1 = (centerSmallBannerindex1 + 1) % centerSmallBanners1.length;
+                       centerSmallBannerindex1 =
+                           (centerSmallBannerindex1 + 1) % centerSmallBanners1.length;
 
                        const banner = centerSmallBanners1[centerSmallBannerindex1];
 
-                       // centerSmallBannerImg1.src = banner.img;
-                       // centerSmallBannerLink1.href = banner.link || '#';
-                       centerSmallBannerImg1.src = centerSmallBanners1[centerSmallBannerindex1].img;
-                       centerSmallBannerLink1.href = centerSmallBanners1[centerSmallBannerindex1].link || '#';
+                       centerSmallBannerImg1.src = banner.img;
+                       centerSmallBannerLink1.href = banner.link || '#';
 
                    }, 4500);
 
