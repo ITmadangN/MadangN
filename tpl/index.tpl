@@ -738,7 +738,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                                        target="_blank">
                                                         <img id="centerSmallBannerImg1"
                                                              src="{{중앙_작은_배너-1_img}}" data-src="{{중앙_작은_배너-1_img}}"
-                                                             alt="배너1"  data-uc-img="loading: lazy">
+                                                             alt="배너1" >
                                                     </a>
                                                 </div>
 
@@ -749,7 +749,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                                        target="_blank">
                                                         <img id="centerSmallBannerImg2"
                                                              src="{{중앙_작은_배너-2_img}}" data-src="{{중앙_작은_배너-2_img}}"
-                                                             alt="배너2"  data-uc-img="loading: lazy">
+                                                             alt="배너2" >
                                                     </a>
                                                 </div>
 

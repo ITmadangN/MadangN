@@ -8629,7 +8629,7 @@ img:hover,
 }
 
 .banner-item {
-    flex: 1
+    flex: 1;
     overflow: hidden;
 }
 
