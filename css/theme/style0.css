@@ -8643,13 +8643,6 @@ img:hover,
     aspect-ratio: 262 / 72;
 }
 
-/*.banner-item img {*/
-/*    display: block;*/
-/*    width: 100%;*/
-/*    height: 100%;*/
-/*    object-fit: contain;*/
-/*}*/
-
 @media (max-width: 767px) {
     .banner-row {
         flex-direction: column;

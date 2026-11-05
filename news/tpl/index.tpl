@@ -196,9 +196,9 @@
                                                         <div class="row child-cols g-2 lg:g-2 uc-grid" data-uc-grid="">
                                                             <div class="uc-first-column">
                                                                 <div class="post-header panel vstack justify-between gap-1">
-                                                                    <div class="cate1"><a class="text-none text-secondary" href="/news/global.php">[세게]</a></div>
+                                                                    <div class="cate1"><a class="text-none text-secondary" href="/news/global.php">[세계]</a></div>
                                                                     <h3 class="post-title h6 m-1 text-truncate-2">
-                                                                        <a class="text-none hover:text-primary duration-150" href="{{TOP_6_LINK}}">{{TOP_5_TITLE}}</a>
+                                                                        <a class="text-none hover:text-primary duration-150" href="{{TOP_6_LINK}}">{{TOP_6_TITLE}}</a>
                                                                     </h3>
                                                                     
                                                                 </div>
