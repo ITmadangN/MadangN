@@ -737,8 +737,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                                        href="{{중앙_작은_배너-1_link}}"
                                                        target="_blank">
                                                         <img id="centerSmallBannerImg1"
-                                                             src="{{중앙_작은_배너-1_img}}"
-                                                             alt="배너1">
+                                                             src="{{중앙_작은_배너-1_img}}" data-src="{{중앙_작은_배너-1_img}}"
+                                                             alt="배너1"  data-uc-img="loading: lazy">
                                                     </a>
                                                 </div>
 
