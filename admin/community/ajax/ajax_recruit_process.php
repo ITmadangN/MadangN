@@ -109,9 +109,59 @@ if($ac == "add_advertising_level") {
     echo json_encode($result_data, JSON_UNESCAPED_UNICODE);
 }
 
+if($ac == "add_job_type") {
+
+    $g_num = (int)($_GET['g_num'] ?? 0);
+
+    $jt = ARRAY_ARRAY_RETURN($define_val->DEFINE_recruit_job_type, -1, '', '직종선택');
+
+    $html = "
+            <div class=\"adlevel-row\" id=\"div_advertising_level_{$g_num}\">
+                <select class=\"detail-form-control\" name=\"job_type[]\" id=\"job_type_{$g_num}\">
+                    ".$jt."
+                </select>
+                <button type=\"button\" class=\"adlevel-delete-btn recruit-del-btn\" onclick=\"DEL_ADVERTISING_LEVEL({$g_num})\">삭제</button>
+            </div>";
+
+    $result_data = [
+        "status" => "success",
+        "msg" => "sucess",
+        "items" => array("item" => $html),
+    ];
+
+    echo json_encode($result_data, JSON_UNESCAPED_UNICODE);
+}
+
+if($ac == "add_state_city") {
+
+    $g_num = (int)($_GET['g_num'] ?? 0);
+
+    $select_state_code = DB_ARRAY_ARRAY_RETURN(-1, "", $db, "common_code", "code_sub_name", "code_sub", "code = 'state' order by sort asc", "주선택");
+
+    $html = "
+            <div class=\"adlevel-row\" id=\"div_state_city_{$g_num}\">
+                <input type=\"hidden\" name=\"loc_sub_id[{$g_num}]\" value=\"\">
+                <select class=\"detail-form-control\" name=\"state_code[{$g_num}]\" id=\"state_code_{$g_num}\" onchange=\"GET_CITY_NAME({$g_num});\">
+                    ".$select_state_code."
+                </select>
+                <select class=\"detail-form-control\" name=\"city_name[{$g_num}]\" id=\"city_name_{$g_num}\">
+                    <option value=''>도시선택</option>
+                </select>
+                <button type=\"button\" class=\"adlevel-delete-btn recruit-del-btn\" onclick=\"DEL_STATE_CITY({$g_num})\">삭제</button>
+            </div>";
+
+    $result_data = [
+        "status" => "success",
+        "msg" => "sucess",
+        "items" => array("item" => $html),
+    ];
+
+    echo json_encode($result_data, JSON_UNESCAPED_UNICODE);
+}
+
 if($ac == "update_recruit") {
 
-    $id = $_POST["id"];
+    $id = (int)$_POST["id"];
 
     $company_name = $_POST['company_name'] ?? "";
     $ac_id = $_REQUEST['ac_id'] ?? "";
@@ -129,12 +179,53 @@ if($ac == "update_recruit") {
     $contact_email = $_POST['contact_email'] ?? "";
     $job_opening_information = $_POST['job_opening_information'] ?? "";
 //    $has_15_plus_employees = $_POST['has_15_plus_employees'] ?? "";
-    $advertising_level = $_POST['advertising_level'] ?? "";
     $internal_notes = $_POST['internal_notes'] ?? "";
     $listing_status = $_POST['listing_status'] ?? "";
     $is_active = $_POST['is_active'] ?? 0;
     $is_approved = $_POST['is_approved'] ?? 0;
     $is_modify_yn = $_POST['is_modify_yn'] ?? 0;
+
+    // 광고레벨은 수정할 수 없으므로 전송된 값이 아니라 DB에 저장된 값을 기준으로 처리한다.
+    $listing_row = GET_ONE_ROW($db, "SELECT advertising_level FROM community_recruit_listings WHERE community_recruit_listings_id = :id", $id);
+
+    if(!$listing_row) {
+        echo json_encode(["status" => "fail", "msg" => "구인구직 데이터가 없습니다."], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
+    $advertising_level = $listing_row->advertising_level;
+
+    // 파일이나 DB를 변경하기 전에 직종, 주/도시를 먼저 검증한다.
+    $job_types = array_map('trim', (array)($_POST['job_type'] ?? []));
+    $validation_msg = "";
+
+    if(in_array("", $job_types, true)) $validation_msg = "직종을 선택해주세요.";
+    else if(count($job_types) !== count(array_unique($job_types))) $validation_msg = "중복된 직종이 있습니다. 확인해 주세요.";
+
+    $location_keys = array();
+    foreach ($state_codes as $index => $state_code) {
+
+        $city_name = $city_names[$index] ?? '';
+
+        if($validation_msg != "") break;
+
+        if($state_code == "") $validation_msg = "주를 선택해주세요.";
+        else if($city_name == "") $validation_msg = "도시를 선택해주세요.";
+        else if(in_array($state_code."|".$city_name, $location_keys, true)) $validation_msg = "중복된 주/도시가 있습니다. 확인해 주세요.";
+
+        $location_keys[] = $state_code."|".$city_name;
+    }
+
+    $is_multi_level = in_array($advertising_level, ['gold', 'platinum'], true);
+
+    if($validation_msg == "" && !$is_multi_level && (count($job_types) > 1 || count($state_codes) > 1)) {
+        $validation_msg = "gold, platinum 광고만 직종과 주/도시를 여러 개 등록할 수 있습니다.";
+    }
+
+    if($validation_msg != "") {
+        echo json_encode(["status" => "fail", "msg" => $validation_msg], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
 
     $h_logo_images_url = $_POST['h_logo_image_url'] ?? "";
     $h_main_image_url = $_POST['h_main_image_url'] ?? "";
@@ -192,7 +283,6 @@ if($ac == "update_recruit") {
         'sub_image_03_url' => $u_sub_image_03_url,
         'sub_image_04_url' => $u_sub_image_04_url,
         'sub_image_05_url' => $u_sub_image_05_url,
-        'advertising_level' => $advertising_level,
         'title' => $title,
         'subtitle' => $subtitle,        
         'contact_name' => $contact_name,
@@ -227,13 +317,7 @@ if($ac == "update_recruit") {
 
     $db->delete('community_recruit_listings_sub', ['community_recruit_listings_id' => $id]);
 
-    for($i=1;$i<30;$i++) {
-
-        
-        $t_job_type = '';
-
-        
-        if (isset($_POST['job_type_'.$i])) $t_job_type = $_POST['job_type_'.$i];
+    foreach ($job_types as $t_job_type) {
 
         $insert_values = array(
             'community_recruit_listings_id' => $id,            
@@ -246,31 +330,56 @@ if($ac == "update_recruit") {
             'ip_address' => $define_val->DEFINE_IP_ADDRESS
         );
 
-        if($t_job_type != "") $result = $db->insert("community_recruit_listings_sub", $insert_values);
+        $result = $db->insert("community_recruit_listings_sub", $insert_values);
         unset($insert_values);
-        
-        
     }
-    
+
+    // 화면에서 삭제된 주/도시는 제출된 loc_sub_id 목록에 없으므로 DB에서도 삭제한다.
+    $keep_loc_sub_ids = array_filter(array_map('intval', (array)$loc_sub_id));
+    $delete_where = 'community_recruit_listings_id = '.$id;
+    if(count($keep_loc_sub_ids) > 0) {
+        $delete_where .= ' and community_recruit_listings_loc_sub_id not in ('.implode(',', $keep_loc_sub_ids).')';
+    }
+    $db->delete('community_recruit_listings_loc_sub', $delete_where);
+
     foreach ($state_codes as $index => $state_code) {
-                                
-        if($state_code == "") continue;
-       
+
         $city_name = $city_names[$index] ?? '';
-                    
-        $ls_id = $loc_sub_id[$index] ?? ''; 
-                        
-        $update_values = array(                
-                'state_code' => htmlspecialchars($state_code),
-                'city_name' => htmlspecialchars($city_name),
-                'updated_user' => $SS_NICKNAME,
-                'updated_at' => date('Y-m-d H:i:s'),
-                'ip_address' => $_SERVER['REMOTE_ADDR']
-        );
-       
-        $result = $db->update('community_recruit_listings_loc_sub', $update_values, 'community_recruit_listings_loc_sub_id = '.$ls_id);
-        unset($update_values);       
+
+        $ls_id = (int)($loc_sub_id[$index] ?? 0);
+
+        if($ls_id > 0) {
+
+            $update_values = array(
+                    'state_code' => htmlspecialchars($state_code),
+                    'city_name' => htmlspecialchars($city_name),
+                    'updated_user' => $SS_NICKNAME,
+                    'updated_at' => date('Y-m-d H:i:s'),
+                    'ip_address' => $_SERVER['REMOTE_ADDR']
+            );
+
+            $result = $db->update('community_recruit_listings_loc_sub', $update_values, 'community_recruit_listings_loc_sub_id = '.$ls_id.' and community_recruit_listings_id = '.$id);
+            unset($update_values);
+        }
+        else {
+
+            $insert_values = array(
+                    'community_recruit_listings_loc_sub_id' => null,
+                    'community_recruit_listings_id' => $id,
+                    'state_code' => htmlspecialchars($state_code),
+                    'city_name' => htmlspecialchars($city_name),
+                    'is_active' => 1,
+                    'created_user' => $SS_NICKNAME ?? "",
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'ip_address' => $_SERVER['REMOTE_ADDR']
+            );
+
+            $result = $db->insert('community_recruit_listings_loc_sub', $insert_values);
+            unset($insert_values);
+        }
     }
+
+    echo json_encode(["status" => "success", "msg" => "sucess"], JSON_UNESCAPED_UNICODE);
 /*
     // 회사정보 업데이트
     $update_values = array(

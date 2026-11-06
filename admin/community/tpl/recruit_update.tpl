@@ -31,8 +31,7 @@
 					<div style="font-size:11px; font-weight:700; color:#0f766e; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">광고레벨</div>
                     <div>                                                
                         <div class="adlevel-row">
-                            <select class="detail-form-control" name="advertising_level"
-                                    id="advertising_level">
+                            <select class="detail-form-control" id="advertising_level" disabled>
                                 {{SELECT_ADVERTISING_LEVEL}}
                             </select>                            
                         </div>
@@ -40,19 +39,17 @@
 
                     </div>
 					<div id="result_advertising_level">
-						<!--div class="adlevel-row" id="adlevel_row_new">
-							<button type="button" class="adlevel-add-btn" onclick="ADD_ADVERTISING_LEVEL()">+ 추가</button>
-						</div-->
 						<!-- LOOP START 'T_LOOP' -->
-						<div class="adlevel-row" id="div_advertising_level_{{T_LOOP.T_NO}}">							
-							<select class="detail-form-control" name="job_type_{{T_LOOP.T_NO}}" id="job_type_{{T_LOOP.T_NO}}">
+						<div class="adlevel-row" id="div_advertising_level_{{T_LOOP.T_NO}}">
+							<select class="detail-form-control" name="job_type[]" id="job_type_{{T_LOOP.T_NO}}">
 								{{T_LOOP.T_JOB_TYPE}}
 							</select>
-							<!--button type="button" class="adlevel-delete-btn" onclick="DEL_ADVERTISING_LEVEL('{{T_LOOP.T_NO}}')">삭제</button-->
+							<button type="button" class="adlevel-delete-btn recruit-del-btn" style="display:none;" onclick="DEL_ADVERTISING_LEVEL('{{T_LOOP.T_NO}}')">삭제</button>
 						</div>
 						<!-- LOOP END 'T_LOOP' -->
 
 					</div>
+					<button type="button" class="adlevel-add-btn recruit-add-btn" style="display:none;" onclick="ADD_JOB_TYPE()">+ 추가</button>
 				</div>
 			</div>
 
@@ -86,22 +83,27 @@
 						<div class="detail-field-label">소제목</div>
 						<input type="text" class="detail-form-control" name="subtitle" id="subtitle" value="{{T_SUBTITLE}}">
 					</div-->
-                    <!-- LOOP START 'T_SC' -->                      
-                    <div class="detail-field full" style="display: flex; flex-direction: column; gap: 5px;">                    
-                        <div class="detail-field-label" style="font-weight: bold;">주 / 도시</div>                        
-                        <div class="detail-input-group" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">    
-                            <input type="hidden" name="loc_sub_id[{{T_SC.T_NUM}}]" value="{{T_SC.T_LOC_SUB_ID}}">                        
-                            <select class="detail-form-control" name="state_code[{{T_SC.T_NUM}}]" id="state_code_{{T_SC.T_NUM}}" onchange="GET_CITY_NAME({{T_SC.T_NUM}});" style="width: auto;">
-                                {{T_SC.T_SELECT_STATE_CODE}}
-                            </select>
-                            
-                            <select class="detail-form-control" name="city_name[{{T_SC.T_NUM}}]" id="city_name_{{T_SC.T_NUM}}" style="width: auto;">
-                                {{T_SC.T_SELECT_CITY_NAME}}
-                            </select>
-                        
+                    <div class="detail-field full" style="display: flex; flex-direction: column; gap: 5px;">
+                        <div class="detail-field-label" style="font-weight: bold;">주 / 도시</div>
+                        <div id="result_state_city">
+                            <!-- LOOP START 'T_SC' -->
+                            <div class="adlevel-row" id="div_state_city_{{T_SC.T_NUM}}">
+                                <input type="hidden" name="loc_sub_id[{{T_SC.T_NUM}}]" value="{{T_SC.T_LOC_SUB_ID}}">
+                                <select class="detail-form-control" name="state_code[{{T_SC.T_NUM}}]" id="state_code_{{T_SC.T_NUM}}" onchange="GET_CITY_NAME({{T_SC.T_NUM}});">
+                                    {{T_SC.T_SELECT_STATE_CODE}}
+                                </select>
+
+                                <select class="detail-form-control" name="city_name[{{T_SC.T_NUM}}]" id="city_name_{{T_SC.T_NUM}}">
+                                    {{T_SC.T_SELECT_CITY_NAME}}
+                                </select>
+                                <button type="button" class="adlevel-delete-btn recruit-del-btn" style="display:none;" onclick="DEL_STATE_CITY({{T_SC.T_NUM}})">삭제</button>
+                            </div>
+                            <!-- LOOP END 'T_SC' -->
                         </div>
-                    </div>               
-                    <!-- LOOP END 'T_SC' -->
+                        <div>
+                            <button type="button" class="adlevel-add-btn recruit-add-btn" style="display:none;" onclick="ADD_STATE_CITY()">+ 추가</button>
+                        </div>
+                    </div>
 					<div class="detail-field">
 						<div class="detail-field-label">조회수</div>
 						<div class="detail-readonly-value">{{T_VIEW_COUNT}}</div>
@@ -325,6 +327,7 @@
 <script>
 
 	var g_num = {{G_NUM}};
+	var g_loc_num = {{G_LOC_NUM}};
 </script>
 <script src="../vendor/jquery/jquery.js"></script>
 <script src="../js/community/recruit_update.js"></script>

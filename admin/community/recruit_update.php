@@ -146,14 +146,6 @@ $loop = array();
 for($i=0;$i<count($p_job_type_array);$i++) {
     
     $jt = ARRAY_ARRAY_RETURN($define_val->DEFINE_recruit_job_type, 1, $p_job_type_array[$i]);
-    if($i==0) {
-        $add_button = '<a href="javascript:return false;" class="delete-button btn btn-primary align-items-center font-weight-semibold line-height-1" onclick="ADD_ADVERTISING_LEVEL();">
-															<i class="bx bx-plus text-4 me-2"></i> 추가
-														</a>';
-    }
-    else {
-        $add_button = '';
-    }
     $loop[$i] = array("T_NO" => $i+1, "T_JOB_TYPE" => $jt);
 
 }
@@ -185,6 +177,7 @@ $tpl->setVar("T_IP_ADDRESS", $p_ip_address);
 $tpl->setVar("SELECT_IS_MODIFY_YN",ARRAY_ARRAY_RETURN($define_val->DEFINE_is_active, 1, $p_is_modify_yn));
 
 $tpl->setVar("G_NUM", $g_num+1);
+$tpl->setVar("G_LOC_NUM", count($loop_state_city));
 
 include("$DOCUMENT_ROOT/admin/include/common.php");
 
