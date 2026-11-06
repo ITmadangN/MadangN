@@ -17,10 +17,30 @@ function updateIndividualFile(input) {
 
     if (input.files && input.files[0]) {
         const file = input.files[0];
-        const maxSize = 2 * 1024 * 1024; // 1MB
+        const maxSize = 2 * 1024 * 1024; // 2 MB
 
-        // 이미지 파일 확장자 체크 (선택 사항)
-        if (!file.type.match('image.*')) {
+        // // 이미지 파일 확장자 체크 (선택 사항)
+        // if (!file.type.match('image.*')) {
+        //     alert('이미지 파일(jpg, png, gif)만 선택 가능합니다.');
+        //     input.value = '';
+        //     return;
+        // }
+
+        // 허용 MIME 타입
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
+        // MIME 타입 검사
+        if (!allowedTypes.includes(file.type)) {
+            alert('이미지 파일(jpg, png, gif)만 선택 가능합니다.');
+            input.value = '';
+            return;
+        }
+
+        // 확장자 검사
+        const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+        const fileExt = file.name.split('.').pop().toLowerCase();
+
+        if (!allowedExtensions.includes(fileExt)) {
             alert('이미지 파일(jpg, png, gif)만 선택 가능합니다.');
             input.value = '';
             return;

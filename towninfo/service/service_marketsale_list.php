@@ -49,7 +49,6 @@ class service_marketsale_list
 
     private function init() {
 
-    
         // 커뮤니티 첫화면일 경우                
         if($this->indexYN == 'Y') {
             $row_sql = "SELECT  
@@ -234,11 +233,11 @@ class service_marketsale_list
                         ORDER BY flyer.towninfo_marketsale_flyer_id";             
             
         }
-       
+
         if($this->limit > 0) {
             $row_sql .= " Limit ".$this->limit;
         }
-
+//        saveLog("sql : ",$row_sql);
         $this->db->query($row_sql);
 
         $this->make_data();

@@ -116,7 +116,7 @@ class service_news_list
         
         $row_sql .= " Limit ".$pagination->limit_regno.", ".$pagination->page_set;
 
-//        if($this->section=='en'){
+//        if($this->section=='pe'){
 //            saveLog("$row_sql : ",$row_sql);
 //        }
 
