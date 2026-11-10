@@ -104,11 +104,11 @@
                                 <div class="row child-cols-12 md:child-cols-6 lg:child-cols-4 g-2 gy-2">
 
                                     {{BUSINESS_HTML}}
-                                    
-                                   
+
+
                                 </div>
                             </div>
-                         
+
                         </div>
                     </div>
                 </div>

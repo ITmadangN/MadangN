@@ -57,9 +57,11 @@ class youtube_index
 
         $this->editors_query = $query . " and A.editors_pick = 'Y' order by B.puliishedat desc limit 0,8";
 
-        $this->insure_query = $query . " and A.insurance_finance_pick = 'Y' order by B.puliishedat desc limit 0,8";
+//        $this->insure_query = $query . " and A.insurance_finance_pick = 'Y' order by B.puliishedat desc limit 0,8";
+        $this->insure_query = $query . " and A.category_1 = 'insure' and A.category_2 != 'ishorts' order by B.puliishedat desc limit 0,8";
 
-        $this->insure_other_query = $query . " and A.insurance_finance_pick = 'Y' order by B.puliishedat desc limit 8,8";
+//        $this->insure_other_query = $query . " and A.insurance_finance_pick = 'Y' order by B.puliishedat desc limit 8,8";
+        $this->insure_other_query = $query . " and A.category_1 = 'insure' and A.category_2 != 'ishorts' order by B.puliishedat desc limit 8,8";
 
         $this->rogg_query = $query . " and A.category_1 = 'rogg'  order by B.puliishedat desc limit 0,4";
 
