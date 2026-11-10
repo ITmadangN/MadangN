@@ -61,7 +61,7 @@ class youtube_index
                                                         ) order by B.puliishedat desc limit 0,4";
         saveLog(" top_query : ",$this->top_query);
 //        $this->top_other_query = $query . " and A.home_pick = 'Y' order by B.puliishedat desc limit 4,2";
-        $this->top_other_query = $query . " and  ( ( A.category_1 = 'madangntv'   and A.category_2 in( 'unity' ,'bridgeone') ) or
+        $this->top_other_query = $query . " and  ( ( A.category_1 = 'insure'   and A.category_2 in( 'unity' ,'bridgeone') ) or
                                                    ( A.category_1 = 'realstate' ) or
                                                    ( A.category_1 = 'rogg' ) )
                                             AND NOT EXISTS (
