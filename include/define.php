@@ -14,7 +14,7 @@ class define_val {
     public string $CAR_FALSE_EMAIL = 'it@madangn.com';
     
     // 유료결제애 대해서 결제를 타야 할지 말지 결정
-    public string $PAY_YN_RECRUIT_PLATINUM = 'Y';
+    public string $PAY_YN_RECRUIT_PLATINUM = 'N';
     public string $PAY_YN_RECRUIT_GOLD = 'N';
     public string $PAY_YN_BUSINESS = 'N';
     public string $PAY_YN_CAR_DEALER = 'N';
