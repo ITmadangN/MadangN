@@ -24,7 +24,7 @@
                               <a href="javascript:return false;" onclick="DT_PAGE('TX','');" class="text-none">Texas</a><span class="divider">|</span>
                               <a href="javascript:return false;" onclick="DT_PAGE('WA','Seattle');" class="text-none">Seattle</a><span class="divider">|</span>
                               <a href="javascript:return false;" onclick="DT_PAGE('GA','Atlanta');" class="text-none">Atlanta</a><span class="divider">|</span>
-                              <a href="javascript:return false;" onclick="DT_PAGE('AL','');" class="text-none">Montgomery</a>`
+                              <a href="javascript:return false;" onclick="DT_PAGE('AL','');" class="text-none">Montgomery</a>
                             </div>
 
                               <div class="bg-gray-25 p-2 rounded" style="margin-top:-1rem !important;">
