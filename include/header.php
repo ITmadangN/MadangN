@@ -146,7 +146,8 @@
                     </ul>
                 </li>
                 <li class="uc-parent">
-                    <a href="javascript:return false;" onclick="goUrl('/realestate/');">부동산h</a>
+                    <!-- <a href="javascript:return false;" onclick="goUrl('/realestate/');">부동산h</a> -->
+                    <a href="javascript:void(0);" onclick="goUrl('/realestate/?popup=y');">부동산<span data-uc-navbar-parent-icon></span></a>
                     <ul class="uc-nav-sub" data-uc-nav="">
                         <li><a href="javascript:return false;" onclick="goUrl('/realestate/');">부동산홈</a></li>
                         <li><a href="javascript:return false;" onclick="goUrl('/realestate/house.php');">주택</a></li>
