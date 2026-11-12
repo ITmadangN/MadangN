@@ -622,6 +622,7 @@
     </div>
 </div>
 
+  <!--
 <style>
     .re-modal {
         display: none;
@@ -658,28 +659,7 @@
             padding: 30px 20px;
         }
     }
-    /*.re-modal {*/
-    /*    display: none;*/
-    /*    position: fixed;*/
-    /*    z-index: 99999;*/
-    /*    left: 0; top: 0;*/
-    /*    width: 100%; height: 100%;*/
-    /*    background-color: rgba(0, 0, 0, 0.75);*/
-    /*    backdrop-filter: blur(8px);*/
-    /*}*/
-    /*.re-modal-content {*/
-    /*    background-color: #0b0b0b;*/
-    /*    color: #ffffff;*/
-    /*    margin: 10% auto;*/
-    /*    padding: 40px 30px;*/
-    /*    border-radius: 20px;*/
-    /*    width: 90%;*/
-    /*    max-width: 750px;*/
-    /*    box-shadow: 0 20px 40px rgba(0,0,0,0.8);*/
-    /*    position: relative;*/
-    /*    text-align: center;*/
-    /*    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;*/
-    /*}*/
+
     .re-close {
         position: absolute; right: 25px; top: 20px;
         color: #888; font-size: 32px; font-weight: 300; cursor: pointer;
@@ -701,3 +681,73 @@
     .re-search-btn { background: #c92a2a; color: white; border: none; padding: 12px 26px; border-radius: 30px; font-weight: 700; font-size: 16px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
     .re-search-btn:hover { background: #a61e1e; }
 </style>
+-->
+<style>
+    .re-modal {
+        display: none;
+        position: fixed;
+        z-index: 999999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(8px);
+        overflow-y: auto;
+    }
+
+    .re-modal-content {
+        background-color: #0b0b0b;
+        color: #ffffff;
+        margin: 230px auto 50px auto;
+        padding: 40px 30px;
+        border-radius: 20px;
+        width: 90%;
+        max-width: 750px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+        position: relative;
+        text-align: center;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .re-close {
+        position: absolute; right: 25px; top: 20px;
+        color: #888; font-size: 32px; font-weight: 300; cursor: pointer;
+    }
+    .re-close:hover { color: #fff; }
+    .re-title { font-size: 28px; font-weight: 700; line-height: 1.3; margin-bottom: 25px; color: #fff; }
+    .re-title span { font-size: 18px; font-weight: 400; color: #aaa; }
+    .re-tabs { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
+    .re-tab-btn { background: none; border: none; color: #a0a0a0; font-size: 18px; font-weight: 600; padding: 8px 6px; cursor: pointer; position: relative; transition: color 0.2s; }
+    .re-tab-btn:hover, .re-tab-btn.active { color: #ffffff; }
+    .re-tab-btn.active::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 3px; background-color: #ffffff; border-radius: 2px; }
+    .re-icon-menu { justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+    .re-icon-menu button { background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 8px 14px; border-radius: 20px; cursor: pointer; font-size: 14px; }
+    .re-icon-menu button:hover { background: rgba(255, 255, 255, 0.25); }
+    .re-search-box { display: flex; align-items: center; background: #ffffff; border-radius: 40px; padding: 6px 8px 6px 15px; max-width: 650px; margin: 0 auto; }
+    .re-gps-btn { background: none; border: none; font-size: 18px; cursor: pointer; padding-right: 8px; }
+    .re-search-box input { flex: 1; border: none; outline: none; font-size: 16px; color: #333; background: transparent; }
+    .re-clear-btn { background: none; border: none; font-size: 20px; color: #777; cursor: pointer; padding: 0 10px; }
+    .re-search-btn { background: #c92a2a; color: white; border: none; padding: 12px 26px; border-radius: 30px; font-weight: 700; font-size: 16px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+    .re-search-btn:hover { background: #a61e1e; }
+
+    /* 모바일 화면 전용 스타일 (맨 아래에 배치해야 기존 스타일을 덮어씁니다) */
+    @media (max-width: 768px) {
+        .re-modal-content {
+            margin: 185px auto 40px auto;
+            padding: 35px 18px 25px 18px;
+            width: 92%;
+        }
+        .re-close { right: 16px; top: 12px; font-size: 28px; }
+        .re-title { font-size: 22px; margin-bottom: 18px; }
+        .re-title span { font-size: 14px; }
+        .re-tabs { gap: 12px; margin-bottom: 16px; }
+        .re-tab-btn { font-size: 16px; padding: 6px 4px; }
+        .re-search-box { padding: 5px 6px 5px 10px; width: 100%; box-sizing: border-box; }
+        .re-gps-btn { font-size: 15px; padding-right: 4px; }
+        .re-search-box input { font-size: 14px; min-width: 0; }
+        .re-clear-btn { font-size: 18px; padding: 0 6px; }
+        .re-search-btn { padding: 9px 14px; font-size: 13px; white-space: nowrap; flex-shrink: 0; }
+    }
+</style>
+                                        
