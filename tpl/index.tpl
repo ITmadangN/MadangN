@@ -616,7 +616,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                         </div>
                                     </li>
                                     <li>
-                                        <a href="javascript:return false;" onclick="goUrl('/realestate/');">부동산 <span data-uc-navbar-parent-icon></span></a>
+                                     <!--   <a href="javascript:return false;" onclick="goUrl('/realestate/');">부동산i <span data-uc-navbar-parent-icon></span></a> -->
+                                        <a href="javascript:void(0);" onclick="goUrl('/realestate/?popup=y');">부동산<span data-uc-navbar-parent-icon></span></a>
                                         <div class="uc-navbar-dropdown ft-primary text-unset fs-6 fw-medium p-3 rounded-0 hide-scrollbar w-auto" data-uc-drop=" offset: 0; boundary: !.uc-navbar; animation: uc-animation-slide-top-small; duration: 150;">
                                             <ul class="uc-nav uc-navbar-dropdown-nav" style="margin-top:-15px;">
                                                  <li><a href="/realestate" style="color:#f39c04"><b>부동산홈</b></a></li>
@@ -2302,7 +2303,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.addEventListener('load', bootNewsPager);
 })();
-</script> 
+</script>
 <script defer src="/js/iibiz_common.js"></script>
 <script defer src="/js/common.js"></script>
 

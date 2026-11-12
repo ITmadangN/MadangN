@@ -213,6 +213,7 @@
 <script defer src="/js/libs/jquery.min.js"></script>
 <script defer src="/js/file.js"></script>
 <script defer src="/js/realestate/index.js"></script>
+<script defer src="/js/realestate/realestate.js"></script>
 <script defer src="/js/iibiz_common.js"></script>
 
 <!-- INCLUDE FILE '../include/footer.php' -->
