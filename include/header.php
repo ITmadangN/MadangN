@@ -625,16 +625,21 @@
     .re-modal {
         display: none;
         position: fixed;
-        z-index: 99999;
-        left: 0; top: 0;
-        width: 100%; height: 100%;
+        z-index: 999999; /* 상단 메뉴보다 무조건 위에 오도록 최상위 지정 */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
         background-color: rgba(0, 0, 0, 0.75);
         backdrop-filter: blur(8px);
+        overflow-y: auto; /* 화면이 작을 경우 스크롤 가능하도록 처리 */
     }
+
     .re-modal-content {
         background-color: #0b0b0b;
         color: #ffffff;
-        margin: 10% auto;
+        /* 위쪽 여백을 고정 픽셀(210px)로 넉넉히 주어 상단 메뉴와 띄움 */
+        margin: 230px auto 50px auto;
         padding: 40px 30px;
         border-radius: 20px;
         width: 90%;
@@ -644,6 +649,36 @@
         text-align: center;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
+
+    /* 모바일 화면에서는 위쪽 여백을 조금 줄여서 보기 좋게 조정 */
+    @media (max-width: 768px) {
+        .re-modal-content {
+            margin: 130px auto 30px auto;
+            padding: 30px 20px;
+        }
+    }
+    /*.re-modal {*/
+    /*    display: none;*/
+    /*    position: fixed;*/
+    /*    z-index: 99999;*/
+    /*    left: 0; top: 0;*/
+    /*    width: 100%; height: 100%;*/
+    /*    background-color: rgba(0, 0, 0, 0.75);*/
+    /*    backdrop-filter: blur(8px);*/
+    /*}*/
+    /*.re-modal-content {*/
+    /*    background-color: #0b0b0b;*/
+    /*    color: #ffffff;*/
+    /*    margin: 10% auto;*/
+    /*    padding: 40px 30px;*/
+    /*    border-radius: 20px;*/
+    /*    width: 90%;*/
+    /*    max-width: 750px;*/
+    /*    box-shadow: 0 20px 40px rgba(0,0,0,0.8);*/
+    /*    position: relative;*/
+    /*    text-align: center;*/
+    /*    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;*/
+    /*}*/
     .re-close {
         position: absolute; right: 25px; top: 20px;
         color: #888; font-size: 32px; font-weight: 300; cursor: pointer;
