@@ -218,7 +218,7 @@ class recruit_list
                                 from community_recruit_listings_loc_sub 
                                 group by community_recruit_listings_id ) C on C.community_recruit_listings_id = A.community_recruit_listings_id
                     LEFT JOIN ad_company on ad_company.ad_company_id = A.ad_company_id
-                    WHERE 1 = 1 
+                    WHERE  ( A.ad_company_id = 0 or ( ad_company.used_type = 'recruit' and  ad_company.is_active = 1 ) )
                         {$this->q_is_active} 
                         {$this->q_is_modify_yn} 
                         {$this->q_advertising_level} 

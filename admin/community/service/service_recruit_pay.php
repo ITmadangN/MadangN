@@ -214,11 +214,12 @@ class recruit_pay_list
                             case when B.has_active_advertisement = 1 then 'Yes' else 'No' end as has_active_advertisement,
                             case when B.is_modify_yn = 1 then  'Yes' else 'No' end  as is_modify_yn
                     FROM ad_payments A 
-                    left join community_recruit_listings B on A.listing_id = B.community_recruit_listings_id 
+                    join community_recruit_listings B on A.listing_id = B.community_recruit_listings_id 
+                    JOIN ad_company on ad_company.ad_company_id = B.ad_company_id
                     left JOIN ( select community_recruit_listings_id, GROUP_CONCAT(DISTINCT CONCAT(city_name, ',', state_code) SEPARATOR ' / ') as state_city_name
                                 from community_recruit_listings_loc_sub 
                                 group by community_recruit_listings_id ) C on C.community_recruit_listings_id = A.listing_id
-                    WHERE A.section_type in ( 1 ,2)
+                    WHERE A.section_type in ( 1 ,2) and ad_company.is_active = 1
                         {$this->q_is_active}  
                         {$this->q_is_modify_yn} 
                         {$this->q_is_approved}
