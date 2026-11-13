@@ -93,15 +93,20 @@
 						<tr>
 							<th width="5%">번호</th>
 							<th width="8%">로고</th>
+							<th width="5%">리스트#</th>
 							<th width="10%">회사명</th>
 							<th width="/">광고제목</th>
-                            <th width="6%">타입</th>
-							<th width="10%">지역</th>
-							<th width="8%">담당자</th>
-							<th width="6%">결제여부</th>
-							<th width="8%">결제금액</th>
-							<th width="6%">등록일</th>
-							<th width="6%">승인상태</th>
+                            <th width="5%">타입</th>
+							<th width="6%">지역</th>
+							<th width="5%">담당자</th>
+							<th width="5%">결제여부</th>
+							<th width="5%">결제금액</th>
+							<th width="5%">광고시작일</th>
+							<th width="5%">광고종료일</th>
+							<th width="5%">승인상태</th>
+							<th width="5%">광고활성<br>상태</th>
+							<th width="5%">수정가능</th>
+							<th width="5%">현재상태</th>
 						</tr>
 						</thead>
 						<tbody id="result_html">

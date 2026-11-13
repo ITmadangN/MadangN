@@ -44,8 +44,10 @@ class define_val {
     public array $DEFINE_common_blank = array('','전체');
     public array $DEFINE_youtube_channel         = array('','전체','UCjcsgya3C8krj-uo24PgxAw','마당N MadangN','UC38ZF45c2L9VmJBAJmjL4Jw','Spoon TV');
 
-    public array $DEFINE_is_active               = array('','전체','1','Active','0','Inactive');    
-    
+    public array $DEFINE_is_active               = array('','전체','1','Active','0','Inactive');
+
+    public array $DEFINE_is_approved             = array('','전체','1','Active','0','Inactive');
+
     public array $DEFINE_is_active_YN               = array('','전체','Y','Active','N','Inactive');    
     
     public array $DEFINE_is_default               = array('','전체','1','default','0','not default');    
