@@ -103,9 +103,17 @@ class ad_company_list
         $this->paging = $pagination->Print_Paging();
         $this->no = $pagination->no;
 
-        $row_sql = "SELECT A.* FROM ad_company A WHERE 1=1 {$this->q_is_active} {$this->q_used_type} {$this->q_keyword}";
-        $row_sql .= " order by ad_company_id desc Limit " . $pagination->limit_regno . ", " . $pagination->page_set;
-
+        $row_sql = "SELECT A.* ,B.community_recruit_listings_id,C.community_business_id
+                    FROM ad_company A 
+                    LEFT JOIN ( select ad_company_id,max(community_recruit_listings_id)as community_recruit_listings_id
+                                from community_recruit_listings
+                                group by ad_company_id ) B on B.ad_company_id = A.ad_company_id
+                    LEFT JOIN ( select ad_company_id,max(community_business_id)as community_business_id
+                                from community_business
+                                group by ad_company_id ) C on C.ad_company_id = A.ad_company_id
+                    WHERE 1=1 {$this->q_is_active} {$this->q_used_type} {$this->q_keyword}";
+        $row_sql .= " order by A.ad_company_id desc Limit " . $pagination->limit_regno . ", " . $pagination->page_set;
+//        saveLog("$row_sql : ",$row_sql);
         $this->db->query($row_sql);
 
         $this->make_data();
@@ -124,10 +132,18 @@ class ad_company_list
             if ($row->is_active == "1") {
                 $is_active_img = "completed";
             }
+//            $logo_img = "/images/blank.png";
+            if($row->community_recruit_listings_id != "") {
+                $logo_img = $this->define_val->IMG_PROTECT . "?c=community&cc=recruit&d=logo&s=" . $row->community_recruit_listings_id;
+            }
+            else{
+                $logo_img = $this->define_val->IMG_PROTECT . "?c=community&cc=business&d=main&s=" . $row->community_business_id;
+            }
 
             $this->loop[$i] = array(
                 'T_NO' => $row->ad_company_id,
                 'T_LINK' => $link,
+                'T_IMG' => $logo_img,
                 'T_USEWD_TYPE' => ARRAY_RETURN($this->define_val->DEFINE_ad_company_used_type, $row->used_type),
                 'T_COMPANY_NAME' => $row->company_name,
                 'T_COMPANY_WEBSITE' => $row->company_website,

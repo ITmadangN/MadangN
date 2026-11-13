@@ -82,11 +82,11 @@ class business_pay_list
         }        
         
         if ($this->s_state_code != "-1" && $this->s_state_code != "") {
-            $this->q_state_code = "AND A.state_code = '{$this->s_state_code}'";
+            $this->q_state_code = "AND B.state_code = '{$this->s_state_code}'";
         }
 
         if ($this->s_city_name != "-1" && $this->s_city_name != "") {
-            $this->q_city_name = "AND A.city_name = '{$this->s_city_name}'";
+            $this->q_city_name = "AND B.city_name = '{$this->s_city_name}'";
         }
 
         /*
@@ -189,12 +189,14 @@ class business_pay_list
             }
             
             if($row->payment_amount == "") $amount = 0;
-            else $amount - number_format((int)$row->payment_amount, 2);
-            
+            else $amount = number_format((int)$row->payment_amount, 2);
+
+            $logo_img = $this->define_val->IMG_PROTECT . "?c=community&cc=business&d=main&s=" . $row->listing_id;
 
             $this->loop[$i] = array(
                 'T_NO' => $row->ad_payments_id,
                 'T_LINK' => $link,
+                'T_IMG' => $logo_img,
                 'T_COMPANY_NAME' => $row->company_name,
                 'T_TITLE' => $row->title,
                 'T_LOCATION' => $row->city_name . "," . $row->state_code,

@@ -2,6 +2,7 @@
 <tr onclick="location.href='{{T_LOOP.T_LINK}}';" style="cursor:pointer;">
     <td>{{T_LOOP.T_NO}}</td>
     <td><img src="{{T_LOOP.T_IMG}}" style="width:60px;"></td>
+    <td>{{T_LOOP.T_AD_COMPANY_ID}}</td>
     <td>{{T_LOOP.T_COMPANY_NAME}}</td>
     <td>{{T_LOOP.T_ADVERTISING_LEVEL}}</td>
     <td>{{T_LOOP.T_JOB_TYPE}}</td>

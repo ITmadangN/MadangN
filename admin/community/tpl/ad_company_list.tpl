@@ -67,15 +67,16 @@
                     <table class="table table-striped mb-0 text-center" style="min-width: 750px;margin-top:20px;">
                         <thead>
                         <tr>
-                            <th width="8%">번호</th>
+                            <th width="5%">번호</th>
+                            <th width="8%">로고</th>
                             <th width="10%">회사명</th>
-                            <th width="20%">구인회사/비지니스홍보회사</th>
+                            <th width="10%">회사구분</th>
                             <th width="10%">담당자</th>
                             <th width="15%">이메일</th>
                             <th width="10%">연락처</th>
                             <th width="/">주소</th>
-                            <th width="10%">등록일</th>
-                            <th width="10%">현재상태</th>
+                            <th width="6%">등록일</th>
+                            <th width="8%">현재상태</th>
                         </tr>
                         </thead>
                         <tbody id="result_html">

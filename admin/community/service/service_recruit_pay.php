@@ -85,11 +85,11 @@ class recruit_pay_list
         }        
 
         if ($this->s_state_code != "-1" && $this->s_state_code != "") {
-            $this->q_state_code = "AND A.state_code = '{$this->s_state_code}'";
+            $this->q_state_code = "AND C.state_code = '{$this->s_state_code}'";
         }
 
         if ($this->s_city_name != "-1" && $this->s_city_name != "") {
-            $this->q_city_name = "AND A.city_name = '{$this->s_city_name}'";
+            $this->q_city_name = "AND C.city_name = '{$this->s_city_name}'";
         }
 
 /*        if ($this->s_is_paid != "-1" && $this->s_is_paid != "") {
@@ -157,7 +157,7 @@ class recruit_pay_list
                       {$this->q_state_code} 
                       {$this->q_city_name}
                 ) ";
-            
+//        saveLog(" $count_sql: ",$count_sql);
         $pagination = new Pagination(
             $this->db,
             $count_sql,
@@ -170,40 +170,71 @@ class recruit_pay_list
         $this->paging = $pagination->Print_Paging();
         $this->no = $pagination->no;
                         
+//        $row_sql = "SELECT
+//                A.*,
+//                B.advertising_level,
+//                B.title,
+//                B.company_name,
+//                B.contact_name,
+//                B.created_at,
+//                B.is_active,
+//                B.is_approved,
+//                B.advertising_level,
+//                (SELECT GROUP_CONCAT(DISTINCT CONCAT(SUB_C.city_name, ' , ', SUB_C.state_code) SEPARATOR ' / ')
+//                 FROM community_recruit_listings_loc_sub SUB_C
+//                 WHERE SUB_C.community_recruit_listings_id = A.listing_id and (A.section_type = 1 or A.section_type = 2)) AS state_city_name
+//            FROM ad_payments A
+//            left join community_recruit_listings B on A.listing_id = B.community_recruit_listings_id and (A.section_type = 1 or A.section_type = 2)
+//            WHERE  A.is_paid = 'Y'
+//                {$this->q_is_active}
+//                {$this->q_is_modify_yn}
+//                {$this->q_is_approved}
+//                {$this->q_has_active_advertisement}
+//                {$this->q_keyword}
+//                AND EXISTS (
+//                    SELECT 1
+//                    FROM community_recruit_listings_loc_sub C
+//                    WHERE C.community_recruit_listings_id = A.listing_id and (A.section_type = 1 or A.section_type = 2)
+//                      {$this->q_state_code}
+//                      {$this->q_city_name}
+//                )
+//            ORDER BY A.created_at DESC";
+
         $row_sql = "SELECT 
-                A.*,
-                B.advertising_level,
-                B.title,         
-                B.company_name,         
-                B.contact_name,
-                B.created_at,
-                B.is_active,      
-                B.is_approved,
-                B.advertising_level,                          
-                (SELECT GROUP_CONCAT(DISTINCT CONCAT(SUB_C.city_name, ' , ', SUB_C.state_code) SEPARATOR ' / ') 
-                 FROM community_recruit_listings_loc_sub SUB_C 
-                 WHERE SUB_C.community_recruit_listings_id = A.listing_id and (A.section_type = 1 or A.section_type = 2)) AS state_city_name
-            FROM ad_payments A 
-            left join community_recruit_listings B on A.listing_id = B.community_recruit_listings_id and (A.section_type = 1 or A.section_type = 2)
-            WHERE  A.is_paid = 'Y'
-                {$this->q_is_active}  
-                {$this->q_is_modify_yn} 
-                {$this->q_is_approved}
-                {$this->q_has_active_advertisement}
-                {$this->q_keyword}                
-                AND EXISTS (
-                    SELECT 1 
-                    FROM community_recruit_listings_loc_sub C 
-                    WHERE C.community_recruit_listings_id = A.listing_id and (A.section_type = 1 or A.section_type = 2)                  
-                      {$this->q_state_code} 
-                      {$this->q_city_name}
-                )                               
-            ORDER BY A.created_at DESC";
+                            A.*,
+                            B.advertising_level,
+                            B.title,         
+                            B.company_name,         
+                            B.contact_name,
+                            B.created_at,
+                            B.is_active,      
+                            B.is_approved,
+                            B.advertising_level,                          
+                            C.state_city_name
+                    FROM ad_payments A 
+                    left join community_recruit_listings B on A.listing_id = B.community_recruit_listings_id 
+                    left JOIN ( select community_recruit_listings_id, GROUP_CONCAT(DISTINCT CONCAT(city_name, ',', state_code) SEPARATOR ' / ') as state_city_name
+                                from community_recruit_listings_loc_sub 
+                                group by community_recruit_listings_id ) C on C.community_recruit_listings_id = A.listing_id
+                    WHERE A.section_type in ( 1 ,2)
+                        {$this->q_is_active}  
+                        {$this->q_is_modify_yn} 
+                        {$this->q_is_approved}
+                        {$this->q_has_active_advertisement}
+                        {$this->q_keyword}                
+                        AND EXISTS (
+                            SELECT 1 
+                            FROM community_recruit_listings_loc_sub C 
+                            WHERE C.community_recruit_listings_id = A.listing_id             
+                              {$this->q_state_code} 
+                              {$this->q_city_name}
+                        )                               
+                    ORDER BY A.created_at DESC";
 
         $row_sql .= " Limit " . $pagination->limit_regno . ", " . $pagination->page_set;
 
         $this->db->query($row_sql);
-
+//        saveLog("recruit pay : ",$row_sql);
         $this->make_data();
 
         $this->navigation_text = "Total(" . number_format($pagination->getTotal(), 0) . ") [Page : " . number_format($this->page, 0) . "/" . number_format($pagination->getTotalPage(), 0) . "]";
@@ -222,10 +253,12 @@ class recruit_pay_list
             if ($row->is_approved == "1") {
                 $is_active_img = "completed";
             }
-
+//            $logo_img = "/images/blank.png";
+            $logo_img = $this->define_val->IMG_PROTECT ."?c=community&cc=recruit&d=logo&s=".$row->listing_id;
             $this->loop[$i] = array(
                 'T_NO' => $row->ad_payments_id,
                 'T_LINK' => $link,
+                'T_IMG' => $logo_img,
                 'T_COMPANY_NAME' => $row->company_name,
                 'T_TITLE' => $row->title,
                 'T_LOCATION' => $row->state_city_name,

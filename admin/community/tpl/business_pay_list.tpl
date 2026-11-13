@@ -91,7 +91,8 @@
 					<table class="table table-striped mb-0 text-center" style="min-width: 750px;margin-top:20px;">
 						<thead>
 						<tr>
-							<th width="8%">번호</th>
+							<th width="5%">번호</th>
+							<th width="8%">로고</th>
 							<th width="10%">회사명</th>
 							<th width="/">광고제목</th>
 							<th width="10%">지역</th>

@@ -91,16 +91,17 @@
 					<table class="table table-striped mb-0 text-center" style="min-width: 750px;margin-top:20px;">
 						<thead>
 						<tr>
-							<th width="8%">번호</th>
+							<th width="5%">번호</th>
+							<th width="8%">로고</th>
 							<th width="10%">회사명</th>
 							<th width="/">광고제목</th>
-                            <th width="9%">타입</th>
+                            <th width="6%">타입</th>
 							<th width="10%">지역</th>
-							<th width="10%">담당자</th>
-							<th width="5%">결제여부</th>
-							<th width="8%">결제금액</th>							
-							<th width="9%">등록일</th>
-							<th width="8%">승인상태</th>
+							<th width="8%">담당자</th>
+							<th width="6%">결제여부</th>
+							<th width="8%">결제금액</th>
+							<th width="6%">등록일</th>
+							<th width="6%">승인상태</th>
 						</tr>
 						</thead>
 						<tbody id="result_html">
