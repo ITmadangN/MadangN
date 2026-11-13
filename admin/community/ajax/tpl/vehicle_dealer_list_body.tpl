@@ -3,10 +3,14 @@
     <td>{{T_LOOP.T_NO}}</td>
     <td><img src="{{T_LOOP.T_IMG}}" style="width:60px;"></td>
     <td>{{T_LOOP.T_COMPANY_NAME}}</td>
-    <td>{{T_LOOP.T_CONTACT_NAME}}</td>
-    <td>{{T_LOOP.T_CONTACT_PHONE}}</td>
+    <td>{{T_LOOP.T_COMPANY_WEBSITE}}</td>
+    <td>{{T_LOOP.T_DEALER_WEBSITE}}</td>
     <td>{{T_LOOP.T_LOCATION}}</td>
-    <td>{{T_LOOP.T_CREATE_AT}}</td>
+    <td>{{T_LOOP.T_CONTACT_NAME}}</td>
+    <td>{{T_LOOP.T_CONTACT_EMAIL}}</td>
+    <td>{{T_LOOP.T_CONTACT_PHONE}}</td>
+    <td>{{T_LOOP.T_HAS_ACTIVE_ADVERTISEMENT}}</td>
+    <td>{{T_LOOP.T_IS_MODIFY_YN}}</td>
     <td><span class="ecommerce-status  {{T_LOOP.T_ACTIVE_IMG}}">{{T_LOOP.T_IS_ACTIVE}}</span></td>
 </tr>
 <!-- LOOP END 'T_LOOP' -->

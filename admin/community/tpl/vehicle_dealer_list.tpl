@@ -80,14 +80,18 @@
                     <table class="table table-striped mb-0 text-center" style="min-width: 750px;margin-top:20px;">
                         <thead>
                         <tr>
-                            <th width="8%">번호</th>
-                            <th width="10%">로고</th>
-                            <th width="10%">회사명</th>
-                            <th width="10%">딜러명</th>
-                            <th width="20%">연락처</th>
-                            <th width="/">지역</th>
-                            <th width="10%">등록일</th>
-                            <th width="10%">현재상태</th>
+                            <th width="5%">번호</th>
+                            <th width="8%">로고</th>
+                            <th width="/">회사명</th>
+                            <th width="10%">회사웹사이트</th>
+                            <th width="10%">딜러웹사이트</th>
+                            <th width="8%">지역</th>
+                            <th width="10%">담당자</th>
+                            <th width="10%">이메일</th>
+                            <th width="7%">연락처</th>
+                            <th width="7%">광고활성상태</th>
+                            <th width="5%">수정가능</th>
+                            <th width="5%">현재상태</th>
                         </tr>
                         </thead>
                         <tbody id="result_html">

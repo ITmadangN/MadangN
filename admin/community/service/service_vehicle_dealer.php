@@ -116,7 +116,11 @@ class vehicle_dealer_list
         $this->paging = $pagination->Print_Paging();
         $this->no = $pagination->no;
 
-        $row_sql = "SELECT A.* FROM community_car_dealers A WHERE 1=1 {$this->q_is_active} {$this->q_is_modify_yn}  {$this->q_state_code} {$this->q_city_name} {$this->q_keyword}";
+        $row_sql = "SELECT A.* ,
+                            case when A.has_active_advertisement = 1 then 'Yes' else 'No' end as has_active_advertisement,
+                            case when A.is_modify_yn = 1 then  'Yes' else 'No' end  as is_modify_yn
+                    FROM community_car_dealers A 
+                    WHERE 1=1 {$this->q_is_active} {$this->q_is_modify_yn}  {$this->q_state_code} {$this->q_city_name} {$this->q_keyword}";
         $row_sql .= " order by community_car_dealers_id desc  Limit " . $pagination->limit_regno . ", " . $pagination->page_set;
 
         $this->db->query($row_sql);
@@ -150,10 +154,15 @@ class vehicle_dealer_list
                 'T_LINK' => $link,
                 'T_IMG' => $img,
                 'T_COMPANY_NAME' => $row->company_name,
-                'T_CONTACT_NAME' => $row->contact_name,
+                'T_COMPANY_WEBSITE' => $row->company_website,
+                'T_DEALER_WEBSITE' => $row->dealer_website,
                 'T_LOCATION' => $row->city_name . "," . $row->state_code,
+                'T_CONTACT_NAME' => $row->contact_name,
+                'T_CONTACT_EMAIL' => $row->contact_email,
                 'T_CONTACT_PHONE' => $row->contact_phone,
                 'T_CREATE_AT' => DATETOSTRING_USA2($row->created_at,"/"),
+                'T_HAS_ACTIVE_ADVERTISEMENT' => $row->has_active_advertisement,
+                'T_IS_MODIFY_YN' => $row->is_modify_yn,
                 'T_ACTIVE_IMG' => $is_active_img,
                 'T_IS_ACTIVE' => ARRAY_RETURN($this->define_val->DEFINE_is_active, $row->is_active)
             );

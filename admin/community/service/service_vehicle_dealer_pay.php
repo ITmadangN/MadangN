@@ -141,9 +141,9 @@ class vehicle_dealer_pay_list
     {
 
         $count_sql = "SELECT count(*) as cnt FROM ad_payments A
-                        left join community_car_dealers B ON A.listing_id = B.community_car_dealers_id                        
-                        left join users D ON A.user_id = D.user_id
-                        where A.section_type = 4 and A.is_paid = 'Y'
+                      join community_car_dealers B ON A.listing_id = B.community_car_dealers_id                        
+                      left join users D ON A.user_id = D.user_id
+                      where A.section_type = 4
                         {$this->q_is_active}  {$this->q_is_modify_yn} {$this->q_is_approved}
                        {$this->q_state_code}  {$this->q_city_name} {$this->q_has_active_advertisement} {$this->q_keyword}";
 
@@ -159,10 +159,14 @@ class vehicle_dealer_pay_list
         $this->paging = $pagination->Print_Paging();
         $this->no = $pagination->no;
 
-        $row_sql = "SELECT A.*, B.company_name, B.state_code, B.city_name, B.contact_name, B.is_approved FROM ad_payments A
-                        left join community_car_dealers B ON A.listing_id = B.community_car_dealers_id                        
+        $row_sql = "    SELECT A.*, B.community_car_dealers_id, 
+                               B.logo_url, B.main_image_url,B.company_name, B.state_code, B.city_name, B.contact_name, B.is_approved ,
+                               case when B.has_active_advertisement = 1 then 'Yes' else 'No' end as has_active_advertisement,
+                               case when B.is_modify_yn = 1 then  'Yes' else 'No' end  as is_modify_yn 
+                        FROM ad_payments A
+                        join community_car_dealers B ON A.listing_id = B.community_car_dealers_id  
                         left join users D ON A.user_id = D.user_id
-                        where A.section_type = 4 and A.is_paid = 'Y'
+                        where A.section_type = 4
                         {$this->q_is_active}  {$this->q_is_modify_yn} {$this->q_is_approved}
                         {$this->q_state_code}  {$this->q_city_name} {$this->q_has_active_advertisement} {$this->q_keyword}
                         order by A.created_at desc";
@@ -185,23 +189,48 @@ class vehicle_dealer_pay_list
 
         while ($row = $this->db->fetch()) {
             $link = "vehicle_dealer_pay_view.php?ad_payments_id=" . $row->ad_payments_id;
+//            $is_active_img = "no-active";
+//            if ($row->is_approved == "1") {
+//                $is_active_img = "completed";
+//            }
             $is_active_img = "no-active";
-            if ($row->is_approved == "1") {
-                $is_active_img = "completed";
+            if($row->is_active == "1") $is_active_img = "completed";
+
+            $is_approved_img = "no-active";
+            if($row->is_approved == "1") $is_approved_img = "completed";
+
+            $logo_img = "/images/blank.png";
+            if ($row->logo_url != "") {
+                $logo_img = $this->define_val->IMG_PROTECT . "?c=community&cc=vehicle_dealer&d=logo&s=" . $row->community_car_dealers_id;
             }
+
+            $dealer_img = "/images/blank.png";
+            if ($row->main_image_url != "") {
+                $dealer_img = $this->define_val->IMG_PROTECT . "?c=community&cc=vehicle_dealer&d=main&s=" . $row->community_car_dealers_id;
+            }
+
 
             $this->loop[$i] = array(
                 'T_NO' => $row->ad_payments_id,
                 'T_LINK' => $link,
+                'T_LOGO_IMG' => $logo_img,
+                'T_DEALER_IMG' => $dealer_img,
+                'T_LISTING_ID' => $row->listing_id,
                 'T_COMPANY_NAME' => $row->company_name,
                 'T_LOCATION' => $row->city_name . "," . $row->state_code,
                 'T_CONTACT_NAME' => $row->contact_name,
                 'T_IS_PAID' => $row->is_paid,
                 'T_PAYMENT_AMOUNT' => number_format($row->payment_amount, 2),
-                'T_DESIRED_START_DATE' => DATETOSTRING_USA($row->desired_start_date, "/"),
-                'T_CREATE_AT' => DATETOSTRING_USA2($row->created_at,"/"),
+                'T_START_DATE' => DATETOSTRING_USA($row->start_date, "/"),
+                'T_END_DATE' =>  DATETOSTRING_USA($row->end_date, "/"),
+                'T_APPROVED_IMG' => $is_approved_img,
+                'T_IS_APPROVED' => ARRAY_RETURN($this->define_val->DEFINE_is_approved, $row->is_approved),
+                'T_HAS_ACTIVE_ADVERTISEMENT' => $row->has_active_advertisement,
+                'T_IS_MODIFY_YN' => $row->is_modify_yn,
                 'T_ACTIVE_IMG' => $is_active_img,
-                'T_IS_ACTIVE' => ARRAY_RETURN($this->define_val->DEFINE_is_active, $row->is_approved)
+                'T_IS_ACTIVE' => ARRAY_RETURN($this->define_val->DEFINE_is_active, $row->is_active),
+                'T_DESIRED_START_DATE' => DATETOSTRING_USA($row->desired_start_date, "/"),
+                'T_CREATE_AT' => DATETOSTRING_USA2($row->created_at,"/")
             );
 
             $i++;

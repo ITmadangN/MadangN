@@ -132,14 +132,30 @@ class vehicle_list
         $this->paging = $pagination->Print_Paging();
         $this->no = $pagination->no;
 
-        $row_sql = "SELECT A.*, B.company_name FROM community_car_listings A
-                    left join community_car_dealers B
-                    on A.community_car_dealers_id = B.community_car_dealers_id        
+        $row_sql = "SELECT  A.*, B.company_name ,
+
+                            case when A.community_car_dealers_id = 0 then 1 else  B.is_approved end as  is_approved,
+
+                            case when A.community_car_dealers_id > 0 and  B.has_active_advertisement = 1 then 'Yes' 
+			                     when A.community_car_dealers_id > 0 and  B.has_active_advertisement = 0 then 'No' 
+                            else 'Yes' end as has_active_advertisement,
+    
+                            case when A.community_car_dealers_id > 0 and  B.is_modify_yn = 1 then  'Yes' 
+                                 when A.community_car_dealers_id > 0 and  B.is_modify_yn = 0 then 'No' 
+                            else 'Yes' end  as is_modify_yn,
+    
+                            C.community_car_listing_images_id
+
+                    FROM community_car_listings A
+                    left join community_car_dealers B  on A.community_car_dealers_id = B.community_car_dealers_id        
+                    join ( select community_car_listings_id,min(community_car_listing_images_id) as community_car_listing_images_id
+                           from community_car_listing_images
+                           group by community_car_listings_id ) C on C.community_car_listings_id =A.community_car_listings_id
                     WHERE 1=1 {$this->q_is_active} {$this->q_is_modify_yn} {$this->q_dealer_yn} {$this->q_state_code} {$this->q_city_name} {$this->q_keyword}";
         $row_sql .= " order by A.community_car_listings_id desc  Limit " . $pagination->limit_regno . ", " . $pagination->page_set;
 
         $this->db->query($row_sql);
-
+        saveLog("vehicle list : ",$row_sql);
         $this->make_data();
 
         $this->navigation_text = "Total(" . number_format($pagination->getTotal(), 0) . ") [Page : " . number_format($this->page, 0) . "/" . number_format($pagination->getTotalPage(), 0) . "]";
@@ -155,19 +171,27 @@ class vehicle_list
             $p_community_car_listings_id = $row->community_car_listings_id;
             
             $link = "vehicle_view.php?community_car_listings_id=" . $p_community_car_listings_id;
-            $is_active_img = "no-active";
-            if ($row->is_active == "1") {
-                $is_active_img = "completed";
-            }
+//            $is_active_img = "no-active";
+//            if ($row->is_active == "1") {
+//                $is_active_img = "completed";
+//            }
             
-            $row_img = "select * from community_car_listing_images where community_car_listings_id = {$p_community_car_listings_id} order by image_order asc limit 0,1";
-
-            $this->db2->query($row_img);
-            $row_img = $this->db2->fetch();
-            
-            $img_no = "img" . $row_img->community_car_listing_images_id;
+//            $row_img = "select * from community_car_listing_images where community_car_listings_id = {$p_community_car_listings_id} order by image_order asc limit 0,1";
+//
+//            $this->db2->query($row_img);
+//            $row_img = $this->db2->fetch();
+//
+//            $img_no = "img" . $row_img->community_car_listing_images_id;
+            $img_no =  "img" . $row->community_car_listing_images_id ;
             $img = $this->define_val->IMG_PROTECT . "?c=community&cc=vehicle&d=$img_no&s=". $p_community_car_listings_id;
-            
+
+            $is_active_img = "no-active";
+            if($row->is_active == "1") $is_active_img = "completed";
+
+            $is_approved_img = "no-active";
+            if($row->community_car_dealers_id > 0 && $row->is_approved == "1") $is_approved_img = "completed";
+            elseif ($row->community_car_dealers_id= 0 ) $is_approved_img = "";
+
             $this->loop[$i] = array(
                 'T_NO' => $row->community_car_listings_id,
                 'T_LINK' => $link,
@@ -175,13 +199,19 @@ class vehicle_list
                 'T_DEALER_YN' => $row->community_car_dealers_id > 0 ? "딜러" : "일반",
                 'T_CAR_MAKER' => $row->car_maker,
                 'T_CAR_MODEL' => $row->car_model,
+                'T_CAR_COLOR' => $row->car_color,
                 'T_CAR_MILEAGE' => $row->car_mileage,
+                'T_CAR_YEAR' => $row->car_year,
                 'T_LOCATION' => $row->city_name . "," . $row->state_code,
-                'T_COMPANY_NAME' => $row->company_name,
+                'T_CAR_LISTING_PRICE' => $row->listing_price,
                 'T_SELLER_NAME' => $row->seller_name,
+                'T_COMPANY_NAME' => $row->company_name,
+                'T_APPROVED_IMG' => $is_approved_img,
+                'T_IS_APPROVED' => ARRAY_RETURN($this->define_val->DEFINE_is_approved, $row->is_approved),
+                'T_HAS_ACTIVE_ADVERTISEMENT' => $row->has_active_advertisement,
+                'T_IS_MODIFY_YN' => $row->is_modify_yn,
                 'T_ACTIVE_IMG' => $is_active_img,
-                'T_CREATE_AT' => DATETOSTRING_USA2($row->created_at,"/"),
-                'T_IS_ACTIVE' => ARRAY_RETURN($this->define_val->DEFINE_is_active, $row->is_active)
+                'T_IS_ACTIVE' => ARRAY_RETURN($this->define_val->DEFINE_is_active, $row->is_active),
             );
 
             $i++;

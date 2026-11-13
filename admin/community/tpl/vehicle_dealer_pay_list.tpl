@@ -91,15 +91,21 @@
 					<table class="table table-striped mb-0 text-center" style="min-width: 750px;margin-top:20px;">
 						<thead>
 						<tr>
-							<th width="8%">번호</th>
+							<th width="5%">번호</th>
+							<th width="8%">로고</th>
+							<th width="8%">딜러</th>
+							<th width="5%">딜러#</th>
 							<th width="15%">회사명</th>
 							<th width="10%">딜러명</th>
-							<th width="/">지역</th>
+							<th width="8%">지역</th>
 							<th width="5%">결제여부</th>
 							<th width="8%">결제금액</th>
-							<th width="10%">희망일</th>
-							<th width="10%">등록일</th>
-							<th width="10%">승인상태</th>
+							<th width="5%">광고시작일</th>
+							<th width="5%">광고종료일</th>
+							<th width="5%">승인상태</th>
+							<th width="5%">광고활성<br>상태</th>
+							<th width="5%">수정가능</th>
+							<th width="5%">현재상태</th>
 						</tr>
 						</thead>
 						<tbody id="result_html">

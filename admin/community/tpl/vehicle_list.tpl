@@ -80,17 +80,22 @@
                     <table class="table table-striped mb-0 text-center" style="min-width: 750px;margin-top:20px;">
                         <thead>
                         <tr>
-                            <th width="8%">번호</th>
-                            <th width="10%">사진</th>
-                            <th width="10%">딜러판매여부</th>
-                            <th width="10%">제조사</th>
-                            <th width="10%">모델</th>
-                            <th width="10%">주행거리</th>
-                            <th width="10%">회사명</th>     
-                            <th width="10%">판매자</th>                            
-                            <th width="/">지역</th>
-                            <th width="10%">등록일</th>
-                            <th width="10%">현재상태</th>
+                            <th width="5%">번호</th>
+                            <th width="8%">사진</th>
+                            <th width="5%">타입</th>
+                            <th width="6%">제조사</th>
+                            <th width="/">모델</th>
+                            <th width="6%">색상</th>
+                            <th width="6%">주행거리</th>
+                            <th width="3%">연식</th>
+                            <th width="6%">지역</th>
+                            <th width="6%">가격</th>
+                            <th width="8%">판매자</th>
+                            <th width="6%">회사명</th>
+                            <th width="6%">승인상태</th>
+                            <th width="7%">광고활성상태</th>
+                            <th width="6%">수정가능</th>
+                            <th width="6%">현재상태</th>
                         </tr>
                         </thead>
                         <tbody id="result_html">
