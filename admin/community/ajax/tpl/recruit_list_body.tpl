@@ -9,7 +9,10 @@
     <td>{{T_LOOP.T_LOCATION}}</td>
     <td>{{T_LOOP.T_TITLE}}</td>
     <td>{{T_LOOP.T_CONTACT_NAME}}</td>
-    <td>{{T_LOOP.T_CREATE_AT}}</td>
+  <!--  <td>{{T_LOOP.T_CREATE_AT}}</td> -->
+    <td><span class="ecommerce-status  {{T_LOOP.T_APPROVED_IMG}}">{{T_LOOP.T_IS_APPROVED}}</span></td>
+    <td>{{T_LOOP.T_HAS_ACTIVE_ADVERTISEMENT}}</td>
+    <td>{{T_LOOP.T_IS_MODIFY_YN}}</td>
     <td><span class="ecommerce-status  {{T_LOOP.T_ACTIVE_IMG}}">{{T_LOOP.T_IS_ACTIVE}}</span></td>
 </tr>
 <!-- LOOP END 'T_LOOP' -->

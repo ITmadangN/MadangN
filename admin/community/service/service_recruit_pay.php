@@ -207,10 +207,12 @@ class recruit_pay_list
                             B.company_name,         
                             B.contact_name,
                             B.created_at,
-                            B.is_active,      
+                            B.is_active  as list_is_active,     
                             B.is_approved,
                             B.advertising_level,                          
-                            C.state_city_name
+                            C.state_city_name,
+                            case when B.has_active_advertisement = 1 then 'Yes' else 'No' end as has_active_advertisement,
+                            case when B.is_modify_yn = 1 then  'Yes' else 'No' end  as is_modify_yn
                     FROM ad_payments A 
                     left join community_recruit_listings B on A.listing_id = B.community_recruit_listings_id 
                     left JOIN ( select community_recruit_listings_id, GROUP_CONCAT(DISTINCT CONCAT(city_name, ',', state_code) SEPARATOR ' / ') as state_city_name
@@ -249,16 +251,23 @@ class recruit_pay_list
 
         while ($row = $this->db->fetch()) {
             $link = "recruit_pay_view.php?ad_payments_id=" . $row->ad_payments_id;
+//            $is_active_img = "no-active";
+//            if ($row->is_approved == "1") {
+//                $is_active_img = "completed";
+//            }
             $is_active_img = "no-active";
-            if ($row->is_approved == "1") {
-                $is_active_img = "completed";
-            }
-//            $logo_img = "/images/blank.png";
+            if($row->is_active == "1") $is_active_img = "completed";
+
+            $is_approved_img = "no-active";
+            if($row->is_approved == "1") $is_approved_img = "completed";
+
             $logo_img = $this->define_val->IMG_PROTECT ."?c=community&cc=recruit&d=logo&s=".$row->listing_id;
+
             $this->loop[$i] = array(
                 'T_NO' => $row->ad_payments_id,
                 'T_LINK' => $link,
                 'T_IMG' => $logo_img,
+                'T_LISTING_ID' => $row->listing_id,
                 'T_COMPANY_NAME' => $row->company_name,
                 'T_TITLE' => $row->title,
                 'T_LOCATION' => $row->state_city_name,
@@ -266,10 +275,16 @@ class recruit_pay_list
                 'T_ADVERTISING_LEVEL' => ARRAY_RETURN($this->define_val->DEFINE_recruit_advertising_level_TEXT, $row->advertising_level),
                 'T_IS_PAID' => $row->is_paid,
                 'T_PAYMENT_AMOUNT' => number_format($row->payment_amount, 2),
-                'T_DESIRED_START_DATE' => DATETOSTRING_USA($row->desired_start_date, "/"),
-                'T_CREATE_AT' => DATETOSTRING_USA2($row->created_at,"/"),
+                'T_START_DATE' => DATETOSTRING_USA($row->start_date, "/"),
+                'T_END_DATE' =>  DATETOSTRING_USA($row->end_date, "/"),
+                'T_APPROVED_IMG' => $is_approved_img,
+                'T_IS_APPROVED' => ARRAY_RETURN($this->define_val->DEFINE_is_approved, $row->is_approved),
+                'T_HAS_ACTIVE_ADVERTISEMENT' => $row->has_active_advertisement,
+                'T_IS_MODIFY_YN' => $row->is_modify_yn,
                 'T_ACTIVE_IMG' => $is_active_img,
-                'T_IS_ACTIVE' => ARRAY_RETURN($this->define_val->DEFINE_is_active, $row->is_approved)
+                'T_IS_ACTIVE' => ARRAY_RETURN($this->define_val->DEFINE_is_active, $row->is_active),
+                'T_DESIRED_START_DATE' => DATETOSTRING_USA($row->desired_start_date, "/"),
+                'T_CREATE_AT' => DATETOSTRING_USA2($row->created_at,"/")
             );
 
             $i++;

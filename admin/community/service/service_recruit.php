@@ -206,7 +206,10 @@ class recruit_list
                             A.is_active ,                
                             A.advertising_level,                
                             B.job_type,                
-                            C.state_city_name
+                            C.state_city_name,
+                            A.is_approved,
+                            case when A.has_active_advertisement = 1 then 'Yes' else 'No' end as has_active_advertisement,
+                            case when A.is_modify_yn = 1 then  'Yes' else 'No' end  as is_modify_yn
                         FROM community_recruit_listings A 
                     left JOIN ( select community_recruit_listings_id,GROUP_CONCAT(DISTINCT job_type SEPARATOR '/') as job_type
                                 from community_recruit_listings_sub 
@@ -230,7 +233,7 @@ class recruit_list
                     ORDER BY A.created_at DESC 
                     LIMIT {$pagination->limit_regno}, {$pagination->page_set}";
         $this->db->query($row_sql);
-//        saveLog("$row_sql : ",$row_sql);
+//        saveLog("RECRUIT LIST : ",$row_sql);
         $this->make_data();
 
         $this->navigation_text = "총 (".number_format($pagination->getTotal(),0).")개 [전체 :".number_format($this->page,0)."/".number_format($pagination->getTotalPage(),0)."] 페이지";
@@ -247,15 +250,24 @@ class recruit_list
             $link = "recruit_view.php?community_recruit_listings_id=".$row->community_recruit_listings_id;
             $is_active_img = "no-active";
             if($row->is_active == "1") $is_active_img = "completed";
+            $is_approved_img = "no-active";
+            if($row->is_approved == "1") $is_approved_img = "completed";
 
             $logo_img = "/images/blank.png";
             if($row->advertising_level != "regular" ) $logo_img = $this->define_val->IMG_PROTECT ."?c=community&cc=recruit&d=logo&s=".$row->community_recruit_listings_id;
 
-            $this->loop[$i] = array('T_NO' => $row->community_recruit_listings_id,'T_LINK' => $link, 'T_IMG' => $logo_img,'T_AD_COMPANY_ID'=> $row->ad_company_id,
-                'T_COMPANY_NAME'=> $row->company_name,  'T_ADVERTISING_LEVEL' => REMOVE_DUPLICATE_WORD($row->advertising_level) ,
+            $this->loop[$i] = array('T_NO' => $row->community_recruit_listings_id,'T_LINK' => $link, 'T_IMG' => $logo_img,
+                                    'T_AD_COMPANY_ID'=> $row->ad_company_id,
+                                    'T_COMPANY_NAME'=> $row->company_name,  'T_ADVERTISING_LEVEL' => REMOVE_DUPLICATE_WORD($row->advertising_level) ,
                                     'T_JOB_TYPE' => GET_MULTI_JOB_TYPE($this->define_val,$row->job_type), 'T_LOCATION' => $row->state_city_name ,
                                     'T_TITLE' => $row->title, 'T_CONTACT_NAME' => $row->contact_name,  'T_CREATE_AT' => DATETOSTRING_USA2($row->created_at,"/"),
-                                    'T_ACTIVE_IMG' => $is_active_img, 'T_IS_ACTIVE' => ARRAY_RETURN($this->define_val->DEFINE_is_active,$row->is_active));
+                                    'T_APPROVED_IMG' => $is_approved_img,
+                                    'T_IS_APPROVED' => ARRAY_RETURN($this->define_val->DEFINE_is_approved,$row->is_approved),
+                                    'T_HAS_ACTIVE_ADVERTISEMENT' => $row->has_active_advertisement,
+                                    'T_IS_MODIFY_YN' => $row->is_modify_yn,
+                                    'T_ACTIVE_IMG' => $is_active_img,
+                                    'T_IS_ACTIVE' => ARRAY_RETURN($this->define_val->DEFINE_is_active,$row->is_active)
+                                    );
 
 
             $i++;
