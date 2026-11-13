@@ -2,15 +2,19 @@
 <tr onclick="location.href='{{T_LOOP.T_LINK}}';" style="cursor:pointer;">
     <td>{{T_LOOP.T_NO}}</td>
     <td><img src="{{T_LOOP.T_IMG}}" style="width:60px;"></td>
+    <td>{{T_LOOP.T_LISTING_ID}}</a></td>
     <td>{{T_LOOP.T_COMPANY_NAME}}</a></td>
     <td>{{T_LOOP.T_TITLE}}</td>
     <td>{{T_LOOP.T_LOCATION}}</td>
     <td>{{T_LOOP.T_CONTACT_NAME}}</td>
     <td><strong>{{T_LOOP.T_IS_PAID}}</strong></td>
     <td>${{T_LOOP.T_PAYMENT_AMOUNT}}</td>
-    <td>{{T_LOOP.T_DESIRED_START_DATE}}</td>
-    <td>{{T_LOOP.T_CREATE_AT}}</td>
-    <td><span class="ecommerce-status {{T_LOOP.T_ACTIVE_IMG}}">{{T_LOOP.T_IS_ACTIVE}}</span></td>
+    <td>{{T_LOOP.T_START_DATE}}</td>
+    <td>{{T_LOOP.T_END_DATE}}</td>
+    <td><span class="ecommerce-status  {{T_LOOP.T_APPROVED_IMG}}">{{T_LOOP.T_IS_APPROVED}}</span></td>
+    <td>{{T_LOOP.T_HAS_ACTIVE_ADVERTISEMENT}}</td>
+    <td>{{T_LOOP.T_IS_MODIFY_YN}}</td>
+    <td><span class="ecommerce-status  {{T_LOOP.T_ACTIVE_IMG}}">{{T_LOOP.T_IS_ACTIVE}}</span></td>
 </tr>
 <!-- LOOP END 'T_LOOP' -->
 <!--

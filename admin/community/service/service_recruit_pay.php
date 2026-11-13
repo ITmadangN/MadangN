@@ -140,23 +140,26 @@ class recruit_pay_list
     private function init()
     {
 
-        $count_sql = "SELECT 
-                count(*) as cnt
-            FROM ad_payments A 
-            left join community_recruit_listings B on A.listing_id = B.community_recruit_listings_id and (A.section_type = 1 or A.section_type = 2)
-            WHERE A.is_paid = 'Y'
-                {$this->q_is_active}  
-                {$this->q_is_modify_yn} 
-                {$this->q_is_approved}
-                {$this->q_has_active_advertisement}
-                {$this->q_keyword}                
-                AND EXISTS (
-                    SELECT 1 
-                    FROM community_recruit_listings_loc_sub C 
-                    WHERE C.community_recruit_listings_id = A.listing_id and (A.section_type = 1 or A.section_type = 2)                  
-                      {$this->q_state_code} 
-                      {$this->q_city_name}
-                ) ";
+        $count_sql = "  SELECT   count(*) as cnt
+                        FROM ad_payments A 
+                        join community_recruit_listings B on A.listing_id = B.community_recruit_listings_id 
+                        JOIN ad_company on ad_company.ad_company_id = B.ad_company_id
+                        left JOIN ( select community_recruit_listings_id, GROUP_CONCAT(DISTINCT CONCAT(city_name, ',', state_code) SEPARATOR ' / ') as state_city_name
+                                    from community_recruit_listings_loc_sub 
+                                    group by community_recruit_listings_id ) C on C.community_recruit_listings_id = A.listing_id
+                        WHERE A.section_type in ( 1 ,2) and ad_company.is_active = 1
+                        {$this->q_is_active}  
+                        {$this->q_is_modify_yn} 
+                        {$this->q_is_approved}
+                        {$this->q_has_active_advertisement}
+                        {$this->q_keyword}                
+                        AND EXISTS (
+                                    SELECT 1 
+                                    FROM community_recruit_listings_loc_sub C 
+                                    WHERE C.community_recruit_listings_id = A.listing_id and (A.section_type = 1 or A.section_type = 2)                  
+                                      {$this->q_state_code} 
+                                      {$this->q_city_name}
+                        ) ";
 //        saveLog(" $count_sql: ",$count_sql);
         $pagination = new Pagination(
             $this->db,
@@ -225,12 +228,12 @@ class recruit_pay_list
                         {$this->q_is_approved}
                         {$this->q_has_active_advertisement}
                         {$this->q_keyword}                
-                        AND EXISTS (
-                            SELECT 1 
-                            FROM community_recruit_listings_loc_sub C 
-                            WHERE C.community_recruit_listings_id = A.listing_id             
-                              {$this->q_state_code} 
-                              {$this->q_city_name}
+                    AND EXISTS (
+                                SELECT 1 
+                                FROM community_recruit_listings_loc_sub C 
+                                WHERE C.community_recruit_listings_id = A.listing_id             
+                                  {$this->q_state_code} 
+                                  {$this->q_city_name}
                         )                               
                     ORDER BY A.created_at DESC";
 

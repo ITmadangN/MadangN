@@ -166,6 +166,7 @@ class recruit_list
         $row_sql .= " GROUP BY A.community_recruit_listings_id, A.company_name, A.title, A.contact_name, A.created_at, A.is_active ";
         $row_sql .= " order by A.created_at desc Limit ".$pagination->limit_regno.", ".$pagination->page_set;
         */
+
 //        $row_sql = "SELECT
 //                A.community_recruit_listings_id,
 //                A.company_name,
@@ -198,7 +199,7 @@ class recruit_list
 
         $row_sql = "SELECT 
                             A.community_recruit_listings_id,
-                            ad_company.ad_company_id,
+                            A.ad_company_id,
                             case when  ifnull(ad_company.company_name,'') <> '' then  ad_company.company_name else A.company_name end as   company_name,  
                             A.title,
                             A.contact_name, 

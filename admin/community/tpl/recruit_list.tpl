@@ -82,7 +82,7 @@
                                                 <tr>
                                                     <th width="5%">번호</th>
                                                     <th width="8%">로고</th>
-                                                    <th width="5%">회사ID</th>
+                                                    <th width="5%">회사#</th>
                                                     <th width="10%">회사명</th>
                                                     <th width="5%">광고</th>
                                                     <th width="8%">직종</th>

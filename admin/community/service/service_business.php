@@ -125,7 +125,18 @@ class business_list
         $this->paging = $pagination->Print_Paging();
         $this->no = $pagination->no;
 
-        $row_sql = "SELECT A.* FROM community_business A WHERE 1=1 {$this->q_is_active} {$this->q_is_modify_yn}  {$this->q_advertising_level} {$this->q_business_type} {$this->q_state_code} {$this->q_city_name} {$this->q_keyword}";
+        $row_sql = "SELECT  A.* ,
+                            case when A.has_active_advertisement = 1 then 'Yes' else 'No' end as has_active_advertisement,
+                            case when A.is_modify_yn = 1 then  'Yes' else 'No' end  as is_modify_yn
+                    FROM community_business A 
+                    LEFT JOIN ad_company on ad_company.ad_company_id = A.ad_company_id
+                    WHERE  ( A.ad_company_id = 0 or ( ad_company.used_type = 'business' and  ad_company.is_active = 1 ) )
+                        {$this->q_is_active} 
+                        {$this->q_is_modify_yn}  
+                        {$this->q_advertising_level} 
+                        {$this->q_business_type} 
+                        {$this->q_state_code} 
+                        {$this->q_city_name} {$this->q_keyword}";
         $row_sql .= " order by A.created_at desc Limit " . $pagination->limit_regno . ", " . $pagination->page_set;
 
         $this->db->query($row_sql);
@@ -142,10 +153,13 @@ class business_list
 
         while ($row = $this->db->fetch()) {
             $link = "business_view.php?community_business_id=" . $row->community_business_id;
+
             $is_active_img = "no-active";
             if ($row->is_active == "1") {
                 $is_active_img = "completed";
             }
+            $is_approved_img = "no-active";
+            if($row->is_approved == "1") $is_approved_img = "completed";
 
             $img = "/images/blank.png";
             if ($row->main_image_url != "") {
@@ -161,6 +175,7 @@ class business_list
                 'T_NO' => $row->community_business_id,
                 'T_LINK' => $link,
                 'T_IMG' => $img,
+                'T_AD_COMPANY_ID'=> $row->ad_company_id,
                 'T_COMPANY_NAME'=> $row->company_name,
                 'T_ADVERTISING_LEVEL' => ARRAY_RETURN($this->define_val->DEFINE_recruit_advertising_level_TEXT, $row->advertising_level),
                 'T_BUSINESS_TYPE' => $business_type,
@@ -168,6 +183,10 @@ class business_list
                 'T_TITLE' => $row->title,
                 'T_CONTACT_NAME' => $row->contact_name,
                 'T_CREATE_AT' => DATETOSTRING_USA2($row->created_at,"/"),
+                'T_APPROVED_IMG' => $is_approved_img,
+                'T_IS_APPROVED' => ARRAY_RETURN($this->define_val->DEFINE_is_approved,$row->is_approved),
+                'T_HAS_ACTIVE_ADVERTISEMENT' => $row->has_active_advertisement,
+                'T_IS_MODIFY_YN' => $row->is_modify_yn,
                 'T_ACTIVE_IMG' => $is_active_img,
                 'T_IS_ACTIVE' => ARRAY_RETURN($this->define_val->DEFINE_is_active, $row->is_active)
             );

@@ -92,16 +92,19 @@
                     <table class="table table-striped mb-0 text-center" style="min-width: 750px;margin-top:20px;">
                         <thead>
                         <tr>
-                            <th width="8%">번호</th>
-                            <th width="10%">이미지</th>
+                            <th width="5%">번호</th>
+                            <th width="8%">로고</th>
+                            <th width="5%">회사#</th>
                             <th width="10%">회사명</th>
-                            <th width="10%">광고 Type</th>
-                            <th width="10%">업종</th>
-                            <th width="20%">지역</th>
+                            <th width="5%">광고</th>
+                            <th width="8%">업종</th>
+                            <th width="8%">지역</th>
                             <th width="/">제목</th>
-                            <th width="5%">담당자</th>
-                            <th width="10%">등록일</th>
-                            <th width="10%">현재상태</th>
+                            <th width="8%">담당자</th>
+                            <th width="6%">승인상태</th>
+                            <th width="7%">광고활성상태</th>
+                            <th width="6%">수정가능</th>
+                            <th width="6%">현재상태</th>
                         </tr>
                         </thead>
                         <tbody id="result_html">

@@ -138,10 +138,12 @@ class business_pay_list
     private function init()
     {
 
-        $count_sql = "SELECT count(*) as cnt FROM ad_payments A
-                        left join community_business B ON A.listing_id = B.community_business_id                        
-                        left join users D ON A.user_id = D.user_id
-                        where A.section_type = 3 and A.is_paid = 'Y'
+        $count_sql = "SELECT count(*) as cnt 
+                      FROM ad_payments A
+                      join community_business B ON A.listing_id = B.community_business_id   
+                      JOIN ad_company on ad_company.ad_company_id = B.ad_company_id
+                      left join users D ON A.user_id = D.user_id
+                      where A.section_type = 3 and ad_company.is_active = 1
                         {$this->q_is_active}  {$this->q_is_modify_yn} {$this->q_is_approved}
                        {$this->q_state_code}  {$this->q_city_name} {$this->q_has_active_advertisement} {$this->q_keyword}";
 
@@ -157,13 +159,17 @@ class business_pay_list
         $this->paging = $pagination->Print_Paging();
         $this->no = $pagination->no;
 
-        $row_sql = "SELECT A.*, B.company_name, B.title, B.state_code, B.city_name, B.contact_name, B.is_approved FROM ad_payments A
-                        left join community_business B ON A.listing_id = B.community_business_id                    
-                        left join users D ON A.user_id = D.user_id
-                        where A.section_type = 3 and A.is_paid = 'Y'
-                        {$this->q_is_active}  {$this->q_is_modify_yn} {$this->q_is_approved}
-                        {$this->q_state_code}  {$this->q_city_name} {$this->q_has_active_advertisement} {$this->q_keyword}
-                        order by A.created_at desc";
+        $row_sql = "SELECT  A.*, B.company_name, B.title, B.state_code, B.city_name, B.contact_name, B.is_approved,
+                            case when B.has_active_advertisement = 1 then 'Yes' else 'No' end as has_active_advertisement,
+                            case when B.is_modify_yn = 1 then  'Yes' else 'No' end  as is_modify_yn 
+                    FROM ad_payments A
+                    join community_business B ON A.listing_id = B.community_business_id     
+                    JOIN ad_company on ad_company.ad_company_id = B.ad_company_id
+                    left join users D ON A.user_id = D.user_id
+                    where A.section_type = 3 and ad_company.is_active = 1
+                    {$this->q_is_active}  {$this->q_is_modify_yn} {$this->q_is_approved}
+                    {$this->q_state_code}  {$this->q_city_name} {$this->q_has_active_advertisement} {$this->q_keyword}
+                    order by A.created_at desc";
 
         $row_sql .= " Limit " . $pagination->limit_regno . ", " . $pagination->page_set;
 
@@ -183,11 +189,16 @@ class business_pay_list
 
         while ($row = $this->db->fetch()) {
             $link = "business_pay_view.php?ad_payments_id=" . $row->ad_payments_id;
+//            $is_active_img = "no-active";
+//            if ($row->is_approved == "1") {
+//                $is_active_img = "completed";
+//            }
             $is_active_img = "no-active";
-            if ($row->is_approved == "1") {
-                $is_active_img = "completed";
-            }
-            
+            if($row->is_active == "1") $is_active_img = "completed";
+
+            $is_approved_img = "no-active";
+            if($row->is_approved == "1") $is_approved_img = "completed";
+
             if($row->payment_amount == "") $amount = 0;
             else $amount = number_format((int)$row->payment_amount, 2);
 
@@ -197,16 +208,23 @@ class business_pay_list
                 'T_NO' => $row->ad_payments_id,
                 'T_LINK' => $link,
                 'T_IMG' => $logo_img,
+                'T_LISTING_ID' => $row->listing_id,
                 'T_COMPANY_NAME' => $row->company_name,
                 'T_TITLE' => $row->title,
                 'T_LOCATION' => $row->city_name . "," . $row->state_code,
                 'T_CONTACT_NAME' => $row->contact_name,
                 'T_IS_PAID' => $row->is_paid,
                 'T_PAYMENT_AMOUNT' => $amount,
-                'T_DESIRED_START_DATE' => DATETOSTRING_USA($row->desired_start_date, "/"),
-                'T_CREATE_AT' => DATETOSTRING_USA2($row->created_at,"/"),
+                'T_START_DATE' => DATETOSTRING_USA($row->start_date, "/"),
+                'T_END_DATE' =>  DATETOSTRING_USA($row->end_date, "/"),
+                'T_APPROVED_IMG' => $is_approved_img,
+                'T_IS_APPROVED' => ARRAY_RETURN($this->define_val->DEFINE_is_approved, $row->is_approved),
+                'T_HAS_ACTIVE_ADVERTISEMENT' => $row->has_active_advertisement,
+                'T_IS_MODIFY_YN' => $row->is_modify_yn,
                 'T_ACTIVE_IMG' => $is_active_img,
-                'T_IS_ACTIVE' => ARRAY_RETURN($this->define_val->DEFINE_is_active, $row->is_approved)
+                'T_IS_ACTIVE' => ARRAY_RETURN($this->define_val->DEFINE_is_active, $row->is_active),
+                'T_DESIRED_START_DATE' => DATETOSTRING_USA($row->desired_start_date, "/"),
+                'T_CREATE_AT' => DATETOSTRING_USA2($row->created_at,"/")
             );
 
             $i++;
