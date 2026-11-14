@@ -54,7 +54,7 @@
 <script defer src="/js/file.js"></script>
 <script defer src="/js/realestate/agent.js"></script>
 <script defer src="/js/iibiz_common.js"></script>
-
+<script defer src="/js/realestate/realestate.js"></script>
 
 <!-- INCLUDE FILE '../include/footer.php' -->
 

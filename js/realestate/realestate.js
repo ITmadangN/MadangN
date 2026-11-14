@@ -593,3 +593,36 @@ window.searchAndScroll = function(targetCategory) {
     window.reCurrentCategory = targetCategory;
     window.handleSearch();
 };
+// =========================================================
+// 페이지 진입 시 ?popup=y 감지하여 팝업 자동 실행
+// =========================================================
+(function() {
+    function runInitialPopup() {
+        var urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('popup') === 'y') {
+            var modal = document.getElementById('realEstateModal');
+            if (modal) {
+                if (typeof openREModal === 'function') {
+                    openREModal();
+                } else {
+                    modal.style.display = 'block';
+                }
+
+                // 주소창에서 ?popup=y 제거 (새로고침 시 재오픈 방지)
+                if (window.history && window.history.replaceState) {
+                    var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                    window.history.replaceState({}, '', cleanUrl);
+                }
+            } else {
+                // 모달 HTML이 아직 로딩 전이면 0.1초 뒤 재시도
+                setTimeout(runInitialPopup, 100);
+            }
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', runInitialPopup);
+    } else {
+        runInitialPopup();
+    }
+})();

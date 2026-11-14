@@ -61,6 +61,7 @@
     <script src="/js/uni-core/js/uni-core-bundle.min.js"></script>
     <script src="/js/nouislider.min.js"></script>
     <script src="/js/common.js"></script>
+    <script src="/js/realestate/realestate.js"></script>
 </head>
     <style>
         .border-end2 {border-right: 1px solid #fff !important;}

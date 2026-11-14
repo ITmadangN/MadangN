@@ -59,6 +59,7 @@
         <!-- include scripts -->
         <script src="/js/uni-core/js/uni-core-bundle.min.js"></script>
         <script src="/js/nouislider.min.js"></script>
+        <script src="/js/realestate/realestate.js"></script>
         <style>
 .news-pager-head {
     display: inline-flex;
@@ -276,7 +277,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             </ul>
                         </li>
                          <li class="uc-parent">
-                            <a href="/realestate">부동산</a>
+                            <a href="/realestate">부동산/a>
                             <ul class="uc-nav-sub" data-uc-nav="">
                                <li><a href="/realestate" style="color:#f39c04"><b>부동산홈</b></a></li>
                                         <li><a href="javascript:return false;" onclick="goUrl('/realestate/house.php');">주택</a></li>
@@ -2219,7 +2220,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <script defer src="/js/helpers/anime-helper.js"></script>
         <script defer src="/js/helpers/anime-helper-defined-timelines.js"></script>
         <script defer src="/js/uikit-components-bs.js"></script>
-
+        <script src="/js/realestate/realestate.js"></script>
         <!-- include app script -->
         <script defer src="/js/app.js"></script>
         <script defer src="/js/file.js"></script>
