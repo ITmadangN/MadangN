@@ -184,7 +184,7 @@ if($ac == "send_call") {
     if($p_has_active_advertisement  == 1 && $p_is_approved == 1) {
         $to_email = $p_agent_email;
     }
-    
+
     // colewell 인경우
     if($p_list_office_key == "3288918" || $p_list_office_key == "3285640" || $p_list_office_key == "3286864" || $p_list_office_key == "5602073") {
         

@@ -4,10 +4,21 @@
                 <div class="section-outer panel">
                     <div class="max-w-xl">
                         <div class="section-inner panel vstack gap-2">
+                            <!--
                             <div class="section-header panel vstack items-center justify-center text-center gap-1 mt-2">
                                  <h2 class="h5  fw-bold -ls-1 xl:-ls-2 m-0 text-inherit hstack gap-1">
                                     <a class="text-none hover:text-primary duration-150" href="#">에이전트</a>
                                  </h2>
+                            </div>
+                            -->
+                            <div id="agentSectionHeader" class="section-header panel vstack items-center justify-center text-center gap-1 mt-2 mb-2">
+                                <h2 class="h5 fw-bold -ls-1 xl:-ls-2 m-0 text-inherit hstack gap-1">
+                                    <a class="text-none hover:text-primary duration-150" href="#">에이전트</a>
+                                </h2>
+                                <button type="button" class="animate-btn btn btn-sm btn-primary text-none gap-1 d-inline-flex fs-6" onclick="location.href='https://madangn.com/advertisement/ad_03.php';">
+                                    <span>에이전트 회원 가입</span>
+                                    <i class="icon icon-narrow unicon-email fw-bold"></i>
+                                </button>
                             </div>
 
                             <!-- 검색 Start -->
@@ -55,6 +66,33 @@
 <script defer src="/js/realestate/agent.js"></script>
 <script defer src="/js/iibiz_common.js"></script>
 <!-- <script defer src="/js/realestate/realestate.js"></script> -->
-
+<style>
+    /* 오직 #agentSectionHeader 내부에만 적용되므로 다른 곳에 전혀 영향 없음 */
+    #agentSectionHeader {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        text-align: left !important;
+        width: 100% !important;
+    }
+    #agentSectionHeader h2 {
+        margin: 0 !important;
+        width: auto !important;
+        flex: 0 0 auto !important;
+    }
+    #agentSectionHeader button {
+        margin: 0 !important;
+        width: auto !important;
+        flex: 0 0 auto !important;
+        transition: background-color 0.2s ease, border-color 0.2s ease !important;
+    }
+    #agentSectionHeader button:hover {
+        background-color: #c92a2a !important;
+        border-color: #c92a2a !important;
+        color: #ffffff !important;
+    }
+</style>
 <!-- INCLUDE FILE '../include/footer.php' -->
 
