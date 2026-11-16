@@ -121,8 +121,8 @@ class agent_list
             $row_sql .= " order by A.agent_full_name asc";
             $row_sql .= " LIMIT " . $pagination->limit_regno . ", " . $pagination->page_set;
         }
-                
-        
+
+
         $this->db->query($row_sql);
         
         $this->make_data();

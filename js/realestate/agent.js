@@ -18,9 +18,9 @@ function GET_PAGE() {
     let s_kind = '';
     let s_keyword = '';
     let s_cnt = 60;
-                                                                      
-                                                                      
-    
+
+
+
     $.ajax({
         url : '/realestate/ajax/ajax_agent.php',
         type : 'GET',
