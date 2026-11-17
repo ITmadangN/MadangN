@@ -112,16 +112,39 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 { id: "하단_중앙배너", name: "하단_중앙배너", top: 2294, left: 4, width: 590, height: 76, image_w:928, image_h:112 },
 
-                { id: "오른쪽-1", name: "오른쪽-1", top: 95, left: 614, width: 186, height: 232, image_w:288, image_h:576 },
-                { id: "오른쪽-2", name: "오른쪽-2", top: 328, left: 614, width: 185, height: 105, image_w:288, image_h:162 },
-                { id: "오른쪽-3", name: "오른쪽-3", top: 436, left: 614, width: 184, height: 228, image_w:288, image_h:360 },
-                { id: "오른쪽-4", name: "오른쪽-4", top: 666, left: 613, width: 185, height: 184, image_w:288, image_h:288 },
+                // { id: "오른쪽-1", name: "오른쪽-1", top: 95, left: 614, width: 186, height: 232, image_w:288, image_h:576 },
+
+                // { id: "오른쪽-2", name: "오른쪽-2", top: 328, left: 614, width: 185, height: 105, image_w:288, image_h:162 },
+                // { id: "오른쪽-3", name: "오른쪽-3", top: 436, left: 614, width: 184, height: 228, image_w:288, image_h:360 },
+                // { id: "오른쪽-4", name: "오른쪽-4", top: 666, left: 613, width: 185, height: 184, image_w:288, image_h:288 },
+                // { id: "오른쪽-5", name: "오른쪽-5", top: 852, left: 612, width: 184, height: 184, image_w:288, image_h:288 },
+
+                // { id: "오른쪽-6", name: "오른쪽-6", top: 1036, left: 613, width: 187, height: 234, image_w:288, image_h:576 },
+
+                // { id: "오른쪽-7", name: "오른쪽-7", top: 1274, left: 613, width: 186, height: 234, image_w:288, image_h:360 },
+                // { id: "오른쪽-8", name: "오른쪽-8", top: 1505, left: 614, width: 182, height: 145, image_w:288, image_h:230 },
+
+                // { id: "오른쪽-9", name: "오른쪽-9", top: 1650, left: 613, width: 182, height: 185, image_w:288, image_h:288 },
+                // { id: "오른쪽-10", name: "오른쪽-10", top: 1833, left: 611, width: 184, height: 189, image_w:288, image_h:288 }
+
+
+                { id: "오른쪽-1", name: "오른쪽-1", top: 95, left: 614, width: 186, height: 232, image_w:288, image_h:360 },
+                { id: "오른쪽-2", name: "오른쪽-2", top: 328, left: 614, width: 185, height: 105, image_w:288, image_h:216 },
+
+                { id: "오른쪽-3", name: "오른쪽-3", top: 436, left: 614, width: 184, height: 228, image_w:288, image_h:162 },
+                { id: "오른쪽-4", name: "오른쪽-4", top: 666, left: 613, width: 185, height: 184, image_w:288, image_h:360 },
                 { id: "오른쪽-5", name: "오른쪽-5", top: 852, left: 612, width: 184, height: 184, image_w:288, image_h:288 },
-                { id: "오른쪽-6", name: "오른쪽-6", top: 1036, left: 613, width: 187, height: 234, image_w:288, image_h:576 },
+                { id: "오른쪽-6", name: "오른쪽-6", top: 1036, left: 613, width: 187, height: 234, image_w:288, image_h:288 },
+
                 { id: "오른쪽-7", name: "오른쪽-7", top: 1274, left: 613, width: 186, height: 234, image_w:288, image_h:360 },
-                { id: "오른쪽-8", name: "오른쪽-8", top: 1505, left: 614, width: 182, height: 145, image_w:288, image_h:230 },
-                { id: "오른쪽-9", name: "오른쪽-9", top: 1650, left: 613, width: 182, height: 185, image_w:288, image_h:288 },
-                { id: "오른쪽-10", name: "오른쪽-10", top: 1833, left: 611, width: 184, height: 189, image_w:288, image_h:288 }
+                { id: "오른쪽-8", name: "오른쪽-8", top: 1505, left: 614, width: 182, height: 145, image_w:288, image_h:216 },
+
+                { id: "오른쪽-9", name: "오른쪽-9", top: 1650, left: 613, width: 182, height: 185, image_w:288, image_h:360 },
+                { id: "오른쪽-10", name: "오른쪽-10", top: 1833, left: 611, width: 184, height: 189, image_w:288, image_h:230 }
+
+
+
+
             ]
         },
 
