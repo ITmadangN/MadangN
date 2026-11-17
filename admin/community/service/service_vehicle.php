@@ -155,7 +155,7 @@ class vehicle_list
         $row_sql .= " order by A.community_car_listings_id desc  Limit " . $pagination->limit_regno . ", " . $pagination->page_set;
 
         $this->db->query($row_sql);
-        saveLog("vehicle list : ",$row_sql);
+//        saveLog("vehicle list : ",$row_sql);
         $this->make_data();
 
         $this->navigation_text = "Total(" . number_format($pagination->getTotal(), 0) . ") [Page : " . number_format($this->page, 0) . "/" . number_format($pagination->getTotalPage(), 0) . "]";

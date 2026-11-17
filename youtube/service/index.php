@@ -59,7 +59,7 @@ class youtube_index
 //                                                        WHERE C.video_id = A.video_id
 //                                                        AND C.category_2 in( 'mshorts','ishorts')
 //                                                        ) order by B.puliishedat desc limit 0,4";
-        saveLog(" top_query : ",$this->top_query);
+//        saveLog(" top_query : ",$this->top_query);
         $this->top_other_query = $query . " and A.home_pick = 'Y' order by B.puliishedat desc limit 4,2";
 //        $this->top_other_query = $query . " and  ( ( A.category_1 = 'insure'   and A.category_2 in( 'unity' ,'bridgeone') ) or
 //                                                   ( A.category_1 = 'realstate' ) or
@@ -72,7 +72,7 @@ class youtube_index
 //                                                           )
 //                                            order by B.puliishedat desc limit 0,2";
 
-        saveLog(" top_other_query : ",$this->top_other_query);
+//        saveLog(" top_other_query : ",$this->top_other_query);
 
         $this->editors_query = $query . " and A.editors_pick = 'Y' order by B.puliishedat desc limit 0,8";
 
@@ -84,7 +84,7 @@ class youtube_index
                                                             WHERE C.video_id = A.video_id
                                                             AND C.category_2 in( 'mshorts','ishorts')
                                                         ) order by B.puliishedat desc limit 0,8";
-        saveLog(" insure_query : ",$this->insure_query);
+//        saveLog(" insure_query : ",$this->insure_query);
 //        $this->insure_other_query = $query . " and A.insurance_finance_pick = 'Y' order by B.puliishedat desc limit 8,8";
         $this->insure_other_query = $query . " and A.category_1 = 'insure' and A.category_2 in( 'unity','bridgeone') 
                                                AND NOT EXISTS (
@@ -93,7 +93,7 @@ class youtube_index
                                                                 WHERE C.video_id = A.video_id
                                                                 AND C.category_2 in( 'mshorts','ishorts')
                                                         ) order by B.puliishedat desc limit 8,8";
-        saveLog(" insure_other_query : ",$this->insure_other_query);
+//        saveLog(" insure_other_query : ",$this->insure_other_query);
 
         $this->rogg_query = $query . " and A.category_1 = 'rogg'  order by B.puliishedat desc limit 0,4";
 

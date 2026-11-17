@@ -107,7 +107,7 @@ function make_realestate_agent_html($db,$define_val) {
 
 $agent_html = make_realestate_agent_html($db,$define_val);
 
-saveLog("index.php","sss");
+//saveLog("index.php","sss");
 
 $main=5;
 $sub=1;
