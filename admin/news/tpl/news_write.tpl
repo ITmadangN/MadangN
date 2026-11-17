@@ -48,7 +48,7 @@
                         </div>
                     </div>
                     <div class="detail-field full" style="border-bottom:none;">
-                        <div class="detail-field-label">기사내용</div>
+                        <div class="detail-field-label">기사내용 - 뉴스본문이미지 표시할 위치는 __IMG1__ 또는 __IMG2__ 처럼 위치를 반드시 표시해주세요 </div>
                         <div class="detail-field-value">
                             <textarea class="form-control" rows="8" data-plugin-maxlength="" maxlength="2000" name="content" id="content">{{T_CONTENT}}</textarea>
                         </div>
@@ -57,11 +57,11 @@
             </div>
 
             <!-- 이미지 -->
-            <div class="detail-card">
+            <!--div class="detail-card">
                 <div class="detail-section-label">이미지</div>
                 <div class="detail-grid">
                     <div class="detail-field">                
-                        <div class="detail-field-label">이미지</div>
+                        <div class="detail-field-label">뉴스 본문 이미지 1</div>
                         <div class="detail-field-value bimg">
                             <div class="fileupload fileupload-new mt-1" data-provides="fileupload">
                                 <div class="input-append">
@@ -74,6 +74,106 @@
                                         <span class="fileupload-new">Upload</span>
                                         <input type="file" name="image_01_url" required>
                                     </span>
+                                    <a href="#" class="btn btn-default fileupload-exists" data-dismiss="fileupload">Remove</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div-->
+            <div class="detail-card">
+                <div class="detail-section-label">이미지</div>
+                <div class="detail-grid">
+                    <div class="detail-field">
+                        <div class="detail-field-label">뉴스 본문 이미지 1</div>
+                        <div class="detail-field-value bimg">
+                            <div class="fileupload fileupload-new mt-1" data-provides="fileupload">
+                                <div class="input-append">
+                                    <div class="uneditable-input">
+                                        <i class="fas fa-file fileupload-exists"></i>
+                                        <span class="fileupload-preview"></span>
+                                    </div>
+                                    <span class="btn btn-default btn-file">
+                                        <span class="fileupload-exists">Change</span>
+                                        <span class="fileupload-new">Upload</span>
+                                        <input type="file" name="image_01_url" required>
+                                    </span>가로 845, 이미지는 jpg, png, gif만 가능
+                                    <a href="#" class="btn btn-default fileupload-exists" data-dismiss="fileupload">Remove</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-field">
+                        <div class="detail-field-label">뉴스 본문 이미지 2</div>
+                        <div class="detail-field-value bimg">
+                            <div class="fileupload fileupload-new mt-1" data-provides="fileupload">
+                                <div class="input-append">
+                                    <div class="uneditable-input">
+                                        <i class="fas fa-file fileupload-exists"></i>
+                                        <span class="fileupload-preview"></span>
+                                    </div>
+                                    <span class="btn btn-default btn-file">
+                                        <span class="fileupload-exists">Change</span>
+                                        <span class="fileupload-new">Upload</span>
+                                        <input type="file" name="image_02_url">
+                                    </span>가로 845, 이미지는 jpg, png, gif만 가능
+                                    <a href="#" class="btn btn-default fileupload-exists" data-dismiss="fileupload">Remove</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-field">
+                        <div class="detail-field-label">뉴스 본문 이미지 3</div>
+                        <div class="detail-field-value bimg">
+                            <div class="fileupload fileupload-new mt-1" data-provides="fileupload">
+                                <div class="input-append">
+                                    <div class="uneditable-input">
+                                        <i class="fas fa-file fileupload-exists"></i>
+                                        <span class="fileupload-preview"></span>
+                                    </div>
+                                    <span class="btn btn-default btn-file">
+                                        <span class="fileupload-exists">Change</span>
+                                        <span class="fileupload-new">Upload</span>
+                                        <input type="file" name="image_03_url">
+                                    </span>가로 845, 이미지는 jpg, png, gif만 가능
+                                    <a href="#" class="btn btn-default fileupload-exists" data-dismiss="fileupload">Remove</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-field" style="border-bottom:none;">
+                        <div class="detail-field-label">뉴스 본문 이미지 4</div>
+                        <div class="detail-field-value bimg">
+                            <div class="fileupload fileupload-new mt-1" data-provides="fileupload">
+                                <div class="input-append">
+                                    <div class="uneditable-input">
+                                        <i class="fas fa-file fileupload-exists"></i>
+                                        <span class="fileupload-preview"></span>
+                                    </div>
+                                    <span class="btn btn-default btn-file">
+                                        <span class="fileupload-exists">Change</span>
+                                        <span class="fileupload-new">Upload</span>
+                                        <input type="file" name="image_04_url">
+                                    </span>가로 845, 이미지는 jpg, png, gif만 가능
+                                    <a href="#" class="btn btn-default fileupload-exists" data-dismiss="fileupload">Remove</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-field">
+                        <div class="detail-field-label">뉴스 본문 이미지 5</div>
+                        <div class="detail-field-value bimg">
+                            <div class="fileupload fileupload-new mt-1" data-provides="fileupload">
+                                <div class="input-append">
+                                    <div class="uneditable-input">
+                                        <i class="fas fa-file fileupload-exists"></i>
+                                        <span class="fileupload-preview"></span>
+                                    </div>
+                                    <span class="btn btn-default btn-file">
+                                        <span class="fileupload-exists">Change</span>
+                                        <span class="fileupload-new">Upload</span>
+                                        <input type="file" name="image_05_url">
+                                    </span>가로 845, 이미지는 jpg, png, gif만 가능
                                     <a href="#" class="btn btn-default fileupload-exists" data-dismiss="fileupload">Remove</a>
                                 </div>
                             </div>

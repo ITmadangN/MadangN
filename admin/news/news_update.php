@@ -20,7 +20,7 @@ include("$DOCUMENT_ROOT/admin/include/db.php");
 
 $news_id = $_GET["news_id"] ?? "";
 
-$sql = "SELECT A.*, B.img_url, B.caption, B.can_use FROM news A
+$sql = "SELECT A.*, B.img_index, B.img_url, B.caption, B.can_use FROM news A
         LEFT JOIN news_images B
         on A.news_id = B.news_id
         where A.news_id = :news_id";
@@ -37,39 +37,103 @@ if (!$result) {
 $loop = array();
 
 $g_num = 0;
-
-$row = $db->fetch();
-
-$p_news_id = $row->news_id;
-$p_report_date = $row->report_date;
-$p_source = $row->source;
-$p_section = $row->section;
-$p_link = $row->link;
-$p_title = $row->title;
-$p_content = $row->content;
-$p_reporter_name = $row->reporter_name;
-$p_view_count = $row->view_count;
-$p_image_count = $row->image_count;
-$p_is_active = $row->is_active;
-$p_created_user = $row->created_user;
-$p_updated_user = $row->updated_user;
-$p_created_at = $row->created_at;
-$p_updated_at = $row->updated_at;
-$p_keyword_tag = $row->keyword_tag;
-$p_ip_address = $row->ip_address;
-$p_is_manual_input = $row->is_manual_input;
-$p_image_01_url = $row->img_url;
-$p_sort = $row->sort;
+$blank_img = "/images/blank.png";
 
 $p_del_image_01_url = "";
-if ($p_image_01_url != "") {
-    $v_image_01_url = $define_val->IMG_PROTECT . "?c=news&cc=news&d=img1&s=" . $p_news_id;
-    $v_image_01_url = "<img src=\"$v_image_01_url\" alt=\"\"  />";
-    $p_del_image_01_url = GET_DEL_UPLOAD_IMAGE('image_01_url');
-} else {
-    $v_image_01_url = $blank_img;
-}
+$v_image_01_url = "";
+$p_image_01_url = "";
+$p_del_image_02_url = "";
+$v_image_02_url = "";
+$p_image_02_url = "";
+$p_del_image_03_url = "";
+$v_image_03_url = "";
+$p_image_03_url = "";
+$p_del_image_04_url = "";
+$v_image_04_url = "";
+$p_image_04_url = "";
+$p_del_image_05_url = "";
+$v_image_05_url = "";
+$p_image_05_url = "";
 
+while ($row = $db->fetch()) {
+
+    $p_news_id = $row->news_id;
+    $p_report_date = $row->report_date;
+    $p_source = $row->source;
+    $p_section = $row->section;
+    $p_link = $row->link;
+    $p_title = $row->title;
+    $p_content = $row->content;
+    $p_reporter_name = $row->reporter_name;
+    $p_view_count = $row->view_count;
+    $p_image_count = $row->image_count;
+    $p_is_active = $row->is_active;
+    $p_created_user = $row->created_user;
+    $p_updated_user = $row->updated_user;
+    $p_created_at = $row->created_at;
+    $p_updated_at = $row->updated_at;
+    $p_keyword_tag = $row->keyword_tag;
+    $p_ip_address = $row->ip_address;
+    $p_is_manual_input = $row->is_manual_input;
+    $p_sort = $row->sort;
+    $p_img_index = $row->img_index;
+
+    if($p_img_index == 1) {
+        $p_image_01_url = $row->img_url;
+        if ($p_image_01_url != "") {
+            $v_image_01_url = $define_val->IMG_PROTECT . "?c=news&cc=news&d=img1&s=" . $p_news_id;
+            $v_image_01_url = "<img src=\"$v_image_01_url\" alt=\"\"  />";
+            $p_del_image_01_url = GET_DEL_UPLOAD_IMAGE('image_01_url');
+        } else {
+            $v_image_01_url = $blank_img;
+        }
+    }
+
+    if($p_img_index == 2) {
+        $p_image_02_url = $row->img_url;
+        if ($p_image_02_url != "") {
+            $v_image_02_url = $define_val->IMG_PROTECT . "?c=news&cc=news&d=img2&s=" . $p_news_id;
+            $v_image_02_url = "<img src=\"$v_image_02_url\" alt=\"\"  />";
+            $p_del_image_02_url = GET_DEL_UPLOAD_IMAGE('image_02_url');
+        } else {
+            $v_image_02_url = $blank_img;
+        }
+    }
+
+    if($p_img_index == 3) {
+        $p_image_03_url = $row->img_url;
+        if ($p_image_03_url != "") {
+            $v_image_03_url = $define_val->IMG_PROTECT . "?c=news&cc=news&d=img3&s=" . $p_news_id;
+            $v_image_03_url = "<img src=\"$v_image_03_url\" alt=\"\"  />";
+            $p_del_image_03_url = GET_DEL_UPLOAD_IMAGE('image_03_url');
+        } else {
+            $v_image_03_url = $blank_img;
+        }
+    }
+
+    if($p_img_index == 4) {
+        $p_image_04_url = $row->img_url;
+        if ($p_image_04_url != "") {
+            $v_image_04_url = $define_val->IMG_PROTECT . "?c=news&cc=news&d=img4&s=" . $p_news_id;
+            $v_image_04_url = "<img src=\"$v_image_04_url\" alt=\"\"  />";
+            $p_del_image_04_url = GET_DEL_UPLOAD_IMAGE('image_04_url');
+        } else {
+            $v_image_04_url = $blank_img;
+        }
+    }
+
+    if($p_img_index == 5) {
+        $p_image_05_url = $row->img_url;
+        if ($p_image_05_url != "") {
+            $v_image_05_url = $define_val->IMG_PROTECT . "?c=news&cc=news&d=img5&s=" . $p_news_id;
+            $v_image_05_url = "<img src=\"$v_image_05_url\" alt=\"\"  />";
+            $p_del_image_05_url = GET_DEL_UPLOAD_IMAGE('image_05_url');
+        } else {
+            $v_image_05_url = $blank_img;
+        }
+    }
+
+}
 
 
 $main=2;
@@ -87,15 +151,20 @@ $tpl->setVar("T_ID", $p_news_id);
 $tpl->setVar("H_IMAGE_01_URL", $p_image_01_url);
 $tpl->setVar("H_IMAGE_02_URL", $p_image_02_url);
 $tpl->setVar("H_IMAGE_03_URL", $p_image_03_url);
-
+$tpl->setVar("H_IMAGE_04_URL", $p_image_04_url);
+$tpl->setVar("H_IMAGE_05_URL", $p_image_05_url);
 
 $tpl->setVar("T_IMAGE_01_URL", $v_image_01_url);
 $tpl->setVar("T_IMAGE_02_URL", $v_image_02_url);
 $tpl->setVar("T_IMAGE_03_URL", $v_image_03_url);
+$tpl->setVar("T_IMAGE_04_URL", $v_image_04_url);
+$tpl->setVar("T_IMAGE_05_URL", $v_image_05_url);
 
 $tpl->setVar("T_DEL_IMAGE_01_URL", $p_del_image_01_url);
 $tpl->setVar("T_DEL_IMAGE_02_URL", $p_del_image_02_url);
 $tpl->setVar("T_DEL_IMAGE_03_URL", $p_del_image_03_url);
+$tpl->setVar("T_DEL_IMAGE_04_URL", $p_del_image_04_url);
+$tpl->setVar("T_DEL_IMAGE_05_URL", $p_del_image_05_url);
 
 $tpl->setVar("T_ID", $p_news_id);
 $tpl->setVar("T_NEWS_ID",       $p_news_id);

@@ -21,7 +21,7 @@ include("$DOCUMENT_ROOT/admin/include/db.php");
 
 $news_id = $_GET["news_id"] ?? "";
 
-$sql = "SELECT A.*, B.img_url, B.caption, B.can_use FROM news A
+$sql = "SELECT A.*, B.img_index, B.img_url, B.caption, B.can_use FROM news A
         LEFT JOIN news_images B
         on A.news_id = B.news_id
         where A.news_id = :news_id";
@@ -58,11 +58,12 @@ while ($row = $db->fetch()) {
     $p_ip_address = $row->ip_address;
     $p_is_manual_input = $row->is_manual_input;
     $p_sort = $row->sort;
+    $p_img_index = $row->img_index;
     
     $yn = "";
     if($row->can_use != "1") $yn = "<span style='color:red'>* 이미지 사용 불가능</span>";
     
-    if($p_is_manual_input == 'Y')  $image_url = $define_val->IMG_PROTECT . "?c=news&cc=news&d=img1&s=" . $p_news_id;
+    if($p_is_manual_input == 'Y')  $image_url = $define_val->IMG_PROTECT . "?c=news&cc=news&d=img".$p_img_index."&s=" . $p_news_id;
     else $image_url = $row->img_url;
     
     $loop[$g_num] = array('T_IMG_URL' => $image_url, 'T_CAPTION' => $row->caption, 'T_YN' => $yn);

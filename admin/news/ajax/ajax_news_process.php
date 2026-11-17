@@ -69,6 +69,8 @@ if ($ac == "write_news") {
     $u_image_01_url = GET_UPLOAD_IMAGE($_FILES['image_01_url']['name'], '', '');
     $u_image_02_url = GET_UPLOAD_IMAGE($_FILES['image_02_url']['name'], '', '');
     $u_image_03_url = GET_UPLOAD_IMAGE($_FILES['image_03_url']['name'], '', '');
+    $u_image_04_url = GET_UPLOAD_IMAGE($_FILES['image_04_url']['name'], '', '');
+    $u_image_05_url = GET_UPLOAD_IMAGE($_FILES['image_05_url']['name'], '', '');
     
     
     if($sort == "") {
@@ -124,16 +126,14 @@ if ($ac == "write_news") {
     FILE_UPLOAD("admin","news_files", "news", $lastInsertId, "image_01_url", "img1");
     FILE_UPLOAD("admin","news_files", "news", $lastInsertId, "image_02_url", "img2");
     FILE_UPLOAD("admin","news_files", "news", $lastInsertId, "image_03_url", "img3");
-    
-    $insert_image_values = array(
+    FILE_UPLOAD("admin","news_files", "news", $lastInsertId, "image_04_url", "img4");
+    FILE_UPLOAD("admin","news_files", "news", $lastInsertId, "image_05_url", "img5");
 
-        'news_id' => $lastInsertId,
-        'img_url' => $u_image_01_url,
-        'img_index' => 1,
-        'can_use' => 1
-    );
-
-    $db->insert('news_images', $insert_image_values);
+    if($u_image_01_url != "") { INSERT_NEWS_IMG($db, $lastInsertId, $u_image_01_url, 1); }
+    if($u_image_02_url != "") { INSERT_NEWS_IMG($db, $lastInsertId, $u_image_02_url, 2); }
+    if($u_image_03_url != "") { INSERT_NEWS_IMG($db, $lastInsertId, $u_image_03_url, 3); }
+    if($u_image_04_url != "") { INSERT_NEWS_IMG($db, $lastInsertId, $u_image_04_url, 4); }
+    if($u_image_05_url != "") { INSERT_NEWS_IMG($db, $lastInsertId, $u_image_05_url, 5); }
     
     $result_data = [
         "status" => "success",
@@ -143,7 +143,6 @@ if ($ac == "write_news") {
     echo json_encode($result_data, JSON_UNESCAPED_UNICODE);
 
 }
-
 
 if ($ac == "update_news") {
 
@@ -160,15 +159,21 @@ if ($ac == "update_news") {
     $h_image_01_url = $_POST['h_image_01_url'] ?? "";
     $h_image_02_url = $_POST['h_image_02_url'] ?? "";
     $h_image_03_url = $_POST['h_image_03_url'] ?? "";
+    $h_image_04_url = $_POST['h_image_04_url'] ?? "";
+    $h_image_05_url = $_POST['h_image_05_url'] ?? "";
 
     $del_image_01_url = $_POST['del_image_01_url'] ?? "";
     $del_image_02_url = $_POST['del_image_02_url'] ?? "";
     $del_image_03_url = $_POST['del_image_03_url'] ?? "";
+    $del_image_04_url = $_POST['del_image_04_url'] ?? "";
+    $del_image_05_url = $_POST['del_image_05_url'] ?? "";
     
     $u_image_01_url = GET_UPLOAD_IMAGE($_FILES['image_01_url']['name'], $h_image_01_url, $del_image_01_url);
     $u_image_02_url = GET_UPLOAD_IMAGE($_FILES['image_02_url']['name'], $h_image_02_url, $del_image_02_url);
     $u_image_03_url = GET_UPLOAD_IMAGE($_FILES['image_03_url']['name'], $h_image_03_url, $del_image_03_url);
-    
+    $u_image_04_url = GET_UPLOAD_IMAGE($_FILES['image_04_url']['name'], $h_image_04_url, $del_image_04_url);
+    $u_image_05_url = GET_UPLOAD_IMAGE($_FILES['image_05_url']['name'], $h_image_05_url, $del_image_05_url);
+
      if($sort == "") {
         
         $row_sql = "SELECT max(sort) as max_sort FROM news where section =:section and DATE_FORMAT(report_date, '%Y-%m-%d') =:report_date";
@@ -222,29 +227,16 @@ if ($ac == "update_news") {
     FILE_UPLOAD("admin","news_files", "news", $id, "image_01_url", "img1");
     FILE_UPLOAD("admin","news_files", "news", $id, "image_02_url", "img2");
     FILE_UPLOAD("admin","news_files", "news", $id, "image_03_url", "img3");
-    
-    $update_image_values = array(
+    FILE_UPLOAD("admin","news_files", "news", $id, "image_04_url", "img4");
+    FILE_UPLOAD("admin","news_files", "news", $id, "image_05_url", "img5");
 
-        'img_url' => $u_image_01_url
 
-    );
+    UPDATE_NEWS_IMG($db, $id, $_FILES['image_01_url']['name'], 1, $del_image_01_url);
+    UPDATE_NEWS_IMG($db, $id, $_FILES['image_02_url']['name'], 2, $del_image_02_url);
+    UPDATE_NEWS_IMG($db, $id, $_FILES['image_03_url']['name'], 3, $del_image_03_url);
+    UPDATE_NEWS_IMG($db, $id, $_FILES['image_04_url']['name'], 4, $del_image_04_url);
+    UPDATE_NEWS_IMG($db, $id, $_FILES['image_05_url']['name'], 5, $del_image_05_url);
 
-    if($u_image_01_url != "") $result = $db->update('news_images', $update_image_values, 'news_id = ' . $id);    
-   
-   /*
-    if($result == false) {
-        
-        $insert_image_values = array(
-
-            'news_id' => $id,
-            'img_url' => $u_image_01_url,
-            'can_use' => 1
-        );
-
-        $db->insert('news_images', $insert_image_values);
-    }
-    */
-    
     $result_data = [
         "status" => "success",
         "msg" => "sucess",
@@ -272,6 +264,49 @@ if($ac == "news_delete") {
     ];
 
     echo json_encode($result_data, JSON_UNESCAPED_UNICODE);
+
+}
+
+function INSERT_NEWS_IMG($db, $lastInsertId, $u_image, $idx)
+{
+
+    $insert_image_values = array(
+
+        'news_id' => $lastInsertId,
+        'img_url' => $u_image,
+        'img_index' => $idx,
+        'can_use' => 1
+    );
+
+    $db->insert('news_images', $insert_image_values);
+
+}
+
+function UPDATE_NEWS_IMG($db, $id, $file_name, $idx, $del)
+{
+    $update_image_values = array('img_url' => $file_name);
+
+    if($file_name != "") {
+
+        $row_sql = "SELECT count(*) as cnt FROM news_images where news_id =:news_id and img_index =:img_index";
+
+        $placeholders = ['news_id' => $id, 'img_index' => $idx];
+        $result = $db->query($row_sql, $placeholders);
+        $row = $db->fetch();
+
+        $total = $row->cnt;
+
+        if($total > 0) {
+            $result = $db->update('news_images', $update_image_values, 'news_id = ' . $id . " and img_index = " . $idx);
+        }
+        else {
+            INSERT_NEWS_IMG($db, $id, $file_name, $idx);
+        }
+    }
+    else if($del == "Y") {
+        $db->delete('news_images', 'news_id = ' . $id . " and img_index = " . $idx);
+        FILE_DELETE("admin","news_images", "news", $id, "img".$idx);
+    }
 
 }
    

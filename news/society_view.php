@@ -59,12 +59,23 @@ unset($row);
       $array_img[$i]['can_use'] = $row->can_use;
       
       if($row->can_use == 1) {
-       
-          
-          $temp_img = "<div class=\"mt-1 mb-1\" style=\"text-align:center;\">
-                      <img src=\"".$row->img_url."\" data-src=\"".$row->img_url."\" alt=\"#\" data-uc-img=\"loading: lazy\">
+
+          if($p_is_manual_input == 'Y') {
+
+              $img = $define_val->IMG_PROTECT . "?c=news&cc=news&d=img".($i+1)."&s=" . $id;
+
+              $temp_img = "<div class=\"mt-1 mb-1\" style=\"text-align:center;\">
+                      <img src=\"".$img."\" data-src=\"".$img."\" alt=\"#\" data-uc-img=\"loading: lazy\">
+                      </div>
+                      ";
+
+          }
+          else {
+              $temp_img = "<div class=\"mt-1 mb-1\" style=\"text-align:center;\">
+                      <img src=\"" . $row->img_url . "\" data-src=\"" . $row->img_url . "\" alt=\"#\" data-uc-img=\"loading: lazy\">
                       </div>
           ";
+          }
           
            $p_content = str_replace('__IMG'.($i+1).'__' , $temp_img , $p_content);
                     
@@ -74,18 +85,6 @@ unset($row);
             
       }
 
-      if($p_is_manual_input == 'Y') {
-          
-          $img = $define_val->IMG_PROTECT . "?c=news&cc=news&d=img1&s=" . $id;
-          
-          $temp_img = "<div class=\"mt-1 mb-1\" style=\"text-align:center;\">
-                      <img src=\"".$img."\" data-src=\"".$img."\" alt=\"#\" data-uc-img=\"loading: lazy\">
-                      </div>
-                      ";
-                      
-          $p_content = $temp_img . $p_content;
-          
-      }  
                 
       $i++;
            

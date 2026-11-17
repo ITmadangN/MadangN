@@ -159,17 +159,18 @@ class news_list
             $is_manual_input = $data[$i]['is_manual_input'];
             $sort = $data[$i]['sort'];
             
-            $sql = "SELECT img_url, caption FROM news_images WHERE news_id = ".$id." and can_use = 1 order by img_index asc limit 0,1";
+            $sql = "SELECT img_index,img_url, caption FROM news_images WHERE news_id = ".$id." and can_use = 1 order by img_index asc limit 0,1";
             
             $row = $this->db->queryRow($sql, []);
             $img_url = $row->img_url;
             $caption = $row->caption;
+            $img_index = $row->img_index;
 
             $img = "/images/blank.png";
             
             if($img_url != "") $img = $img_url;
             
-            if($is_manual_input == 'Y') $img = $this->define_val->IMG_PROTECT . "?c=news&cc=news&d=img1&s=" . $id;
+            if($is_manual_input == 'Y') $img = $this->define_val->IMG_PROTECT . "?c=news&cc=news&d=img".$img_index."&s=" . $id;
 
             $this->loop[$i] = array('T_NO' => $id,'T_LINK' => $link, 'T_IMG' => $img, 'T_SECTION' => $section , 'T_TITLE' => $title, 'T_REPORTER_NAME' => $reporter_name , 
                     'T_REPORT_DATE' => $report_date,'T_ACTIVE_IMG' => $active_img, 'T_IS_ACTIVE' => $is_active, 'T_SORT' => $sort);
