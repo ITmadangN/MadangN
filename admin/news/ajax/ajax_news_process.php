@@ -305,7 +305,7 @@ function UPDATE_NEWS_IMG($db, $id, $file_name, $idx, $del)
     }
     else if($del == "Y") {
         $db->delete('news_images', 'news_id = ' . $id . " and img_index = " . $idx);
-        FILE_DELETE("admin","news_images", "news", $id, "img".$idx);
+        FILE_DELETE("admin","news_files", "news", $id, "img".$idx);
     }
 
 }
