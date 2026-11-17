@@ -115,8 +115,8 @@ class service_notification_list
             $p_image_02_url = $row->image_02_url;
             $p_image_03_url = $row->image_03_url;
 
-            $blank_img = "";
-//            $blank_img = "/images/blank.png";
+//            $blank_img = "";
+            $blank_img = "/images/blank.png";
 
             if ($p_image_01_url != "") {
                 $main_img = ($this->define_val->IMG_PROTECT) . "?c=towninfo&cc=notification&d=img1&s=" . $p_towninfo_event_notification_id;}
