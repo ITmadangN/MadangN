@@ -261,42 +261,42 @@ function GET_CITYNAME() {
 
 }
 
-// $(document).ready(function() {
-//
-// //    cityNameDisplay();
-// //    cityNameDisplayCouunt();
-//
-//     $('.js-example-basic-multiple').select2({
-//         placeholder: "도시",
-//         allowClear: true
-//     });
-//
-//
-//      $('#s_min_price').mask('000,000,000', {reverse: true});
-//      $('#s_max_price').mask('000,000,000', {reverse: true});
-//
-//      let temp_city_name = Cookies.get('s_city_name');
-//
-//      if(temp_city_name != "" && temp_city_name != undefined) {
-//
-//          let t_city_name = temp_city_name.split(',');
-//
-//          $('.js-example-basic-multiple').val(t_city_name).trigger('change');
-//
-//      }
-//
-//      GO_PAGE(g_page);
-//
-//     /*
-//     $('#s_min_price').maskMoney({
-//         prefix: '$ ',
-//         thousands: ',',
-//         precision: 0 // 원화는 소수점 제외
-//     });
-//     */
-// // [이 위치에 추가]
+$(document).ready(function() {
+
+//    cityNameDisplay();
+//    cityNameDisplayCouunt();
+
+    $('.js-example-basic-multiple').select2({
+        placeholder: "도시",
+        allowClear: true
+    });
+
+
+     $('#s_min_price').mask('000,000,000', {reverse: true});
+     $('#s_max_price').mask('000,000,000', {reverse: true});
+
+     let temp_city_name = Cookies.get('s_city_name');
+
+     if(temp_city_name != "" && temp_city_name != undefined) {
+
+         let t_city_name = temp_city_name.split(',');
+
+         $('.js-example-basic-multiple').val(t_city_name).trigger('change');
+
+     }
+
+     GO_PAGE(g_page);
+
+    /*
+    $('#s_min_price').maskMoney({
+        prefix: '$ ',
+        thousands: ',',
+        precision: 0 // 원화는 소수점 제외
+    });
+    */
+// [이 위치에 추가]
 //     checkPopupParam();
-// });
+});
 
 // $(document).ready(function() {
 //
@@ -308,24 +308,68 @@ function GET_CITYNAME() {
 //     $('#s_min_price').mask('000,000,000', {reverse: true});
 //     $('#s_max_price').mask('000,000,000', {reverse: true});
 //
-//     // [추가] 팝업에서 URL 파라미터(?s_city_name=도시명)로 넘어온 경우 우선 처리
 //     const urlParams = new URLSearchParams(window.location.search);
 //     const paramCity = urlParams.get('s_city_name');
+//     const paramState = urlParams.get('s_state');
 //
-//     if (paramCity) {
-//         // Select2 옵션에 해당 도시가 없으면 동적으로 옵션 추가 후 선택 처리
-//         if ($('.js-example-basic-multiple').find("option[value='" + paramCity + "']").length === 0) {
-//             var newOption = new Option(paramCity, paramCity, true, true);
-//             $('.js-example-basic-multiple').append(newOption).trigger('change');
-//         } else {
-//             $('.js-example-basic-multiple').val([paramCity]).trigger('change');
+//     // [추가] 주(State) 파라미터가 넘어온 경우 드롭다운 자동 선택
+//     if (paramState) {
+//         // 기존 페이지의 주(State) select box ID에 맞춰 선택 (예: #s_state)
+//         var $stateSelect = $('#s_state_code, select[name="s_state_code"]');
+//         if ($stateSelect.length > 0) {
+//             // 1) value 값으로 먼저 매칭 시도
+//             $stateSelect.val(paramState);
+//
+//             // 2) value가 약어(CA)로 되어 있고 넘어온 값이 풀네임(California)인 경우 텍스트로 매칭
+//             if (!$stateSelect.val()) {
+//                 $stateSelect.find('option').each(function() {
+//                     if ($(this).text().trim().toLowerCase() === paramState.toLowerCase() ||
+//                         $(this).val().toLowerCase() === paramState.toLowerCase()) {
+//                         $stateSelect.val($(this).val());
+//                     }
+//                 });
+//             }
+//             $stateSelect.trigger('change');
 //         }
+//     }
 //
-//         // 기존 검색 실행 함수 호출
+//     // [기존 보완] 도시 파라미터가 넘어온 경우 Select2 자동 선택
+//     // if (paramCity) {
+//     //     if ($('.js-example-basic-multiple').find("option[value='" + paramCity + "']").length === 0) {
+//     //         var newOption = new Option(paramCity, paramCity, true, true);
+//     //         $('.js-example-basic-multiple').append(newOption).trigger('change');
+//     //     } else {
+//     //         $('.js-example-basic-multiple').val([paramCity]).trigger('change');
+//     //     }
+//     //
+//     //     GO_PAGE(1);
+//     // } else {
+//     //     // 파라미터가 없을 때는 기존 쿠키 방식 유지
+//     //     let temp_city_name = Cookies.get('s_city_name');
+//     //     if(temp_city_name != "" && temp_city_name != undefined) {
+//     //         let t_city_name = temp_city_name.split(',');
+//     //         $('.js-example-basic-multiple').val(t_city_name).trigger('change');
+//     //     }
+//     //     GO_PAGE(g_page);
+//     // }
+//     if (paramCity) {
+//         // 쉼표로 구분된 도시 문자열을 배열로 분리 (예: ["Orange", "Anaheim", "Santa Ana"])
+//         var cityList = paramCity.split(',').map(function(c) { return c.trim(); }).filter(Boolean);
+//
+//         cityList.forEach(function(cName) {
+//             // 기존 select 옵션에 해당 도시가 없으면 새로 추가
+//             if ($('.js-example-basic-multiple').find('option').filter(function() { return $(this).val() === cName; }).length === 0) {
+//                 var newOption = new Option(cName, cName, true, true);
+//                 $('.js-example-basic-multiple').append(newOption);
+//             }
+//         });
+//
+//         // 배열 형태로 한 번에 선택 적용 후 change 이벤트 발생
+//         $('.js-example-basic-multiple').val(cityList).trigger('change');
+//
 //         GO_PAGE(1);
-//
 //     } else {
-//         // 기존 쿠키 기반 도시 세팅 로직 유지
+//         // 파라미터가 없을 때는 기존 쿠키 방식 유지
 //         let temp_city_name = Cookies.get('s_city_name');
 //         if(temp_city_name != "" && temp_city_name != undefined) {
 //             let t_city_name = temp_city_name.split(',');
@@ -334,295 +378,339 @@ function GET_CITYNAME() {
 //         GO_PAGE(g_page);
 //     }
 //
+//
+//     // checkPopupParam();
 // });
 
-$(document).ready(function() {
 
-    $('.js-example-basic-multiple').select2({
-        placeholder: "도시",
-        allowClear: true
-    });
-
-    $('#s_min_price').mask('000,000,000', {reverse: true});
-    $('#s_max_price').mask('000,000,000', {reverse: true});
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const paramCity = urlParams.get('s_city_name');
-    const paramState = urlParams.get('s_state');
-
-    // [추가] 주(State) 파라미터가 넘어온 경우 드롭다운 자동 선택
-    if (paramState) {
-        // 기존 페이지의 주(State) select box ID에 맞춰 선택 (예: #s_state)
-        var $stateSelect = $('#s_state_code, select[name="s_state_code"]');
-        if ($stateSelect.length > 0) {
-            // 1) value 값으로 먼저 매칭 시도
-            $stateSelect.val(paramState);
-
-            // 2) value가 약어(CA)로 되어 있고 넘어온 값이 풀네임(California)인 경우 텍스트로 매칭
-            if (!$stateSelect.val()) {
-                $stateSelect.find('option').each(function() {
-                    if ($(this).text().trim().toLowerCase() === paramState.toLowerCase() ||
-                        $(this).val().toLowerCase() === paramState.toLowerCase()) {
-                        $stateSelect.val($(this).val());
-                    }
-                });
-            }
-            $stateSelect.trigger('change');
-        }
-    }
-
-    // [기존 보완] 도시 파라미터가 넘어온 경우 Select2 자동 선택
-    if (paramCity) {
-        if ($('.js-example-basic-multiple').find("option[value='" + paramCity + "']").length === 0) {
-            var newOption = new Option(paramCity, paramCity, true, true);
-            $('.js-example-basic-multiple').append(newOption).trigger('change');
-        } else {
-            $('.js-example-basic-multiple').val([paramCity]).trigger('change');
-        }
-
-        GO_PAGE(1);
-    } else {
-        // 파라미터가 없을 때는 기존 쿠키 방식 유지
-        let temp_city_name = Cookies.get('s_city_name');
-        if(temp_city_name != "" && temp_city_name != undefined) {
-            let t_city_name = temp_city_name.split(',');
-            $('.js-example-basic-multiple').val(t_city_name).trigger('change');
-        }
-        GO_PAGE(g_page);
-    }
-    checkPopupParam();
-});
-
-// =========================================================
-// 부동산 통합 검색 팝업 제어 함수
-// =========================================================
-window.reCurrentCategory = '주택';
-
-// URL의 ?popup=y 감지하여 팝업 실행
-function checkPopupParam() {
-    var urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('popup') === 'y') {
-        openREModal();
-
-        // 주소창에서 ?popup=y 제거 (새로고침 시 재노출 방지)
-        if (window.history && window.history.replaceState) {
-            var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-            window.history.replaceState({path: cleanUrl}, '', cleanUrl);
-        }
-    }
-}
-
-// 팝업 열기
-function openREModal() {
-    var modal = document.getElementById('realEstateModal');
-    if (modal) {
-        modal.style.display = 'block';
-        getCurrentLocation();
-    } else {
-        // DOM 생성이 늦어지는 경우 예외 처리
-        setTimeout(function() {
-            var retryModal = document.getElementById('realEstateModal');
-            if (retryModal) {
-                retryModal.style.display = 'block';
-                getCurrentLocation();
-            }
-        }, 150);
-    }
-}
-
-// 팝업 닫기
-function closeREModal() {
-    var modal = document.getElementById('realEstateModal');
-    if (modal) modal.style.display = 'none';
-}
-
-// 배경 클릭 시 닫기
-window.addEventListener('click', function(event) {
-    var modal = document.getElementById('realEstateModal');
-    if (modal && event.target === modal) closeREModal();
-});
-
-// 탭 전환
-function switchTab(btnElement, categoryName) {
-    window.reCurrentCategory = categoryName;
-    var btns = document.querySelectorAll('.re-tab-btn');
-    btns.forEach(function(b) { b.classList.remove('active'); });
-    if (btnElement) btnElement.classList.add('active');
-
-    var subMenu = document.getElementById('subCategoryArea');
-    if (subMenu) {
-        subMenu.style.display = (categoryName === '커머셜' || categoryName === '사업체') ? 'flex' : 'none';
-    }
-}
-
-// 내 위치 자동 가져오기
-function getCurrentLocation() {
-    var input = document.getElementById('reSearchInput');
-    if (!input) return;
-    input.placeholder = "현재 위치 찾는 중...";
-
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            function(position) {
-                fetch('https://nominatim.openstreetmap.org/reverse?lat=' + position.coords.latitude + '&lon=' + position.coords.longitude + '&format=json')
-                    .then(function(res) { return res.json(); })
-                    .then(function(data) {
-                        var city = data.address.city || data.address.town || data.address.county || "";
-                        var state = data.address.state || "";
-                        var postcode = data.address.postcode || "";
-                        input.value = (city || postcode) ? ((postcode ? postcode + ', ' : '') + city + (state ? ', ' + state : '')) : "90623, La Palma, CA";
-                    })
-                    .catch(function() { input.value = "90623, La Palma, CA"; });
-            },
-            function() { input.value = "90623, La Palma, CA"; }
-        );
-    } else {
-        input.value = "90623, La Palma, CA";
-    }
-}
-
-function clearSearchInput() {
-    var input = document.getElementById('reSearchInput');
-    if (input) input.value = '';
-}
-
-// 검색 버튼 클릭 시 실행
-// window.handleSearch = function() {
-//     var rawInput = document.getElementById('reSearchInput').value.trim();
-//     var cityName = "";
 //
-//     // "90623, La Palma, CA" 같은 주소 형태에서 도시명("La Palma")만 추출
-//     if (rawInput.indexOf(',') !== -1) {
-//         var parts = rawInput.split(',');
-//         // 첫 번째 조각이 숫자(Zipcode)면 두 번째 조각을 도시명으로 사용
-//         if (/^\d+$/.test(parts[0].trim()) && parts.length > 1) {
-//             cityName = parts[1].trim();
-//         } else {
-//             cityName = parts[0].trim();
+// // =========================================================
+// // 부동산 통합 검색 팝업 제어 함수
+// // =========================================================
+// window.reCurrentCategory = '주택';
+// // 자동 위치 찾기 차단 플래그 (클리어 버튼을 누르면 true로 전환)
+// var reBlockAutoLocation = false;
+// var reIsLocationCancelled = false;
+// // URL의 ?popup=y 감지하여 팝업 실행
+// function checkPopupParam() {
+//     var urlParams = new URLSearchParams(window.location.search);
+//     if (urlParams.get('popup') === 'y') {
+//         openREModal();
+//
+//         // 주소창에서 ?popup=y 제거 (새로고침 시 재노출 방지)
+//         if (window.history && window.history.replaceState) {
+//             var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+//             window.history.replaceState({path: cleanUrl}, '', cleanUrl);
 //         }
-//     } else {
-//         cityName = rawInput;
+//     }
+// }
+//
+//
+// function openREModal() {
+//     var modal = document.getElementById('realEstateModal');
+//     if (modal) {
+//         modal.style.display = 'block';
 //     }
 //
-//     // 선택된 탭에 따라 이동할 페이지 URL 설정
-//     var targetUrl = '/realestate/house.php'; // 기본값: 주택
-//     if (window.reCurrentCategory === '렌트') {
-//         targetUrl = '/realestate/rent.php';
-//     } else if (window.reCurrentCategory === '커머셜') {
-//         targetUrl = '/realestate/commercial.php';
-//     } else if (window.reCurrentCategory === '사업체') {
-//         targetUrl = '/realestate/business.php';
+//     // 입력창이 비어 있고 && 사용자가 클리어(×) 버튼을 누른 적이 없을 때만 자동 위치 조회
+//     var currentVal = $('#reSearchInput').val().trim();
+//     if (currentVal === '' && !reBlockAutoLocation) {
+//         if (typeof getCurrentLocation === 'function') {
+//             getCurrentLocation();
+//         }
+//     }
+// }
+// // 팝업 닫기
+// function closeREModal() {
+//     var modal = document.getElementById('realEstateModal');
+//     if (modal) modal.style.display = 'none';
+// }
+//
+// // 배경 클릭 시 닫기
+// window.addEventListener('click', function(event) {
+//     var modal = document.getElementById('realEstateModal');
+//     if (modal && event.target === modal) closeREModal();
+// });
+//
+// // 탭 전환
+// function switchTab(btnElement, categoryName) {
+//     window.reCurrentCategory = categoryName;
+//     var btns = document.querySelectorAll('.re-tab-btn');
+//     btns.forEach(function(b) { b.classList.remove('active'); });
+//     if (btnElement) btnElement.classList.add('active');
+//
+//     var subMenu = document.getElementById('subCategoryArea');
+//     if (subMenu) {
+//         subMenu.style.display = (categoryName === '커머셜' || categoryName === '사업체') ? 'flex' : 'none';
+//     }
+// }
+//
+// // 내 위치 자동 가져오기
+// function getCurrentLocation() {
+//     var input = document.getElementById('reSearchInput');
+//     if (!input) return;
+//     input.placeholder = "현재 위치 찾는 중...";
+//
+//     if (navigator.geolocation) {
+//         navigator.geolocation.getCurrentPosition(
+//             function(position) {
+//                 fetch('https://nominatim.openstreetmap.org/reverse?lat=' + position.coords.latitude + '&lon=' + position.coords.longitude + '&format=json')
+//                     .then(function(res) { return res.json(); })
+//                     .then(function(data) {
+//                         var city = data.address.city || data.address.town || data.address.county || "";
+//                         var state = data.address.state || "";
+//                         var postcode = data.address.postcode || "";
+//                         input.value = (city || postcode) ? ((postcode ? postcode + ', ' : '') + city + (state ? ', ' + state : '')) : "90623, La Palma, CA";
+//                     })
+//                     .catch(function() { input.value = "90623, La Palma, CA"; });
+//             },
+//             function() { input.value = "90623, La Palma, CA"; }
+//         );
+//     } else {
+//         input.value = "90623, La Palma, CA";
+//     }
+// }
+//
+// // 1. 클리어(×) 버튼 클릭 시: 이벤트 전파 차단 + 자동 위치 찾기 영구 중지
+// function clearSearchInput(e) {
+//     // 부모 요소로 클릭 이벤트가 퍼져서 openREModal이 다시 실행되는 것을 차단
+//     if (e) {
+//         e.preventDefault();
+//         e.stopPropagation();
+//     }
+//     if (window.event) {
+//         window.event.cancelBubble = true;
 //     }
 //
-//     // 도시명이 입력되어 있다면 URL 파라미터로 전달하며 페이지 이동
-//     if (cityName !== "") {
-//         window.location.href = targetUrl + '?s_city_name=' + encodeURIComponent(cityName);
-//     } else {
-//         window.location.href = targetUrl;
+//     reIsLocationCancelled = true;
+//     reBlockAutoLocation = true; // 사용자가 직접 지웠으므로 자동 GPS 실행 금지
+//
+//     var $input = $('#reSearchInput');
+//     $input.val('');
+//     $input.attr('placeholder', '우편번호, 도시 또는 주 입력');
+//     $input.focus();
+// }
+//
+// async function getNearbyCities(lat, lon, radiusMiles, baseCity) {
+//     var citySet = new Set();
+//     if (baseCity) citySet.add(baseCity.trim());
+//
+//     if (!radiusMiles || radiusMiles <= 0 || !lat || !lon) {
+//         return Array.from(citySet);
 //     }
+//
+//     // miles를 meters로 변환 (1 mile = 1609.34 meters)
+//     var radiusMeters = Math.round(radiusMiles * 1609.34);
+//     var query = `[out:json][timeout:15];(node["place"~"city|town"](around:${radiusMeters},${lat},${lon}););out body;`;
+//
+//     // Overpass 메인 서버가 느리거나 막힐 경우 대비한 백업 서버 목록
+//     var endpoints = [
+//         'https://overpass-api.de/api/interpreter',
+//         'https://overpass.kumi.systems/api/interpreter'
+//     ];
+//
+//     for (var i = 0; i < endpoints.length; i++) {
+//         try {
+//             const res = await fetch(endpoints[i] + '?data=' + encodeURIComponent(query));
+//             if (res.ok) {
+//                 const data = await res.json();
+//                 if (data.elements && data.elements.length > 0) {
+//                     data.elements.forEach(function(el) {
+//                         if (el.tags && el.tags.name) {
+//                             citySet.add(el.tags.name.trim());
+//                         }
+//                     });
+//                     break; // 성공하면 루프 종료
+//                 }
+//             }
+//         } catch (e) {
+//             console.warn("Overpass 서버 재시도 중:", endpoints[i], e);
+//         }
+//     }
+//
+//     return Array.from(citySet);
+// }
+//
+// // 2. 미국 주 풀네임 -> 2자리 약어 변환 (Zippopotam 도시 검색용)
+// function getStateAbbr(stateInput) {
+//     if (!stateInput) return "";
+//     var clean = stateInput.trim().toLowerCase();
+//     if (clean.length === 2) return clean;
+//
+//     var map = {
+//         'alabama':'al','alaska':'ak','arizona':'az','arkansas':'ar','california':'ca',
+//         'colorado':'co','connecticut':'ct','delaware':'de','florida':'fl','georgia':'ga',
+//         'hawaii':'hi','idaho':'id','illinois':'il','indiana':'in','iowa':'ia',
+//         'kansas':'ks','kentucky':'ky','louisiana':'la','maine':'me','maryland':'md',
+//         'massachusetts':'ma','michigan':'mi','minnesota':'mn','mississippi':'ms','missouri':'mo',
+//         'montana':'mt','nebraska':'ne','nevada':'nv','new hampshire':'nh','new jersey':'nj',
+//         'new mexico':'nm','new york':'ny','north carolina':'nc','north dakota':'nd','ohio':'oh',
+//         'oklahoma':'ok','oregon':'or','pennsylvania':'pa','rhode island':'ri','south carolina':'sc',
+//         'south dakota':'sd','tennessee':'tn','texas':'tx','utah':'ut','vermont':'vt',
+//         'virginia':'va','washington':'wa','west virginia':'wv','wisconsin':'wi','wyoming':'wy'
+//     };
+//     return map[clean] || "";
+// }
+//
+// // 3. 검색 버튼 클릭 시 실행
+// async function handleSearch() {
+//     var rawInput = $('#reSearchInput').val().trim();
+//     var radiusMiles = parseInt($('#reRadiusSelect').val() || '0', 10);
+//     var cityName = "";
+//     var stateName = "";
+//     var zipCode = "";
+//     var lat = null;
+//     var lon = null;
+//
+//     var $btn = $('.re-search-btn');
+//     var origText = $btn.html();
+//     $btn.html('주변 탐색 중...').prop('disabled', true);
+//
+//     try {
+//         // 입력값 파싱 (우편번호 / 도시,주 / 도시 단독)
+//         if (/^\d{5}$/.test(rawInput)) {
+//             zipCode = rawInput;
+//         } else if (rawInput.indexOf(',') !== -1) {
+//             var parts = rawInput.split(',').map(function(item) { return item.trim(); });
+//             if (/^\d{5}$/.test(parts[0])) {
+//                 zipCode = parts[0];
+//                 cityName = parts[1] || "";
+//                 stateName = parts[2] || "";
+//             } else {
+//                 cityName = parts[0] || "";
+//                 stateName = parts[1] || "";
+//             }
+//         } else {
+//             // "92868 Orange" 처럼 공백으로 우편번호가 섞여 있을 경우 분리
+//             var spaceMatch = rawInput.match(/^(\d{5})\s+(.+)$/);
+//             if (spaceMatch) {
+//                 zipCode = spaceMatch[1];
+//                 cityName = spaceMatch[2].trim();
+//             } else {
+//                 cityName = rawInput;
+//             }
+//         }
+//
+//         // [단계 A] 우편번호가 있으면 Zippopotam ZIP API로 좌표 확보
+//         if (zipCode) {
+//             const zipRes = await fetch('https://api.zippopotam.us/us/' + zipCode);
+//             if (zipRes.ok) {
+//                 const zipData = await zipRes.json();
+//                 if (zipData.places && zipData.places.length > 0) {
+//                     if (!cityName) cityName = zipData.places[0]['place name'];
+//                     if (!stateName) stateName = zipData.places[0]['state'];
+//                     lat = parseFloat(zipData.places[0]['latitude']);
+//                     lon = parseFloat(zipData.places[0]['longitude']);
+//                 }
+//             }
+//         }
+//
+//         // [단계 B] 우편번호 없이 도시명만 직접 입력한 경우 좌표 확보
+//         if ((!lat || !lon) && cityName) {
+//             // 현재 페이지에 선택된 주(State)가 있다면 기본값으로 활용 (예: California)
+//             var currentStateVal = $('select').filter(function() {
+//                 return $(this).find('option[value="CA"], option:contains("California")').length > 0;
+//             }).val();
+//
+//             var stateAbbr = getStateAbbr(stateName) || getStateAbbr(currentStateVal) || 'ca';
+//
+//             // 1순위: Zippopotam 도시 API (예: https://api.zippopotam.us/us/ca/irvine) - 매우 빠름
+//             try {
+//                 const cityRes = await fetch('https://api.zippopotam.us/us/' + stateAbbr + '/' + encodeURIComponent(cityName.toLowerCase()));
+//                 if (cityRes.ok) {
+//                     const cityData = await cityRes.json();
+//                     if (cityData.places && cityData.places.length > 0) {
+//                         lat = parseFloat(cityData.places[0]['latitude']);
+//                         lon = parseFloat(cityData.places[0]['longitude']);
+//                         if (!stateName && cityData['state']) stateName = cityData['state'];
+//                     }
+//                 }
+//             } catch (e) {}
+//
+//             // 2순위: 1순위 실패 시 Nominatim 백업 조회
+//             if (!lat || !lon) {
+//                 try {
+//                     var q = cityName + (stateName ? ', ' + stateName : '') + ', USA';
+//                     const nomRes = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(q));
+//                     if (nomRes.ok) {
+//                         const nomData = await nomRes.json();
+//                         if (nomData && nomData.length > 0) {
+//                             lat = parseFloat(nomData[0].lat);
+//                             lon = parseFloat(nomData[0].lon);
+//                         }
+//                     }
+//                 } catch (e) {}
+//             }
+//         }
+//
+//         // [단계 C] 반경이 0보다 크고 좌표를 찾았다면 주변 도시 일괄 수집
+//         var targetCities = [cityName];
+//         if (radiusMiles > 0 && lat && lon) {
+//             targetCities = await getNearbyCities(lat, lon, radiusMiles, cityName);
+//         }
+//         targetCities = targetCities.filter(Boolean);
+//
+//         // 디버깅용 콘솔 로그 (F12 개발자 도구에서 확인 가능)
+//         console.log("검색 기준:", { cityName, stateName, lat, lon, radiusMiles, targetCities });
+//
+//         // 이동할 URL 조립
+//         var targetUrl = '/realestate/house.php';
+//         if (window.reCurrentCategory === '렌트') {
+//             targetUrl = '/realestate/rent.php';
+//         } else if (window.reCurrentCategory === '커머셜') {
+//             targetUrl = '/realestate/commercial.php';
+//         } else if (window.reCurrentCategory === '사업체') {
+//             targetUrl = '/realestate/business.php';
+//         }
+//
+//         var params = new URLSearchParams();
+//         if (targetCities.length > 0) params.append('s_city_name', targetCities.join(','));
+//         if (stateName !== "") params.append('s_state', stateName);
+//         if (radiusMiles > 0) params.append('s_radius', radiusMiles);
+//
+//         var queryString = params.toString();
+//         window.location.href = queryString ? (targetUrl + '?' + queryString) : targetUrl;
+//
+//     } finally {
+//         $btn.html(origText).prop('disabled', false);
+//     }
+// }
+//
+// // (참고) 아이콘 버튼 클릭 시에도 동일하게 이동하도록 연결
+// window.searchAndScroll = function(targetCategory) {
+//     window.reCurrentCategory = targetCategory;
+//     window.handleSearch();
 // };
-
-// 검색 버튼 클릭 시 실행 (우편번호 자동 변환 + 도시/주 동시 전달)
-async function handleSearch() {
-    var rawInput = $('#reSearchInput').val().trim();
-    var cityName = "";
-    var stateName = "";
-
-    // 1. 사용자가 5자리 미국 우편번호(예: 90623)만 단독으로 입력한 경우 API로 도시/주 자동 조회
-    if (/^\d{5}$/.test(rawInput)) {
-        try {
-            // 버튼 상태를 검색 중으로 표시
-            var $btn = $('.re-search-btn');
-            var origText = $btn.html();
-            $btn.html('찾는 중...').prop('disabled', true);
-
-            const response = await fetch('https://api.zippopotam.us/us/' + rawInput);
-            if (response.ok) {
-                const data = await response.json();
-                if (data.places && data.places.length > 0) {
-                    cityName = data.places[0]['place name']; // 예: La Palma
-                    stateName = data.places[0]['state'];     // 예: California (약어 필요시 'state abbreviation')
-                }
-            }
-            $btn.html(origText).prop('disabled', false);
-        } catch (e) {
-            console.error("Zipcode 조회 실패:", e);
-        }
-    }
-    // 2. "90623, La Palma, California" 또는 "La Palma, CA" 형태인 경우 분리 추출
-    else if (rawInput.indexOf(',') !== -1) {
-        var parts = rawInput.split(',').map(function(item) { return item.trim(); });
-
-        // 첫 번째 항목이 우편번호(숫자)인 경우: [우편번호, 도시, 주]
-        if (/^\d+$/.test(parts[0])) {
-            cityName = parts[1] || "";
-            stateName = parts[2] || "";
-        }
-        // 첫 번째 항목이 도시명인 경우: [도시, 주]
-        else {
-            cityName = parts[0] || "";
-            stateName = parts[1] || "";
-        }
-    }
-    // 3. 도시명만 단독으로 입력한 경우 (예: "Irvine")
-    else {
-        cityName = rawInput;
-    }
-
-    // 이동할 타겟 페이지 설정
-    var targetUrl = '/realestate/house.php';
-    if (window.reCurrentCategory === '렌트') {
-        targetUrl = '/realestate/rent.php';
-    } else if (window.reCurrentCategory === '커머셜') {
-        targetUrl = '/realestate/commercial.php';
-    } else if (window.reCurrentCategory === '사업체') {
-        targetUrl = '/realestate/business.php';
-    }
-
-    // URL 파라미터 조립 (도시 + 주)
-    var params = new URLSearchParams();
-    if (cityName !== "") params.append('s_city_name', cityName);
-    if (stateName !== "") params.append('s_state', stateName);
-
-    var queryString = params.toString();
-    window.location.href = queryString ? (targetUrl + '?' + queryString) : targetUrl;
-}
-
-// (참고) 아이콘 버튼 클릭 시에도 동일하게 이동하도록 연결
-window.searchAndScroll = function(targetCategory) {
-    window.reCurrentCategory = targetCategory;
-    window.handleSearch();
-};
-// =========================================================
-// 페이지 진입 시 ?popup=y 감지하여 팝업 자동 실행
-// =========================================================
-(function() {
-    function runInitialPopup() {
-        var urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('popup') === 'y') {
-            var modal = document.getElementById('realEstateModal');
-            if (modal) {
-                if (typeof openREModal === 'function') {
-                    openREModal();
-                } else {
-                    modal.style.display = 'block';
-                }
-
-                // 주소창에서 ?popup=y 제거 (새로고침 시 재오픈 방지)
-                if (window.history && window.history.replaceState) {
-                    var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-                    window.history.replaceState({}, '', cleanUrl);
-                }
-            } else {
-                // 모달 HTML이 아직 로딩 전이면 0.1초 뒤 재시도
-                setTimeout(runInitialPopup, 100);
-            }
-        }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', runInitialPopup);
-    } else {
-        runInitialPopup();
-    }
-})();
+// // =========================================================
+// // 페이지 진입 시 ?popup=y 감지하여 팝업 자동 실행
+// // =========================================================
+// (function() {
+//     function runInitialPopup() {
+//         var urlParams = new URLSearchParams(window.location.search);
+//         if (urlParams.get('popup') === 'y') {
+//             var modal = document.getElementById('realEstateModal');
+//             if (modal) {
+//                 if (typeof openREModal === 'function') {
+//                     openREModal();
+//                 } else {
+//                     modal.style.display = 'block';
+//                 }
+//
+//                 // 주소창에서 ?popup=y 제거 (새로고침 시 재오픈 방지)
+//                 if (window.history && window.history.replaceState) {
+//                     var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+//                     window.history.replaceState({}, '', cleanUrl);
+//                 }
+//             } else {
+//                 // 모달 HTML이 아직 로딩 전이면 0.1초 뒤 재시도
+//                 setTimeout(runInitialPopup, 100);
+//             }
+//         }
+//     }
+//
+//     if (document.readyState === 'loading') {
+//         document.addEventListener('DOMContentLoaded', runInitialPopup);
+//     } else {
+//         runInitialPopup();
+//     }
+// })();

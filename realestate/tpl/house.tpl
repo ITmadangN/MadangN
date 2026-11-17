@@ -38,7 +38,8 @@
                                                  {{S_SELECT_STATE_CODE}}
                                           </select>
                                         
-                                          <select class="js-example-basic-multiple fs-6 w-60pro" name="s_city_name[]" id="s_city_name" multiple="multiple">
+                                          <!-- <select class="js-example-basic-multiple re-city-select fs-6 w-60pro" name="s_city_name[]" id="s_city_name" multiple="multiple"> -->
+                                          <select class="js-example-basic-multiple  fs-6 w-60pro" name="s_city_name[]" id="s_city_name" multiple="multiple">
                                                {{S_SELECT_CITY_NAME}}
                                           </select>                                        
                                         <div class="w-276 d-flex items-start justify-between"> 
@@ -103,5 +104,5 @@
 <script defer src="/js/multi_select.js" ></script>
 <script defer src="/js/libs/jquery.mask.js"></script>
 
+<!-- <link rel="stylesheet" href="/css/realestate_view.css"> -->
 <!-- INCLUDE FILE '../include/footer.php' -->
-

@@ -79,6 +79,7 @@
        }
 }
         </style>
+<!-- <link rel="stylesheet" href="/css/realestate_view.css"> -->
 <body class="uni-body panel bg-white text-gray-900 overflow-x-hidden">
 
 
@@ -147,8 +148,8 @@
                     </ul>
                 </li>
                 <li class="uc-parent">
-                    <!-- <a href="javascript:return false;" onclick="goUrl('/realestate/');">부동산h</a> -->
-                    <a href="javascript:void(0);" onclick="goUrl('/realestate/?popup=y');">부동산<span data-uc-navbar-parent-icon></span></a>
+                    <a href="javascript:return false;" onclick="goUrl('/realestate/');">부동산</a>
+                 <!--   <a href="javascript:void(0);" onclick="goUrl('/realestate/?popup=y');">부동산<span data-uc-navbar-parent-icon></span></a> -->
                     <ul class="uc-nav-sub" data-uc-nav="">
                         <li><a href="javascript:return false;" onclick="goUrl('/realestate/');">부동산홈</a></li>
                         <li><a href="javascript:return false;" onclick="goUrl('/realestate/house.php');">주택</a></li>
@@ -471,12 +472,12 @@
                                        </div>
                                    </li>
                                    <li>
-                                      <!-- <a href="/realestate" {{MAIN5}}>부동산 <span data-uc-navbar-parent-icon></span></a> -->
-                                       <a href="/realestate/?popup=y"
+                                     <a href="/realestate" {{MAIN5}}>부동산 <span data-uc-navbar-parent-icon></span></a>
+                                   <!--    <a href="/realestate/?popup=y"
                                           onclick="if (typeof openREModal === 'function' && document.getElementById('realEstateModal')) { openREModal(); return false; }"
                                           {{MAIN5}}>
                                            부동산 <span data-uc-navbar-parent-icon></span>
-                                       </a>
+                                       </a> -->
                                        <div class="uc-navbar-dropdown ft-primary text-unset fs-6 fw-medium p-3 rounded-0 hide-scrollbar w-auto" data-uc-drop=" offset: 0; boundary: !.uc-navbar; animation: uc-animation-slide-top-small; duration: 150;">
                                            <ul class="uc-nav uc-navbar-dropdown-nav" style="margin-top:-15px;">
                                                <li><a href="/realestate" style="color:#f39c04"><b>부동산홈</b></a></li>
@@ -589,15 +590,26 @@
     <!-- IF END 'NOTINDEX' -->
 
 <!-- 부동산 통합 검색 팝업 레이어 -->
+
+ <!--
 <div id="realEstateModal" class="re-modal">
     <div class="re-modal-content">
-        <!-- 닫기 버튼 -->
+
         <span class="re-close" onclick="closeREModal()">&times;</span>
 
-        <!-- 타이틀 -->
+        <div class="re-radius-wrap">
+            <select id="reRadiusSelect" class="re-radius-select">
+                <option value="0">해당 지역만</option>
+                <option value="5" selected>반경 5 miles</option>
+                <option value="10">반경 10 miles</option>
+                <option value="20">반경 20 miles</option>
+                <option value="30">반경 30 miles</option>
+            </select>
+        </div>
+
         <h2 class="re-title">내 집 찾기의 시작<br><span>지역 또는 주소를 검색해보세요</span></h2>
 
-        <!-- 탭 메뉴 -->
+
         <div class="re-tabs">
             <button type="button" class="re-tab-btn active" onclick="switchTab(this, '주택')">주택</button>
             <button type="button" class="re-tab-btn" onclick="switchTab(this, '렌트')">렌트</button>
@@ -605,7 +617,7 @@
             <button type="button" class="re-tab-btn" onclick="switchTab(this, '사업체')">사업체</button>
         </div>
 
-        <!-- 세 번째 화면 스타일의 아이콘 메뉴 (커머셜/사업체 선택 시 노출) -->
+
         <div id="subCategoryArea" class="re-icon-menu" style="display: none;">
             <button type="button" onclick="searchAndScroll('커머셜')">🏢 오피스</button>
             <button type="button" onclick="searchAndScroll('커머셜')">🏪 리테일</button>
@@ -613,7 +625,7 @@
             <button type="button" onclick="searchAndScroll('사업체')">🤝 사업체 매매</button>
         </div>
 
-        <!-- 검색바 (GPS 내 위치 자동 감지) -->
+
         <div class="re-search-box">
             <button type="button" class="re-gps-btn" onclick="getCurrentLocation()" title="내 위치 가져오기">📍</button>
             <input type="text" id="reSearchInput" placeholder="위치 검색 중...">
@@ -622,132 +634,4 @@
         </div>
     </div>
 </div>
-
-  <!--
-<style>
-    .re-modal {
-        display: none;
-        position: fixed;
-        z-index: 999999; /* 상단 메뉴보다 무조건 위에 오도록 최상위 지정 */
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.75);
-        backdrop-filter: blur(8px);
-        overflow-y: auto; /* 화면이 작을 경우 스크롤 가능하도록 처리 */
-    }
-
-    .re-modal-content {
-        background-color: #0b0b0b;
-        color: #ffffff;
-        /* 위쪽 여백을 고정 픽셀(210px)로 넉넉히 주어 상단 메뉴와 띄움 */
-        margin: 230px auto 50px auto;
-        padding: 40px 30px;
-        border-radius: 20px;
-        width: 90%;
-        max-width: 750px;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-        position: relative;
-        text-align: center;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-
-    /* 모바일 화면에서는 위쪽 여백을 조금 줄여서 보기 좋게 조정 */
-    @media (max-width: 768px) {
-        .re-modal-content {
-            margin: 130px auto 30px auto;
-            padding: 30px 20px;
-        }
-    }
-
-    .re-close {
-        position: absolute; right: 25px; top: 20px;
-        color: #888; font-size: 32px; font-weight: 300; cursor: pointer;
-    }
-    .re-close:hover { color: #fff; }
-    .re-title { font-size: 28px; font-weight: 700; line-height: 1.3; margin-bottom: 25px; color: #fff; }
-    .re-title span { font-size: 18px; font-weight: 400; color: #aaa; }
-    .re-tabs { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
-    .re-tab-btn { background: none; border: none; color: #a0a0a0; font-size: 18px; font-weight: 600; padding: 8px 6px; cursor: pointer; position: relative; transition: color 0.2s; }
-    .re-tab-btn:hover, .re-tab-btn.active { color: #ffffff; }
-    .re-tab-btn.active::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 3px; background-color: #ffffff; border-radius: 2px; }
-    .re-icon-menu { justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-    .re-icon-menu button { background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 8px 14px; border-radius: 20px; cursor: pointer; font-size: 14px; }
-    .re-icon-menu button:hover { background: rgba(255, 255, 255, 0.25); }
-    .re-search-box { display: flex; align-items: center; background: #ffffff; border-radius: 40px; padding: 6px 8px 6px 15px; max-width: 650px; margin: 0 auto; }
-    .re-gps-btn { background: none; border: none; font-size: 18px; cursor: pointer; padding-right: 8px; }
-    .re-search-box input { flex: 1; border: none; outline: none; font-size: 16px; color: #333; background: transparent; }
-    .re-clear-btn { background: none; border: none; font-size: 20px; color: #777; cursor: pointer; padding: 0 10px; }
-    .re-search-btn { background: #c92a2a; color: white; border: none; padding: 12px 26px; border-radius: 30px; font-weight: 700; font-size: 16px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
-    .re-search-btn:hover { background: #a61e1e; }
-</style>
--->
-<style>
-    .re-modal {
-        display: none;
-        position: fixed;
-        z-index: 999999;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.75);
-        backdrop-filter: blur(8px);
-        overflow-y: auto;
-    }
-
-    .re-modal-content {
-        background-color: #0b0b0b;
-        color: #ffffff;
-        margin: 230px auto 50px auto;
-        padding: 40px 30px;
-        border-radius: 20px;
-        width: 90%;
-        max-width: 750px;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-        position: relative;
-        text-align: center;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-
-    .re-close {
-        position: absolute; right: 25px; top: 20px;
-        color: #888; font-size: 32px; font-weight: 300; cursor: pointer;
-    }
-    .re-close:hover { color: #fff; }
-    .re-title { font-size: 28px; font-weight: 700; line-height: 1.3; margin-bottom: 25px; color: #fff; }
-    .re-title span { font-size: 18px; font-weight: 400; color: #aaa; }
-    .re-tabs { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
-    .re-tab-btn { background: none; border: none; color: #a0a0a0; font-size: 18px; font-weight: 600; padding: 8px 6px; cursor: pointer; position: relative; transition: color 0.2s; }
-    .re-tab-btn:hover, .re-tab-btn.active { color: #ffffff; }
-    .re-tab-btn.active::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 3px; background-color: #ffffff; border-radius: 2px; }
-    .re-icon-menu { justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-    .re-icon-menu button { background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 8px 14px; border-radius: 20px; cursor: pointer; font-size: 14px; }
-    .re-icon-menu button:hover { background: rgba(255, 255, 255, 0.25); }
-    .re-search-box { display: flex; align-items: center; background: #ffffff; border-radius: 40px; padding: 6px 8px 6px 15px; max-width: 650px; margin: 0 auto; }
-    .re-gps-btn { background: none; border: none; font-size: 18px; cursor: pointer; padding-right: 8px; }
-    .re-search-box input { flex: 1; border: none; outline: none; font-size: 16px; color: #333; background: transparent; }
-    .re-clear-btn { background: none; border: none; font-size: 20px; color: #777; cursor: pointer; padding: 0 10px; }
-    .re-search-btn { background: #c92a2a; color: white; border: none; padding: 12px 26px; border-radius: 30px; font-weight: 700; font-size: 16px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
-    .re-search-btn:hover { background: #a61e1e; }
-
-    /* 모바일 화면 전용 스타일 (맨 아래에 배치해야 기존 스타일을 덮어씁니다) */
-    @media (max-width: 768px) {
-        .re-modal-content {
-            margin: 185px auto 40px auto;
-            padding: 35px 18px 25px 18px;
-            width: 92%;
-        }
-        .re-close { right: 16px; top: 12px; font-size: 28px; }
-        .re-title { font-size: 22px; margin-bottom: 18px; }
-        .re-title span { font-size: 14px; }
-        .re-tabs { gap: 12px; margin-bottom: 16px; }
-        .re-tab-btn { font-size: 16px; padding: 6px 4px; }
-        .re-search-box { padding: 5px 6px 5px 10px; width: 100%; box-sizing: border-box; }
-        .re-gps-btn { font-size: 15px; padding-right: 4px; }
-        .re-search-box input { font-size: 14px; min-width: 0; }
-        .re-clear-btn { font-size: 18px; padding: 0 6px; }
-        .re-search-btn { padding: 9px 14px; font-size: 13px; white-space: nowrap; flex-shrink: 0; }
-    }
-</style>
+                                        -->
