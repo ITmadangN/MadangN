@@ -101,7 +101,7 @@ class user_list
         $this->no = $pagination->no;
 
         $row_sql = "SELECT A.*, B.permission_group_name FROM users A left join permission_group B on A.permission_group_id = B.permission_group_id WHERE 1=1 {$this->q_is_active} {$this->q_permission_group_id} {$this->q_keyword}";
-        $row_sql .= " order by user_id asc Limit " . $pagination->limit_regno . ", " . $pagination->page_set;
+        $row_sql .= " order by created_at desc Limit " . $pagination->limit_regno . ", " . $pagination->page_set;
 
         $this->db->query($row_sql);
 
