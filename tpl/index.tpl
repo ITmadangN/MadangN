@@ -244,6 +244,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <li><a href="javascript:return false;" onclick="goUrl('/news/political_economy.php');">정치경제</a></li>
                                     <li><a href="javascript:return false;" onclick="goUrl('/news/entertainment.php');">연예</a></li>
                                     <li><a href="javascript:return false;" onclick="goUrl('/news/sports.php');">스포츠</a></li>
+                                    <li><a href="javascript:return false;" onclick="goUrl('/news/localnews.php');">로컬</a></li>
                             </ul>
                         </li>
                         <li class="uc-parent">
@@ -561,12 +562,13 @@ document.addEventListener('DOMContentLoaded', function() {
                                         <a href="javascript:return false;" onclick="goUrl('/news/');">뉴스<span data-uc-navbar-parent-icon></span></a>
                                         <div class="uc-navbar-dropdown ft-primary text-unset fs-5 fw-medium p-3 rounded-0 hide-scrollbar w-auto" data-uc-drop=" offset: 0; boundary: !.uc-navbar; animation: uc-animation-slide-top-small; duration: 150;">
                                             <ul class="uc-nav uc-navbar-dropdown-nav" style="margin-top:-15px;">
-                                               <li><a href="javascript:return false;" onclick="goUrl('/news/');" style="color:#22548f"><b>뉴스홈</b></span></a></li>
-                                        <li><a href="javascript:return false;" onclick="goUrl('/news/society.php');">사회</a></li>
-                                        <li><a href="javascript:return false;" onclick="goUrl('/news/global.php');">세계</a></li>
-                                        <li><a href="javascript:return false;" onclick="goUrl('/news/political_economy.php');">정치경제</a></li>
-                                        <li><a href="javascript:return false;" onclick="goUrl('/news/entertainment.php');">연예</a></li>
-                                        <li><a href="javascript:return false;" onclick="goUrl('/news/sports.php');">스포츠</a></li>
+                                                <li><a href="javascript:return false;" onclick="goUrl('/news/');" style="color:#22548f"><b>뉴스홈</b></span></a></li>
+                                                <li><a href="javascript:return false;" onclick="goUrl('/news/society.php');">사회</a></li>
+                                                <li><a href="javascript:return false;" onclick="goUrl('/news/global.php');">세계</a></li>
+                                                <li><a href="javascript:return false;" onclick="goUrl('/news/political_economy.php');">정치경제</a></li>
+                                                <li><a href="javascript:return false;" onclick="goUrl('/news/entertainment.php');">연예</a></li>
+                                                <li><a href="javascript:return false;" onclick="goUrl('/news/sports.php');">스포츠</a></li>
+                                                <li><a href="javascript:return false;" onclick="goUrl('/news/localnews.php');">로컬</a></li>
                                                
                                             </ul>
                                         </div>

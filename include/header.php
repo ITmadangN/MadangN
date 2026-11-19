@@ -115,6 +115,8 @@
                         <li><a href="javascript:return false;" onclick="goUrl('/news/political_economy.php');">정치경제</a></li>
                         <li><a href="javascript:return false;" onclick="goUrl('/news/entertainment.php');">연예</a></li>
                         <li><a href="javascript:return false;" onclick="goUrl('/news/sports.php');">스포츠</a></li>
+                        <li><a href="javascript:return false;" onclick="goUrl('/news/localnews.php');">로컬</a></li>
+
                     </ul>
                 </li>
                 <li class="uc-parent">
@@ -423,6 +425,7 @@
                                         <li><a href="javascript:return false;" onclick="goUrl('/news/political_economy.php');">정치경제</a></li>
                                         <li><a href="javascript:return false;" onclick="goUrl('/news/entertainment.php');">연예</a></li>
                                         <li><a href="javascript:return false;" onclick="goUrl('/news/sports.php');">스포츠</a></li>
+                                        <li><a href="javascript:return false;" onclick="goUrl('/news/localnews.php');">로컬</a></li>
 
                                     </ul>
                                 </div>

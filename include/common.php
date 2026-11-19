@@ -26,6 +26,7 @@
     if($sub == 4) $tpl->setVar("SUB4"," class=\"on\"");
     if($sub == 5) $tpl->setVar("SUB5"," class=\"on\"");
     if($sub == 6) $tpl->setVar("SUB6"," class=\"on\"");
+    if($sub == 7) $tpl->setVar("SUB7"," class=\"on\"");
 
     $tpl->setVar("CSRF",$csrf);
 

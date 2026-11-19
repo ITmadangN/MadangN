@@ -80,13 +80,20 @@ class service_news_list
     private function init() {
 
 //        $count_sql = "SELECT count(*) as cnt from news A where A.is_active = 1 and A.can_use = 1 {$this->q_section} {$this->q_keyword} {$this->q_report_date}";
-        $count_sql = "SELECT count(*) as cnt from news A 
-                      join (   select news_id 
-                               from news_images 
-                               where ifnull(img_url,'') <> '' 
-                               and can_use = 1 
-                               group by news_id ) B on B.news_id = A.news_id
-                      where A.is_active = 1 and A.can_use = 1 {$this->q_section} {$this->q_keyword} {$this->q_report_date}";
+        if($this->section  != 'local') {
+            $count_sql = "SELECT count(*) as cnt from news A 
+                          join (   select news_id 
+                                   from news_images 
+                                   where ifnull(img_url,'') <> '' 
+                                   and can_use = 1 
+                                   group by news_id ) B on B.news_id = A.news_id
+                          where A.is_active = 1 and A.can_use = 1 {$this->q_section} {$this->q_keyword} {$this->q_report_date}";
+        }
+        else {
+            $count_sql = "SELECT count(*) as cnt from news A 
+                          where A.is_active = 1 and A.can_use = 1 {$this->q_section} {$this->q_keyword} {$this->q_report_date}";
+        }
+
 //        saveLog("count_sql : ",$count_sql);
         $pagination = new Pagination(
             $this->db,
@@ -101,22 +108,28 @@ class service_news_list
         $this->no = $pagination->no;
 
 //        $row_sql = "SELECT A.* FROM news A where A.is_active = 1 and A.can_use = 1 {$this->q_section} {$this->q_keyword} {$this->q_report_date}";
-        $row_sql = "SELECT A.*
-                    FROM news A
-                    join ( select news_id
-                           from news_images
-                           where ifnull(img_url,'') <> ''
-                           and can_use = 1
-                           group by news_id ) B on B.news_id = A.news_id
-                    where A.is_active = 1 and A.can_use = 1 {$this->q_section} {$this->q_keyword} {$this->q_report_date}";
-
+        if($this->section  != 'local') {
+            $row_sql = "SELECT A.*
+                        FROM news A
+                        join ( select news_id
+                               from news_images
+                               where ifnull(img_url,'') <> ''
+                               and can_use = 1
+                               group by news_id ) B on B.news_id = A.news_id
+                        where A.is_active = 1 and A.can_use = 1 {$this->q_section} {$this->q_keyword} {$this->q_report_date}";
+        }
+        else{
+            $row_sql = "SELECT A.*
+                        FROM news A
+                        where A.is_active = 1 and A.can_use = 1 {$this->q_section} {$this->q_keyword} {$this->q_report_date}";
+        }
         //if($this->random == "Y") $row_sql .= " order by RAND()";
         if($this->random == "Y") $row_sql .= " order by DATE(A.report_date) desc, A.sort asc";
         else $row_sql .= " order by DATE(A.report_date) desc, A.sort asc";
         
         $row_sql .= " Limit ".$pagination->limit_regno.", ".$pagination->page_set;
 
-//        if($this->section=='pe'){
+//        if($this->section=='local'){
 //            saveLog("$row_sql : ",$row_sql);
 //        }
 
@@ -141,7 +154,7 @@ class service_news_list
         while ($row = $this->db->fetch()) {
 
            $view = "";
-           
+
            switch($row->section) {
                case "so" : $view = "society_view"; break;
                //case "lo" : $view = "local_view"; break;
@@ -149,11 +162,11 @@ class service_news_list
                case "pe" : $view = "political_economy_view"; break;
                case "en" : $view = "entertainment_view"; break;
                case "st" : $view = "sports_view"; break;
-               
+               case "local" : $view = "localnews_view"; break;
            }
-        
+
            $link = "/news/".$view.".php?id=" . $row->news_id;
-           
+
            $data[$i] = array('no' => $no,'id' => $row->news_id, 'link' => $link, 'title' => $row->title , 'content' => $row->content, 'report_date' => DATETOSTRING_USA2($row->report_date, "/"), 'reporter_name' => $row->reporter_name,
                 'view_count' => $row->view_count, 'create_at' => DATETOSTRING_USA2($row->created_at,"/"),  'created_user' => $row->created_user, 'is_manual_input' => $row->is_manual_input); 
 
@@ -176,19 +189,23 @@ class service_news_list
             $create_at = $data[$i]['create_at'];            
             $created_user = $data[$i]['created_user'];
             $is_manual_input = $data[$i]['is_manual_input'];
+            $source = $data[$i]['source'];
              
             $sql = "SELECT img_url FROM news_images WHERE can_use = 1 AND news_id = ".$id." AND img_url <> '' order by news_image_id asc limit 0,1";
-            
+
             $row = $this->db->queryRow($sql, []);
             $image_url = $row->img_url;
-            
-            // 무조건 이미지 있는것만 사용
-            if($this->image == 'Y' && ($image_url == '' || strpos($image_url, 'www.youtube.com') !== false)) continue;
-            
+
+            if($this->section  != 'local') {
+                // 무조건 이미지 있는것만 사용
+                if ($this->image == 'Y' && ($image_url == '' || strpos($image_url, 'www.youtube.com') !== false)) continue;
+            }
+
             $news_img = "/images/blank.png";
             if ($image_url != "") $news_img = $image_url;
             
-            if($is_manual_input == 'Y') $news_img = $this->define_val->IMG_PROTECT . "?c=news&cc=news&d=img1&s=" . $id;
+//            if($is_manual_input == 'Y') $news_img = $this->define_val->IMG_PROTECT . "?c=news&cc=news&d=img1&s=" . $id;
+            if($is_manual_input == 'Y' || $source == 'AI') $news_img = $this->define_val->IMG_PROTECT . "?c=news&cc=news&d=img1&s=" . $id;
             
             $content = str_replace('__IMG1__', '', $content);
             $content = str_replace('__IMG2__', '', $content);

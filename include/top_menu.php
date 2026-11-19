@@ -5,6 +5,7 @@
 <li {{SUB4}}><a href="javascript:return false;" onclick="goUrl('/news/political_economy.php');">정치경제</a></li>
 <li {{SUB5}}><a href="javascript:return false;" onclick="goUrl('/news/entertainment.php');">연예</a></li>
 <li {{SUB6}}><a href="javascript:return false;" onclick="goUrl('/news/sports.php');">스포츠</a></li>
+<li {{SUB7}}><a href="javascript:return false;" onclick="goUrl('/news/localnews.php');">로컬</a></li>
 <!-- IF END 'MAIN1_NAV' -->
 
 <!-- IF START 'MAIN2_NAV' -->
