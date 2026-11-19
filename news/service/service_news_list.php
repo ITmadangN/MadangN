@@ -215,7 +215,8 @@ class service_news_list
             $content = str_replace('__IMG3__', '', $content);
             $content = str_replace('__IMG4__', '', $content);
             $content = str_replace('__IMG5__', '', $content);
-             
+            $content = trim(preg_replace('/\s+/', ' ', strip_tags($content)));
+            
             $this->loop[$cnt] = array('T_NO' => $no,'T_LINK' => $link, 'T_IMG' => $news_img, 'T_TITLE' => $title , 'T_CONTENT' => $content, 'T_REPORT_DATE' => $report_date, 'T_REPORTER_NAME' => $reporter_name,
                 'T_VIEW_COUNT' => $view_count, 'T_CREATE_AT' => $create_at,  'T_CREATED_USER' => $created_user);
      
