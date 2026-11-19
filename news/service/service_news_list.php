@@ -206,10 +206,10 @@ class service_news_list
             
 //            if($is_manual_input == 'Y') $news_img = $this->define_val->IMG_PROTECT . "?c=news&cc=news&d=img1&s=" . $id;
             if($is_manual_input == 'Y' || $source == 'AI') $news_img = $this->define_val->IMG_PROTECT . "?c=news&cc=news&d=img1&s=" . $id;
-            if ($id == 29601 || $id == 28212){
-                saveLog("$source : ",$source);
-                saveLog("id : ",$news_img);
-            }
+//            if ($id == 29601 || $id == 28212){
+//                saveLog("$source : ",$source);
+//                saveLog("id : ",$news_img);
+//            }
             $content = str_replace('__IMG1__', '', $content);
             $content = str_replace('__IMG2__', '', $content);
             $content = str_replace('__IMG3__', '', $content);

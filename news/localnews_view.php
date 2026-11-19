@@ -35,6 +35,7 @@ $p_title = $row->title;
 $p_content = $row->content;
 $p_reporter_name = $row->reporter_name;
 $p_is_manual_input = $row->is_manual_input;
+$p_source = $row->source;
 $p_view_count = $row->view_count + 1;
 
 $db->update('news', ['view_count' => $p_view_count], 'news_id = ' . $id);
@@ -60,7 +61,7 @@ unset($row);
       
       if($row->can_use == 1) {
 
-          if($p_is_manual_input == 'Y') {
+          if($p_is_manual_input == 'Y' || $p_source == 'AI') {
 
               $img = $define_val->IMG_PROTECT . "?c=news&cc=news&d=img".($i+1)."&s=" . $id;
 
