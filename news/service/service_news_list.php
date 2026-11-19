@@ -168,7 +168,7 @@ class service_news_list
            $link = "/news/".$view.".php?id=" . $row->news_id;
 
            $data[$i] = array('no' => $no,'id' => $row->news_id, 'link' => $link, 'title' => $row->title , 'content' => $row->content, 'report_date' => DATETOSTRING_USA2($row->report_date, "/"), 'reporter_name' => $row->reporter_name,
-                'view_count' => $row->view_count, 'create_at' => DATETOSTRING_USA2($row->created_at,"/"),  'created_user' => $row->created_user, 'is_manual_input' => $row->is_manual_input); 
+                'view_count' => $row->view_count, 'create_at' => DATETOSTRING_USA2($row->created_at,"/"),  'created_user' => $row->created_user, 'is_manual_input' => $row->is_manual_input, 'source' => $row->source);
 
            $i++;
            $no--;
@@ -206,7 +206,10 @@ class service_news_list
             
 //            if($is_manual_input == 'Y') $news_img = $this->define_val->IMG_PROTECT . "?c=news&cc=news&d=img1&s=" . $id;
             if($is_manual_input == 'Y' || $source == 'AI') $news_img = $this->define_val->IMG_PROTECT . "?c=news&cc=news&d=img1&s=" . $id;
-            
+            if ($id == 29601 || $id == 28212){
+                saveLog("$source : ",$source);
+                saveLog("id : ",$news_img);
+            }
             $content = str_replace('__IMG1__', '', $content);
             $content = str_replace('__IMG2__', '', $content);
             $content = str_replace('__IMG3__', '', $content);
