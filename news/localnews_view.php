@@ -102,7 +102,7 @@ $tpl = new BearTemplate("./tpl");
 $tpl->setFile("main", "localnews_view.tpl");
 
 $tpl->setVar("T_TITLE",$p_title);
-$tpl->setVar("T_REPORT_DATE", DATETOSTRING_USA2($p_report_date, "/") . " localnews_view.php" . substr($p_report_date,11));
+$tpl->setVar("T_REPORT_DATE",DATETOSTRING_USA2($p_report_date,"/") . " " . substr($p_report_date,11));
 $tpl->setVar("T_REPORTER_NAME",$p_reporter_name);
 $tpl->setVar("T_CONTENT",$p_content);
 
