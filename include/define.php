@@ -286,7 +286,7 @@ public array $DEFINE_vehicle_car_maker_eng = array(
     public array $DEFINE_realstate_property_type = array('','전체','ResidentialLease','ResidentialLease','Residential','Residential','Land','Land','CommercialSale','CommercialSale','CommercialLease','CommercialLease','BusinessOpportunity','BusinessOpportunity','ManufacturedInPark','ManufacturedInPark','ResidentialIncome','ResidentialIncome');
     
 
-    public array $DEFINE_news_section = array('','전체','so','사회','lo','세계','pe','정치/경제','en','연예','st','스포츠','local','로컬');
+    public array $DEFINE_news_section = array('','전체','so','사회','lo','세계','pe','정치/경제','en','연예','st','스포츠','local','로컬','expertcolumn','전문가칼럼');
     
     public array $DEFINE_news_s_kind = array('','전체','title','제목','content','내용');
     
