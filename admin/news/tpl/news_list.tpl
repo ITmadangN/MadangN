@@ -66,10 +66,10 @@
 													<th width="10%">이미지</th>
 													<th width="10%">섹션</th>
 													<th width="/">제목</th>
-													<th width="5%">기자명</th>
-													<th width="10%">보도일자</th>
-                                                    <th width="8%">순서</th>
-													<th width="10%">현재상태</th>
+													<th width="10%">기자명</th>
+													<th width="5%">보도일자</th>
+                                                    <th width="5%">순서</th>
+													<th width="6%">현재상태</th>
 												</tr>
 											</thead>
 											<tbody  id="result_html">

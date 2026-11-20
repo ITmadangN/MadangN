@@ -139,7 +139,7 @@ class news_list
             
             $link = "news_view.php?news_id=".$row->news_id;
                     
-            $data[$k] = array('id' => $row->news_id, 'section' => $section,  'title' => $row->title, 'reporter_name' => $row->reporter_name, 'report_date' =>  DATETOSTRING_USA2($row->report_date,"/"),
+            $data[$k] = array('id' => $row->news_id, 'section' => $section,  'category' => $row->category, 'title' => $row->title, 'reporter_name' => $row->reporter_name, 'report_date' =>  DATETOSTRING_USA2($row->report_date,"/"),
             'active_img' => $is_active_img, 'is_active' => ARRAY_RETURN($this->define_val->DEFINE_is_active,$row->is_active), 'link' => $link, 'is_manual_input' => $row->is_manual_input,'source' => $row->source, 'sort' => $row->sort);
 
             $k++;
@@ -150,6 +150,7 @@ class news_list
 
             $id = $data[$i]['id'];
             $section = $data[$i]['section'];
+            $category = $data[$i]['category'];
             $title = $data[$i]['title'];
             $reporter_name = $data[$i]['reporter_name'];
             $report_date = $data[$i]['report_date'];
@@ -173,13 +174,12 @@ class news_list
             
             if($is_manual_input == 'Y' || $source == 'AI') $img = $this->define_val->IMG_PROTECT . "?c=news&cc=news&d=img".$img_index."&s=" . $id;
 //            if ($id == 30605 || $id == 28212){
-//            if ( $id == 28212){
 //                saveLog("id : ",$id);
 //                saveLog("source : ",$source);
 //                saveLog("image : ",$img);
 //            }
-            if($id == 30605) $img = $this->define_val->IMG_PROTECT . "?c=news&cc=news&d=img".$img_index."&s=" . 28212;
-            $this->loop[$i] = array('T_NO' => $id,'T_LINK' => $link, 'T_IMG' => $img, 'T_SECTION' => $section , 'T_TITLE' => $title, 'T_REPORTER_NAME' => $reporter_name , 
+
+            $this->loop[$i] = array('T_NO' => $id,'T_LINK' => $link, 'T_IMG' => $img, 'T_SECTION' => $section , 'T_CATEGORY' => $category , 'T_TITLE' => $title, 'T_REPORTER_NAME' => $reporter_name ,
                     'T_REPORT_DATE' => $report_date,'T_ACTIVE_IMG' => $active_img, 'T_IS_ACTIVE' => $is_active, 'T_SORT' => $sort);
              
 
