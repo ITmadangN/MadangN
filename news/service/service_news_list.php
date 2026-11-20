@@ -124,8 +124,8 @@ class service_news_list
                         where A.is_active = 1 and A.can_use = 1 {$this->q_section} {$this->q_keyword} {$this->q_report_date}";
         }
         //if($this->random == "Y") $row_sql .= " order by RAND()";
-        if($this->random == "Y") $row_sql .= " order by DATE(A.report_date) desc, A.sort asc";
-        else $row_sql .= " order by DATE(A.report_date) desc, A.sort asc";
+        if($this->random == "Y") $row_sql .= " order by (A.report_date) desc, A.sort asc";
+        else $row_sql .= " order by (A.report_date) desc, A.sort asc";
         
         $row_sql .= " Limit ".$pagination->limit_regno.", ".$pagination->page_set;
 
