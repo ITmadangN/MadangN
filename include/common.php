@@ -172,8 +172,8 @@ if (!function_exists('detectSubRegionByIp')) {
 if (!function_exists('getLoggedInUserStateCode')) {
     function getLoggedInUserStateCode($db = null): string
     {
-        if (isset($_SESSION['state_code']) && trim((string)$_SESSION['state_code']) !== '') {
-            return strtoupper(trim((string)$_SESSION['state_code']));
+        if (isset($_SESSION['ss_state_code']) && trim((string)$_SESSION['ss_state_code']) !== '') {
+            return strtoupper(trim((string)$_SESSION['ss_state_code']));
         }
 
         $loginUserId = $_SESSION['user_id'] ?? ($_SESSION['id'] ?? ($_SESSION['member_id'] ?? null));
@@ -188,16 +188,16 @@ if (!function_exists('getLoggedInUserStateCode')) {
                 $row = $db->queryRow("SELECT state_code FROM users WHERE user_id = '{$safeId}' LIMIT 1", []);
                 $st = trim((string)($row->state_code ?? ''));
                 if ($st !== '') {
-                    $_SESSION['state_code'] = strtoupper($st);
-                    return $_SESSION['state_code'];
+                    $_SESSION['ss_state_code'] = strtoupper($st);
+                    return $_SESSION['ss_state_code'];
                 }
             } elseif ($db instanceof PDO) {
                 $stmt = $db->prepare("SELECT state_code FROM users WHERE user_id = :uid LIMIT 1");
                 $stmt->execute([':uid' => $loginUserId]);
                 $st = trim((string)($stmt->fetchColumn() ?: ''));
                 if ($st !== '') {
-                    $_SESSION['state_code'] = strtoupper($st);
-                    return $_SESSION['state_code'];
+                    $_SESSION['ss_state_code'] = strtoupper($st);
+                    return $_SESSION['ss_state_code'];
                 }
             }
         } catch (Throwable $e) {
@@ -237,50 +237,109 @@ if (!function_exists('initCurrentUserSubRegion')) {
     {
         $allowed = ['SOCAL', 'NY', 'NJ', 'CHICAGO', 'DC', 'TEXAS', 'SEATTLE', 'ATLANTA', 'ALABAMA'];
 
-        // 0. 드롭다운(mnChangeNewsRegion)에서 ?region= 파라미터가 넘어온 경우 최우선 적용 및 저장
+        // 기존 브라우저에 남아 있던 영구 쿠키가 있으면 즉시 삭제
+        if (isset($_COOKIE['mn_sub_region']) && !headers_sent()) {
+            $host = $_SERVER['HTTP_HOST'] ?? '';
+            $domain = (stripos($host, 'madangn.com') !== false) ? '.madangn.com' : '';
+            setcookie('mn_sub_region', '', time() - 3600, '/');
+            if ($domain !== '') {
+                setcookie('mn_sub_region', '', time() - 3600, '/', $domain);
+            }
+            unset($_COOKIE['mn_sub_region']);
+        }
+
+        // 1. 로그인/로그아웃 상태 변화 감지 (비로그인 <-> 로그인, 또는 다른 아이디로 재로그인 시)
+        $currentOwner = (string)($_SESSION['user_id'] ?? ($_SESSION['id'] ?? ($_SESSION['member_id'] ?? 'GUEST')));
+        $prevOwner = $_SESSION['mn_region_owner'] ?? null;
+
+        if ($prevOwner !== null && $prevOwner !== $currentOwner) {
+            // 로그인하거나 로그아웃한 직후: 이전 지역 선택값·캐시 모두 초기화
+            unset($_SESSION['user_sub_region'], $_SESSION['ss_state_code']);
+        }
+        $_SESSION['mn_region_owner'] = $currentOwner;
+
+        // 2. 드롭다운(mnChangeNewsRegion)에서 ?region= 파라미터가 넘어온 경우 최우선 적용
         if (isset($_GET['region']) && trim((string)$_GET['region']) !== '') {
             $picked = strtoupper(trim((string)$_GET['region']));
             if ($picked === 'CA') {
                 $picked = 'SOCAL';
             }
-
             if (in_array($picked, $allowed, true)) {
                 $_SESSION['user_sub_region'] = $picked;
-                setMnSubRegionCookie($picked);
                 return $picked;
             }
         }
 
-        // 1. 현재 세션에 확정된 지역이 있는 경우 그대로 유지
+        // 3. 현재 세션에 이미 확정된 지역이 있는 경우 (다른 섹션 갔다 와도 유지)
         if (!empty($_SESSION['user_sub_region']) && in_array($_SESSION['user_sub_region'], $allowed, true)) {
             return $_SESSION['user_sub_region'];
         }
 
-        // 2. 쿠키에 저장된 지역이 있는 경우 세션으로 복원 (다른 섹션 갔다와도 유지)
-        if (!empty($_COOKIE['mn_sub_region']) && in_array($_COOKIE['mn_sub_region'], $allowed, true)) {
-            $_SESSION['user_sub_region'] = $_COOKIE['mn_sub_region'];
-            return $_COOKIE['mn_sub_region'];
+        // 4. 새로 로그인했거나 첫 진입인 경우: 로그인 상태면 users.state_code 조회
+        if ($currentOwner !== 'GUEST') {
+            $userStateCode = getLoggedInUserStateCode($db);
+            if ($userStateCode !== '') {
+                $reg = mapStateToSubRegion($userStateCode);
+                $_SESSION['user_sub_region'] = $reg;
+                return $reg;
+            }
         }
 
-        // 3. 세션·쿠키 모두 없는 경우: 로그인 상태면 users 테이블의 state_code 확인
-        $userStateCode = getLoggedInUserStateCode($db);
-        if ($userStateCode !== '') {
-            $reg = mapStateToSubRegion($userStateCode);
-            $_SESSION['user_sub_region'] = $reg;
-            setMnSubRegionCookie($reg);
-            return $reg;
-        }
-
-        // 4. 비로그인이거나 users.state_code가 비어 있는 경우: IP로 내 지역 감지 후 저장
+        // 5. 비로그인이거나 users.state_code가 비어 있는 경우: 접속 IP로 내 지역 감지
         $reg = detectSubRegionByIp();
         $_SESSION['user_sub_region'] = $reg;
-        setMnSubRegionCookie($reg);
         return $reg;
     }
 }
+//    function initCurrentUserSubRegion($db = null): string
+//    {
+//        $allowed = ['SOCAL', 'NY', 'NJ', 'CHICAGO', 'DC', 'TEXAS', 'SEATTLE', 'ATLANTA', 'ALABAMA'];
+//
+//        // 0. 드롭다운(mnChangeNewsRegion)에서 ?region= 파라미터가 넘어온 경우 최우선 적용 및 저장
+//        if (isset($_GET['region']) && trim((string)$_GET['region']) !== '') {
+//            $picked = strtoupper(trim((string)$_GET['region']));
+//            if ($picked === 'CA') {
+//                $picked = 'SOCAL';
+//            }
+//
+//            if (in_array($picked, $allowed, true)) {
+//                $_SESSION['user_sub_region'] = $picked;
+//                setMnSubRegionCookie($picked);
+//                return $picked;
+//            }
+//        }
+//
+//        // 1. 현재 세션에 확정된 지역이 있는 경우 그대로 유지
+//        if (!empty($_SESSION['user_sub_region']) && in_array($_SESSION['user_sub_region'], $allowed, true)) {
+//            return $_SESSION['user_sub_region'];
+//        }
+//
+//        // 2. 쿠키에 저장된 지역이 있는 경우 세션으로 복원 (다른 섹션 갔다와도 유지)
+//        if (!empty($_COOKIE['mn_sub_region']) && in_array($_COOKIE['mn_sub_region'], $allowed, true)) {
+//            $_SESSION['user_sub_region'] = $_COOKIE['mn_sub_region'];
+//            return $_COOKIE['mn_sub_region'];
+//        }
+//
+//        // 3. 세션·쿠키 모두 없는 경우: 로그인 상태면 users 테이블의 state_code 확인
+//        $userStateCode = getLoggedInUserStateCode($db);
+//        if ($userStateCode !== '') {
+//            $reg = mapStateToSubRegion($userStateCode);
+//            $_SESSION['user_sub_region'] = $reg;
+//            setMnSubRegionCookie($reg);
+//            return $reg;
+//        }
+//
+//        // 4. 비로그인이거나 users.state_code가 비어 있는 경우: IP로 내 지역 감지 후 저장
+//        $reg = detectSubRegionByIp();
+//        $_SESSION['user_sub_region'] = $reg;
+//        setMnSubRegionCookie($reg);
+//        return $reg;
+//    }
+
 
 // 전역 변수 및 헤더 드롭다운용 변수 세팅 ($db 또는 $pdo 전달)
 $CURRENT_SUB_REGION = initCurrentUserSubRegion($db ?? ($pdo ?? null));
+saveLog("CURRENT_SUB_REGION : ",$CURRENT_SUB_REGION);
 $mnCurrentPath = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?: '';
 $IS_NEWS_MENU = (preg_match('#^/news(/|$)#i', $mnCurrentPath) === 1);
 $NEWS_REGION_DISPLAY = $IS_NEWS_MENU ? 'inline-flex' : 'none';

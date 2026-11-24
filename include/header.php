@@ -601,16 +601,32 @@
 
 <!-- Header end -->
 <script>
+    // 지역 변경 시: 현재 탭의 sessionStorage에 표시 후 localnews.php 이동
     function mnChangeNewsRegion(regionCode) {
         if (!regionCode) return;
-
-        var domainAttr = (location.hostname.indexOf('madangn.com') !== -1) ? '; domain=.madangn.com' : '';
-        document.cookie = 'mn_sub_region=' + encodeURIComponent(regionCode) + '; path=/' + domainAttr + '; max-age=' + (86400 * 30) + '; SameSite=Lax';
-
+        sessionStorage.setItem('mn_tab_region_manual', regionCode);
         window.location.href = '/news/localnews.php?region=' + encodeURIComponent(regionCode);
     }
 
     document.addEventListener('DOMContentLoaded', function () {
+        // 1. 새 탭 여부 판별: 이 탭에서 수동으로 지역을 바꾼 적이 없는데 서버가 ?region= 없이 이전 값을 물고 있다면 기본값으로 리셋
+        var urlParams = new URLSearchParams(window.location.search);
+        var hasRegionParam = urlParams.has('region');
+        var tabManualRegion = sessionStorage.getItem('mn_tab_region_manual');
+
+        if (hasRegionParam) {
+            sessionStorage.setItem('mn_tab_region_manual', urlParams.get('region'));
+        } else if (!tabManualRegion && !sessionStorage.getItem('mn_tab_initialized')) {
+            // 새 탭 최초 진입 표시
+            sessionStorage.setItem('mn_tab_initialized', '1');
+            // 새 탭에서 뉴스/로컬 페이지로 바로 들어온 경우 기본 지역(state_code 또는 IP)으로 재설정
+            if (window.location.pathname.toLowerCase().indexOf('/news') === 0) {
+                window.location.replace(window.location.pathname + '?reset_region=1');
+                return;
+            }
+        }
+
+        // 2. 상단 드롭다운 표시/숨김 동기화
         var wrap = document.getElementById('mnNewsRegionWrap');
         if (!wrap) return;
 
@@ -619,23 +635,43 @@
             var isNews = (path === '/news' || path.indexOf('/news/') === 0);
             wrap.style.display = isNews ? 'inline-flex' : 'none';
         }
-
         syncRegionVisibility();
-
-        // 상단 메뉴(뉴스 / 유튜브 / 커뮤니티 / 타운정보 / 부동산) 클릭 시 즉시 표시·숨김 동기화
-        document.querySelectorAll('header a, nav a').forEach(function (link) {
-            link.addEventListener('click', function () {
-                var href = (this.getAttribute('href') || '').toLowerCase();
-                if (!href || href === '#' || href.indexOf('javascript:') === 0) return;
-
-                if (href.indexOf('/news') === 0 || href.indexOf('news/') !== -1) {
-                    wrap.style.display = 'inline-flex';
-                } else {
-                    wrap.style.display = 'none';
-                }
-            });
-        });
     });
+    // function mnChangeNewsRegion(regionCode) {
+    //     if (!regionCode) return;
+    //
+    //     var domainAttr = (location.hostname.indexOf('madangn.com') !== -1) ? '; domain=.madangn.com' : '';
+    //     document.cookie = 'mn_sub_region=' + encodeURIComponent(regionCode) + '; path=/' + domainAttr + '; max-age=' + (86400 * 30) + '; SameSite=Lax';
+    //
+    //     window.location.href = '/news/localnews.php?region=' + encodeURIComponent(regionCode);
+    // }
+    //
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     var wrap = document.getElementById('mnNewsRegionWrap');
+    //     if (!wrap) return;
+    //
+    //     function syncRegionVisibility() {
+    //         var path = window.location.pathname.toLowerCase();
+    //         var isNews = (path === '/news' || path.indexOf('/news/') === 0);
+    //         wrap.style.display = isNews ? 'inline-flex' : 'none';
+    //     }
+    //
+    //     syncRegionVisibility();
+    //
+    //     // 상단 메뉴(뉴스 / 유튜브 / 커뮤니티 / 타운정보 / 부동산) 클릭 시 즉시 표시·숨김 동기화
+    //     document.querySelectorAll('header a, nav a').forEach(function (link) {
+    //         link.addEventListener('click', function () {
+    //             var href = (this.getAttribute('href') || '').toLowerCase();
+    //             if (!href || href === '#' || href.indexOf('javascript:') === 0) return;
+    //
+    //             if (href.indexOf('/news') === 0 || href.indexOf('news/') !== -1) {
+    //                 wrap.style.display = 'inline-flex';
+    //             } else {
+    //                 wrap.style.display = 'none';
+    //             }
+    //         });
+    //     });
+    // });
 </script>
 
 

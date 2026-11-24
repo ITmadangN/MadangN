@@ -210,7 +210,9 @@ if($ac == "login_member") {
     $gid = $row->permission_group_id;
     
     $_SESSION['ss_permission_group_id'] = $gid;
-    
+    $_SESSION['user_sub_region'] = $row->state_code;
+    $_SESSION['mn_sub_region'] = $row->state_code;
+
     $sql = "SELECT A.* FROM permission_group_card A where  A.permission_group_id = :gid order by permission_code asc";
 
     $placeholders = ['gid' => $gid];
