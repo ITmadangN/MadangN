@@ -1739,6 +1739,7 @@ function saveLog($php_name, $content, $mode = 'a') {
 //    $client_ip   = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
     
 //    $result = fwrite($fp, "======================================= START LOG : {$php_name} / {$today} ============================================\n");
+    $result = fwrite($fp, " \n{$today}\n");
     $result = fwrite($fp, "{$php_name}");
     $result = fwrite($fp, "{$conv_content}");
     $result = fwrite($fp, "\n");

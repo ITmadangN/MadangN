@@ -432,7 +432,7 @@ if (!function_exists('initCurrentUserSubRegion')) {
 
 // 전역 변수 및 헤더 드롭다운용 변수 세팅 ($db 또는 $pdo 전달)
 $CURRENT_SUB_REGION = initCurrentUserSubRegion($db ?? ($pdo ?? null));
-saveLog("CURRENT_SUB_REGION : ",$CURRENT_SUB_REGION);
+//saveLog("CURRENT_SUB_REGION : ",$CURRENT_SUB_REGION);
 $mnCurrentPath = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?: '';
 $IS_NEWS_MENU = (preg_match('#^/news(/|$)#i', $mnCurrentPath) === 1);
 $NEWS_REGION_DISPLAY = $IS_NEWS_MENU ? 'inline-flex' : 'none';

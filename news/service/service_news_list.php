@@ -192,14 +192,14 @@ class service_news_list
         //if($this->random == "Y") $row_sql .= " order by RAND()";
 //        if($this->random == "Y") $row_sql .= " order by (A.report_date) desc, A.sort asc";
 //        else $row_sql .= " order by (A.report_date) desc, A.sort asc";
-        if($this->random == "Y") $row_sql .=" ORDER BY DATE(A.report_date) DESC,A.report_date DESC, A.news_id DESC";
-        else $row_sql .= " ORDER BY DATE(A.report_date) DESC,  A.report_date DESC, A.news_id DESC";
+        if($this->random == "Y") $row_sql .=" ORDER BY A.report_date DESC, A.news_id DESC";
+        else $row_sql .= " ORDER BY   A.report_date DESC, A.news_id DESC";
         
         $row_sql .= " Limit ".$pagination->limit_regno.", ".$pagination->page_set;
 
-//        if($this->section=='local'){
-//            saveLog("$row_sql : ",$row_sql);
-//        }
+        if($this->section=='local'){
+            saveLog("SQL : ",$row_sql);
+        }
 
         $this->db->query($row_sql);
 
