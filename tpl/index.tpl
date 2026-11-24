@@ -639,10 +639,10 @@ document.addEventListener('DOMContentLoaded', function() {
                             </div>
                             <div class="uc-navbar-right gap-2 lg:gap-3 d-none lg:d-flex">
                                   <div style="display:flex;gap:18px;align-items: center;justify-content: center;">
-                                  
+
                                 <a href="{{ADVERTISE_LOGIN1}}" class="text-none fs-5 fw-bold">
                                 <i class="fa fa-check-square-o fw-normal fs-4 text-secondary"></i>  유료광고신청
-                                    
+
                                 </a>
 
                                  <!--div>

@@ -8,7 +8,7 @@
         
         if($page == "index") $cut_str = 40;
         
-        $sql = "SELECT A.* FROM news A where A.is_active = 1 and A.can_use = 1
+        $sql = "SELECT A.* FROM news A where A.is_active = 1 and A.can_use = 1 and section <> 'expertcolumn'
                 order by view_count desc
                 limit 0,15";
 
@@ -25,6 +25,7 @@
                case "pe" : $view = "political_economy_view"; break;
                case "en" : $view = "entertainment_view"; break;
                case "st" : $view = "sports_view"; break;
+               case "local" : $view = "localnews_view"; break;
                
            }
         
@@ -39,7 +40,7 @@
             $temp_cnt++;
         }
               
-        $sql = "SELECT A.* FROM news A where A.is_active = 1 and A.can_use = 1
+        $sql = "SELECT A.* FROM news A where A.is_active = 1 and A.can_use = 1 and section <> 'expertcolumn'
                 order by report_date desc
                 limit 0,15";
 
@@ -56,6 +57,7 @@
                case "pe" : $view = "political_economy_view"; break;
                case "en" : $view = "entertainment_view"; break;
                case "st" : $view = "sports_view"; break;
+               case "local" : $view = "localnews_view"; break;
                
            }
         
@@ -87,6 +89,7 @@
                case "pe" : $view = "political_economy_view"; break;
                case "en" : $view = "entertainment_view"; break;
                case "st" : $view = "sports_view"; break;
+               case "local" : $view = "localnews_view"; break;
                
            }
         

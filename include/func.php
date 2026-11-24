@@ -1734,12 +1734,13 @@ function saveLog($php_name, $content, $mode = 'a') {
     if(is_array($content)) $conv_content = var_export($content, true);     
     else $conv_content = $content;
      
-    $request_url = $_SERVER['REQUEST_URI'] ?? 'CLI-Mode';
-    $http_method = $_SERVER['REQUEST_METHOD'] ?? '-';
-    $client_ip   = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+//    $request_url = $_SERVER['REQUEST_URI'] ?? 'CLI-Mode';
+//    $http_method = $_SERVER['REQUEST_METHOD'] ?? '-';
+//    $client_ip   = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
     
-    $result = fwrite($fp, "======================================= START LOG : {$php_name} / {$today} ============================================\n");
-    
+//    $result = fwrite($fp, "======================================= START LOG : {$php_name} / {$today} ============================================\n");
+    $result = fwrite($fp, "{$php_name}");
+    $result = fwrite($fp, "{$conv_content}");
     $result = fwrite($fp, "\n");
     
 //    $result = fwrite($fp, "* REQUEST_URI : {$request_url} \n");
@@ -1749,12 +1750,12 @@ function saveLog($php_name, $content, $mode = 'a') {
 //    $result = fwrite($fp, "\n");
     
     
-    $result = fwrite($fp, $conv_content);
+//    $result = fwrite($fp, $conv_content);
     
-    $result = fwrite($fp, "\n");
-    
-    $result = fwrite($fp, "======================================= END LOG : {$php_name} / {$today} ============================================\n");
-    $result = fwrite($fp, "\n");
+//    $result = fwrite($fp, "\n");
+
+//    $result = fwrite($fp, "======================================= END LOG : {$php_name} / {$today} ============================================\n");
+//    $result = fwrite($fp, "\n");
 
     fclose($fp);
 
