@@ -212,6 +212,8 @@ if($ac == "login_member") {
     $_SESSION['ss_permission_group_id'] = $gid;
     $_SESSION['user_sub_region'] = $row->state_code;
     $_SESSION['mn_sub_region'] = $row->state_code;
+    $_SESSION['ss_state_code'] = trim((string)($row->state_code ?? ''));
+    unset($_SESSION['user_sub_region'], $_SESSION['mn_region_owner']);
 
     $sql = "SELECT A.* FROM permission_group_card A where  A.permission_group_id = :gid order by permission_code asc";
 

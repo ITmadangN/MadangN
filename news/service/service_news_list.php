@@ -85,11 +85,16 @@ class service_news_list
 
         // 드롭다운에서 ?region=NY 등으로 넘어온 경우 세션과 세션쿠키(만료=0) 즉시 갱신
         if (!empty($_GET['region'])) {
-            $allowed = ['SOCAL', 'NY', 'NJ', 'CHICAGO', 'DC', 'TEXAS', 'SEATTLE', 'ATLANTA', 'ALABAMA'];
+            $allowed = ['SOCAL', 'NY_NJ', 'CHICAGO', 'DC', 'TEXAS', 'SEATTLE', 'ATLANTA', 'ALABAMA'];
             $picked  = strtoupper(trim((string) $_GET['region']));
             if ($picked === 'CA') {
                 $picked = 'SOCAL';
+            } elseif ($picked === 'NY' || $picked === 'NJ') {
+                $picked = 'NY_NJ';
             }
+//            if (in_array($picked, $allowed, true)) {
+//                $_SESSION['user_sub_region'] = $picked;
+//            }
             if (in_array($picked, $allowed, true)) {
                 $_SESSION['user_sub_region'] = $picked;
                 if (function_exists('setMnSubRegionCookie')) {
@@ -103,7 +108,7 @@ class service_news_list
         $userRegion = strtoupper(trim((string) ($GLOBALS['CURRENT_SUB_REGION'] ?? ($_SESSION['user_sub_region'] ?? ($_COOKIE['mn_sub_region'] ?? 'SOCAL')))));
 
         // 2. 허용된 지역 코드 화이트리스트 검증 (SQL 인젝션 방지)
-        $allowedRegions = ['LA', 'OC', 'SD', 'BAY', 'SOCAL', 'CA', 'NY', 'NJ', 'CHICAGO', 'DC', 'TEXAS', 'SEATTLE', 'ATLANTA', 'ALABAMA'];
+        $allowedRegions = ['LA', 'OC', 'SD', 'BAY', 'SOCAL', 'CA', 'NY_NJ', 'NY', 'NJ', 'CHICAGO', 'DC', 'TEXAS', 'SEATTLE', 'ATLANTA', 'ALABAMA'];
         if (!in_array($userRegion, $allowedRegions, true)) {
             $userRegion = 'SOCAL';
         }
@@ -111,7 +116,7 @@ class service_news_list
         // 3. 선택한 지역 뉴스만 나오도록 WHERE 조건 생성
         if ($userRegion === 'SOCAL') {
             $q_region = " AND UPPER(IFNULL(A.sub_region, '')) IN ('LA', 'OC', 'SOCAL', 'CA') ";
-        } elseif ($userRegion === 'NY' || $userRegion === 'NJ') {
+        } elseif ($userRegion === 'NY_NJ' || $userRegion === 'NY' || $userRegion === 'NJ') {
             $q_region = " AND UPPER(IFNULL(A.sub_region, '')) IN ('NY', 'NJ') ";
         } else {
             $q_region = " AND UPPER(IFNULL(A.sub_region, '')) = '" . addslashes($userRegion) . "' ";
