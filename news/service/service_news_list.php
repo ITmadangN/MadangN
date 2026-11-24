@@ -79,6 +79,61 @@ class service_news_list
 
     private function init() {
 
+        if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
+            session_start();
+        }
+
+        // 드롭다운에서 ?region=NY 등으로 넘어온 경우 세션과 세션쿠키(만료=0) 즉시 갱신
+        if (!empty($_GET['region'])) {
+            $allowed = ['SOCAL', 'NY', 'NJ', 'CHICAGO', 'DC', 'TEXAS', 'SEATTLE', 'ATLANTA', 'ALABAMA'];
+            $picked  = strtoupper(trim((string) $_GET['region']));
+            if ($picked === 'CA') {
+                $picked = 'SOCAL';
+            }
+            if (in_array($picked, $allowed, true)) {
+                $_SESSION['user_sub_region'] = $picked;
+                if (function_exists('setMnSubRegionCookie')) {
+                    setMnSubRegionCookie($picked);
+                }
+            }
+        }
+
+
+// 1. 현재 확정된 사용자 지역 가져오기
+        $userRegion = strtoupper(trim((string) ($GLOBALS['CURRENT_SUB_REGION'] ?? ($_SESSION['user_sub_region'] ?? ($_COOKIE['mn_sub_region'] ?? 'SOCAL')))));
+
+        // 2. 허용된 지역 코드 화이트리스트 검증 (SQL 인젝션 방지)
+        $allowedRegions = ['LA', 'OC', 'SD', 'BAY', 'SOCAL', 'CA', 'NY', 'NJ', 'CHICAGO', 'DC', 'TEXAS', 'SEATTLE', 'ATLANTA', 'ALABAMA'];
+        if (!in_array($userRegion, $allowedRegions, true)) {
+            $userRegion = 'SOCAL';
+        }
+
+        // 3. 선택한 지역 뉴스만 나오도록 WHERE 조건 생성
+        if ($userRegion === 'SOCAL') {
+            $q_region = " AND UPPER(IFNULL(A.sub_region, '')) IN ('LA', 'OC', 'SOCAL', 'CA') ";
+        } elseif ($userRegion === 'NY' || $userRegion === 'NJ') {
+            $q_region = " AND UPPER(IFNULL(A.sub_region, '')) IN ('NY', 'NJ') ";
+        } else {
+            $q_region = " AND UPPER(IFNULL(A.sub_region, '')) = '" . addslashes($userRegion) . "' ";
+        }
+
+//        // 4. 같은 날짜 내 우선순위 점수 (NY면 NY->NJ, NJ면 NJ->NY)
+//        if ($userRegion === 'SOCAL') {
+//            $regionPriorityExpr = "CASE WHEN UPPER(IFNULL(A.sub_region, '')) IN ('LA', 'OC', 'SOCAL', 'CA') THEN 2 ELSE 0 END";
+//        } elseif ($userRegion === 'NY' || $userRegion === 'NJ') {
+//            $secondRegion = ($userRegion === 'NY') ? 'NJ' : 'NY';
+//            $regionPriorityExpr = "CASE
+//                WHEN UPPER(IFNULL(A.sub_region, '')) = '{$userRegion}' THEN 2
+//                WHEN UPPER(IFNULL(A.sub_region, '')) = '{$secondRegion}' THEN 1
+//                ELSE 0
+//            END";
+//        } else {
+//            $regionPriorityExpr = "CASE WHEN UPPER(IFNULL(A.sub_region, '')) = '" . addslashes($userRegion) . "' THEN 2 ELSE 0 END";
+//        }
+
+
+
+//        saveLog("$regionPriorityExpr : ",$regionPriorityExpr);
 //        $count_sql = "SELECT count(*) as cnt from news A where A.is_active = 1 and A.can_use = 1 {$this->q_section} {$this->q_keyword} {$this->q_report_date}";
         if($this->section  != 'local') {
             $count_sql = "SELECT count(*) as cnt from news A 
@@ -87,11 +142,13 @@ class service_news_list
                                    where ifnull(img_url,'') <> '' 
                                    and can_use = 1 
                                    group by news_id ) B on B.news_id = A.news_id
-                          where A.is_active = 1 and A.can_use = 1 {$this->q_section} {$this->q_keyword} {$this->q_report_date}";
+                          where A.is_active = 1 and A.can_use = 1 {$this->q_section} {$this->q_keyword} {$this->q_report_date} ";
         }
         else {
-            $count_sql = "SELECT count(*) as cnt from news A 
-                          where A.is_active = 1 and A.can_use = 1 {$this->q_section} {$this->q_keyword} {$this->q_report_date}";
+            $count_sql = "SELECT count(*) as cnt from news A
+                          where A.is_active = 1 and A.can_use = 1 {$this->q_section} {$this->q_keyword} {$this->q_report_date} {$q_region}";
+//            $count_sql = "SELECT count(*) as cnt from news A
+//                          where A.is_active = 1 and A.can_use = 1 {$this->q_section} {$this->q_keyword} {$this->q_report_date} ";
         }
 
 //        saveLog("count_sql : ",$count_sql);
@@ -121,11 +178,17 @@ class service_news_list
         else{
             $row_sql = "SELECT A.*
                         FROM news A
-                        where A.is_active = 1 and A.can_use = 1 {$this->q_section} {$this->q_keyword} {$this->q_report_date}";
+                        where A.is_active = 1 and A.can_use = 1 {$this->q_section} {$this->q_keyword} {$this->q_report_date} {$q_region}";
+//            $row_sql = "SELECT A.*
+//                        FROM news A
+//                        where A.is_active = 1 and A.can_use = 1 {$this->q_section} {$this->q_keyword} {$this->q_report_date} ";
+
         }
         //if($this->random == "Y") $row_sql .= " order by RAND()";
-        if($this->random == "Y") $row_sql .= " order by (A.report_date) desc, A.sort asc";
-        else $row_sql .= " order by (A.report_date) desc, A.sort asc";
+//        if($this->random == "Y") $row_sql .= " order by (A.report_date) desc, A.sort asc";
+//        else $row_sql .= " order by (A.report_date) desc, A.sort asc";
+        if($this->random == "Y") $row_sql .=" ORDER BY DATE(A.report_date) DESC,A.report_date DESC, A.news_id DESC";
+        else $row_sql .= " ORDER BY DATE(A.report_date) DESC,  A.report_date DESC, A.news_id DESC";
         
         $row_sql .= " Limit ".$pagination->limit_regno.", ".$pagination->page_set;
 

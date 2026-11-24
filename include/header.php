@@ -63,22 +63,45 @@
     <script src="/js/common.js"></script>
     <script src="/js/realestate/realestate.js"></script>
 </head>
-    <style>
-        .border-end2 {border-right: 1px solid #fff !important;}
-        .pt2-5{margin-top:27px !important;}
-        .pt2-52{margin-top:27px !important;}
-        @media (max-width:768px) {
-        div.pt2-5 { 
-        margin-top: 0px !important;
-        padding-top: 15px !important; 
+<style>
+    .border-end2 {border-right: 1px solid #fff !important;}
+    .pt2-5{margin-top:27px !important;}
+    .pt2-52{margin-top:27px !important;}
+    @media (max-width:768px) {
+    div.pt2-5 {
+    margin-top: 0px !important;
+    padding-top: 15px !important;
+    }
+
+   div.pt2-52 {
+    margin-top: 0px !important;
+
+     }
+    }
+
+    .mn-news-region-select {
+        width: 135px !important;      /* 원하는 가로 길이로 직접 숫자 조절 (예: 120px ~ 150px) */
+        min-width: 150px !important;  /* width와 같은 값으로 고정 */
+        max-width: 150px !important;  /* 긴 옵션 글자 때문에 늘어나는 것 차단 */
+        height: 30px !important;      /* 원하는 세로 높이로 조절 (예: 34px ~ 42px) */
+        line-height: 36px !important;
+        padding: 0 26px 0 10px !important;
+        font-size: 13px !important;
+        font-weight: 600;
+        color: #1e293b;
+        background-color: #fff;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 6px;
+        cursor: pointer;
+        outline: none;
+        box-sizing: border-box !important;
+    }
+    .mn-news-region-select:hover,
+    .mn-news-region-select:focus {
+        border-color: #244b8a;
         }
 
-       div.pt2-52 { 
-        margin-top: 0px !important; 
-       
-       }
-}
-        </style>
+</style>
 <!-- <link rel="stylesheet" href="/css/realestate_view.css"> -->
 <body class="uni-body panel bg-white text-gray-900 overflow-x-hidden">
 
@@ -459,7 +482,7 @@
                                       </ul>
                                   </div>
                               </li>
-                              <li>
+                            <li>
                                   <a href="/towninfo/marketsale.php" {{MAIN4}}>타운정보<span data-uc-navbar-parent-icon></span></a>
 
                                   <div class="uc-navbar-dropdown ft-primary text-unset fs-6 fw-medium p-3 rounded-0 hide-scrollbar w-auto" data-uc-drop=" offset: 0; boundary: !.uc-navbar; animation: uc-animation-slide-top-small; duration: 150;">
@@ -474,7 +497,7 @@
                                            </ul>
                                        </div>
                                    </li>
-                                   <li>
+                            <li>
                                      <a href="/realestate" {{MAIN5}}>부동산 <span data-uc-navbar-parent-icon></span></a>
                                    <!--    <a href="/realestate/?popup=y"
                                           onclick="if (typeof openREModal === 'function' && document.getElementById('realEstateModal')) { openREModal(); return false; }"
@@ -494,7 +517,7 @@
                                        </div>
                                    </li>
 
-                               </ul>
+                        </ul>
                            </div>
 
                            <div class="uc-navbar-right d-none lg:d-block mt-4">
@@ -505,12 +528,18 @@
                                            <img  src="/images/search2.svg" alt="Search">
                                        </a>
                                    </div-->
-                            <button type="button" class="animate-btn btn btn-sm btn-primary text-none gap-0 d-none lg:d-inline-flex fs-6" onclick="{{ADVERTISE_LOGIN2}}">
-                                <span>유료광고신청</span>
-                                <i class="icon icon-narrow unicon-email fw-bold"></i>
-                            </button>
-                        </div>
-                    </div>
+                                   <!-- 뉴스 메뉴(/news/...)일 때만 보이고 유튜브·커뮤니티·타운정보·부동산에서는 숨김 -->
+                                   <div id="mnNewsRegionWrap" class="me-2" style="display: {{NEWS_REGION_DISPLAY}}; align-items: center;">
+                                       <select id="mnNewsRegionSelect" class="mn-news-region-select" aria-label="뉴스 지역 선택" onchange="mnChangeNewsRegion(this.value)">
+                                           {{NEWS_REGION_OPTIONS}}
+                                       </select>
+                                   </div>
+                                    <button type="button" class="animate-btn btn btn-sm btn-primary text-none gap-0 d-none lg:d-inline-flex fs-6" onclick="{{ADVERTISE_LOGIN2}}">
+                                        <span>유료광고신청</span>
+                                        <i class="icon icon-narrow unicon-email fw-bold"></i>
+                                    </button>
+                               </div>
+                           </div>
 
                     <!-- IF START 'NOTLOGIN' -->
                     <div class="uc-navbar-right  d-block lg:d-none">
@@ -522,7 +551,7 @@
                     </div>
                     <!-- IF END 'NOTLOGIN' -->
                     <!-- IF START 'LOGIN' -->
-                    <div class="uc-navbar-right  d-block lg:d-none"> 
+                    <div class="uc-navbar-right  d-block lg:d-none">
                         <div style="display: flex; gap: 8px;margin-top:20px;">
                             <div class="icon-circle"><a href="/member/logout.php" class="text-none"><i class="fa fa-unlock" aria-hidden="true"></i></a></div>
                             <div class="icon-circle"><a href="/member/register_info.php" class="text-none"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></div>
@@ -571,6 +600,44 @@
 </header>
 
 <!-- Header end -->
+<script>
+    function mnChangeNewsRegion(regionCode) {
+        if (!regionCode) return;
+
+        var domainAttr = (location.hostname.indexOf('madangn.com') !== -1) ? '; domain=.madangn.com' : '';
+        document.cookie = 'mn_sub_region=' + encodeURIComponent(regionCode) + '; path=/' + domainAttr + '; max-age=' + (86400 * 30) + '; SameSite=Lax';
+
+        window.location.href = '/news/localnews.php?region=' + encodeURIComponent(regionCode);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var wrap = document.getElementById('mnNewsRegionWrap');
+        if (!wrap) return;
+
+        function syncRegionVisibility() {
+            var path = window.location.pathname.toLowerCase();
+            var isNews = (path === '/news' || path.indexOf('/news/') === 0);
+            wrap.style.display = isNews ? 'inline-flex' : 'none';
+        }
+
+        syncRegionVisibility();
+
+        // 상단 메뉴(뉴스 / 유튜브 / 커뮤니티 / 타운정보 / 부동산) 클릭 시 즉시 표시·숨김 동기화
+        document.querySelectorAll('header a, nav a').forEach(function (link) {
+            link.addEventListener('click', function () {
+                var href = (this.getAttribute('href') || '').toLowerCase();
+                if (!href || href === '#' || href.indexOf('javascript:') === 0) return;
+
+                if (href.indexOf('/news') === 0 || href.indexOf('news/') !== -1) {
+                    wrap.style.display = 'inline-flex';
+                } else {
+                    wrap.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+
 
 <!-- Wrapper start -->
 <div id="wrapper" class="wrap overflow-hidden-x mt-2">
