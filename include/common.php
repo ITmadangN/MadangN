@@ -176,7 +176,8 @@ if (!function_exists('getLoggedInUserStateCode')) {
             return strtoupper(trim((string)$_SESSION['ss_state_code']));
         }
 
-        $loginUserId = $_SESSION['user_id'] ?? ($_SESSION['id'] ?? ($_SESSION['member_id'] ?? null));
+//        $loginUserId = $_SESSION['user_id'] ?? ($_SESSION['id'] ?? ($_SESSION['member_id'] ?? null));
+        $loginUserId = $_SESSION['ss_id'] ?? null;
         if (empty($loginUserId) || $db === null) {
             return '';
         }
