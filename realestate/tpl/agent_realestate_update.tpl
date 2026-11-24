@@ -120,7 +120,7 @@ preview-item { position: relative; overflow: hidden; border-radius: 8px; }
                                                      <div class="post-meta panel hstack justify-start gap-1 fs-63 fw-bold text-gray-900 text-opacity-60  md:d-flex z-1">
                                                                   <div class="min-w-130px">Property Sub Type</div>
                                                                   <div class="w-full">
-                                                                       <select class="form-select rounded text-gray-900 fs-63 w-full h-32px p-narrow text-opacity-60" id="property_sub_type" name="property_sub_type" required>
+                                                                       <select class="form-select rounded text-gray-900 fs-63 w-full h-32px p-narrow text-opacity-60" id="property_sub_type" name="property_sub_type" >
                                                                             {{S_SELECT_PROPERTY_SUB_TYPE}}
                                                                         </select>
                                                                    </div>

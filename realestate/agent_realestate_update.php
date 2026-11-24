@@ -332,7 +332,7 @@ $tpl->setVar("T_AGENT_COMMENT",                          $p_agent_comment);
 
 
 $tpl->setVar("S_SELECT_STATE_CODE",DB_ARRAY_ARRAY_RETURN(1,$p_state_or_province,$db,"common_code","code_sub_name","code_sub","code = 'state' order by sort asc"));
-$tpl->setVar("S_SELECT_CITY", DB_ARRAY_ARRAY_RETURN(1, $p_city, $db, "common_code", "code_sub_name", "code_sub", "code = '{$p_state_or_province}' order by code_sub_name asc","선택"));
+$tpl->setVar("S_SELECT_CITY", DB_ARRAY_ARRAY_RETURN(-1, $p_city, $db, "common_code", "code_sub_name", "code_sub", "code = '{$p_state_or_province}' order by code_sub_name asc","선택"));
 $tpl->setVar("S_SELECT_PROPERTY_TYPE",DB_ARRAY_ARRAY_RETURN(1,$p_property_type,$db,"common_code","code_sub_name","code_sub_name","code = 'realestate' order by code_sub_name asc","선택"));
 $tpl->setVar("S_SELECT_PROPERTY_SUB_TYPE",DB_ARRAY_ARRAY_RETURN(1,$p_property_sub_type,$db,"common_code","code_sub_name","code_sub_name","code = '{$p_property_type}' order by code_sub_name asc","선택"));
 
