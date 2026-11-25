@@ -303,8 +303,8 @@ public array $DEFINE_vehicle_car_maker_eng = array(
     
     public array $DEFINE_realestate_s_kind = array('','전체','build','건축년도','bed','침실수','bath','욕실수');
 
-    public array $DEFINE_agent_s_kind = array('','전체','id','사용자 ID','name','에이전트명','office_name','회사명');
-    
+//    public array $DEFINE_agent_s_kind = array('','전체','id','사용자 ID','name','에이전트명','office_name','회사명');
+    public array $DEFINE_agent_s_kind = array('','전체','id','사용자 ID','name','에이전트명','drelicense','DRE#','office_name','회사명');
     public array $DEFINE_memo_type = array('','전체','recipient','받은 쪽지','sender','보낸 쪽지');
     
     public array $DEFINE_user_s_kind = array('','전체','name','이름','email','이메일','phone','연락처');

@@ -63,7 +63,8 @@ while ($row = $db->fetch()) {
     $yn = "";
     if($row->can_use != "1") $yn = "<span style='color:red'>* 이미지 사용 불가능</span>";
     
-    if($p_is_manual_input == 'Y')  $image_url = $define_val->IMG_PROTECT . "?c=news&cc=news&d=img".$p_img_index."&s=" . $p_news_id;
+//    if($p_is_manual_input == 'Y')  $image_url = $define_val->IMG_PROTECT . "?c=news&cc=news&d=img".$p_img_index."&s=" . $p_news_id;
+    if($p_is_manual_input == 'Y'  || $p_source == 'AI')  $image_url = $define_val->IMG_PROTECT . "?c=news&cc=news&d=img".$p_img_index."&s=" . $p_news_id;
     else $image_url = $row->img_url;
     
     $loop[$g_num] = array('T_IMG_URL' => $image_url, 'T_CAPTION' => $row->caption, 'T_YN' => $yn);

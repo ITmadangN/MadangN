@@ -197,9 +197,9 @@ class service_news_list
         
         $row_sql .= " Limit ".$pagination->limit_regno.", ".$pagination->page_set;
 
-        if($this->section=='local'){
-            saveLog("SQL : ",$row_sql);
-        }
+//        if($this->section=='local'){
+//            saveLog("SQL : ",$row_sql);
+//        }
 
         $this->db->query($row_sql);
 

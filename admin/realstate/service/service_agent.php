@@ -94,6 +94,9 @@ class agent_list
                 case "field":
                     $column = "A.specialized_field";
                     break;
+                case "drelicense":
+                    $column = "A.agent_dre_license";
+                    break;
                 case "office_name":
                     $column = "A.office_name";
                     break;    
